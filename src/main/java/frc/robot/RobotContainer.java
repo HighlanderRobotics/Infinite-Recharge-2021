@@ -26,6 +26,7 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.ControlPanelPosition;
 import frc.robot.commands.ControlPanelRotation;
 import frc.robot.commands.ColorWheelApproach;
+import frc.robot.commands.Climb;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -33,6 +34,7 @@ import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -61,6 +63,7 @@ public class RobotContainer {
     private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
     private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
     private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+    private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
     private final XboxController m_functionsController = new XboxController(Constants.FUNCTIONS_CONTROLLER_PORT);
     private final XboxController m_driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
@@ -100,6 +103,9 @@ public class RobotContainer {
         
         new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(new ControlPanelRotation(m_controlPanelSubsystem));
+
+        new JoystickButton(m_functionsController, Button.kBumperRight.value)
+            .toggleWhenPressed(new Climb(m_climberSubsystem));
         
         // Driver Controller
         //new JoystickButton(m_driverController, Button.kBumperLeft.value)
