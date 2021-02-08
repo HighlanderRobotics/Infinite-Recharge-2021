@@ -7,8 +7,14 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import edu.wpi.first.wpilibj.controller.PIDController;
+
 
 public class ClimberSubsystem extends SubsystemBase {
   /**
@@ -16,12 +22,20 @@ public class ClimberSubsystem extends SubsystemBase {
    */
 
   // To-do: initialize relevant motors/climber mechanism parts
-  private Encoder encoderString = new Encoder(0,1); //Change 0,1 to relevant ports from Constants
-  private Encoder encoderWheel = new Encoder(2, 3); //Change 2,3 to relevant ports from Constants
+  private Encoder encoderString = new Encoder(Constants.kStringEncoderPorts[0], Constants.kStringEncoderPorts[1]);
+  private Encoder encoderWheel = new Encoder(Constants.kWheelEncoderPorts[0], Constants.kWheelEncoderPorts[1]);
 
   //Add two motors
+  private VictorSPX stringMotor = new VictorSPX(Constants.CLIMBERSUBSYSTEM_STRING_VICTOR);
+  private VictorSPX wheelMotor = new VictorSPX(Constants.CLIMBERSUBSYSTEM_WHEEL_VICTOR);
 
   // Add two duplicate encoders and two duplicate motors
+  // TBD because of motor shortage.
+
+  private PIDController winchPID = new PIDController(0,0,0);
+  // Need to input PID constants from 
+
+  double ratio = 0.5; // Multiply string speed by this to have wheel speed.
 
   public ClimberSubsystem() {
 
@@ -39,17 +53,44 @@ public class ClimberSubsystem extends SubsystemBase {
     
   }
 
-  // Raises the climber to grab the hook and hang (to-do)
-  public void hang() {
-
-
+  public void resetEncoders() {
+    
+    encoderString.reset();
+    encoderWheel.reset();
   }
 
-  // Lowers the climber back to the ground (to-do)
-  public void lower() {
+  public void setSpeed(double speed) {
 
-
+    stringMotor.set(ControlMode.PercentOutput, speed * ratio);
+    wheelMotor.set(ControlMode.PercentOutput, speed);
   }
+
+  public void setRatio(double ratio) {
+
+    this.ratio = ratio;
+  }
+
+  public void slowWinch() {
+
+    ratio -= .05;
+  }
+
+  public void fastWinch() {
+
+    ratio += .05;
+  }
+
+  /**
+  public void fullPowerString() {
+
+    stringMotor.set(ControlMode.PercentOutput, 1);
+  }
+
+  public void fullPowerWheel() {
+
+    wheelMotor.set(ControlMode.PercentOutput, 1);
+  }
+  */
 
   @Override
   public void periodic() {

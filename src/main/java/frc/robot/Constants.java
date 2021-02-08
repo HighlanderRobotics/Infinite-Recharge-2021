@@ -71,6 +71,8 @@ public final class Constants {
     public static int SHOOTERSUBSYSTEM_BACK_VICTOR = 5;
     public static int SHOOTERSUBSYSTEM_FRONT_VICTOR = 6;
     public static int INTAKESUBSYSTEM_VICTOR = 7;
+    public static int CLIMBERSUBSYSTEM_STRING_VICTOR = 8;
+    public static int CLIMBERSUBSYSTEM_WHEEL_VICTOR = 9;
 
     // Solenoids
     public static final int INTAKE_FORWARD_CHANNEL = 4;
@@ -88,4 +90,8 @@ public final class Constants {
     public static double kEncoderPulses = 1000;
     public static double kEncoderDistancePerPulse = 0.47879/kEncoderPulses;
     public static boolean kEncoderReversed = false;
+
+    // Climber Encoders
+    public static int[] kStringEncoderPorts = {4,5};
+    public static int[] kWheelEncoderPorts = {6,7};
 }
