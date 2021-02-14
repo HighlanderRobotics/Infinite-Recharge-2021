@@ -20,8 +20,11 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class SwerveModule {
+public class SwerveModule implements Loggable{
   private static final double kWheelRadius = 0.0508;
   private static final int kEncoderResolution = 4096;
   double targetVelocity = 1 * 2048 / 600; // X RPM 
@@ -30,18 +33,67 @@ public class SwerveModule {
   private static final double kModuleMaxAngularAcceleration
       = 2 * Math.PI; // radians per second squared
 
+  @Log
   private final WPI_TalonFX m_driveMotor;
+  @Log private double drivekP = 0.25;
+  @Log private double drivekI = 0;
+  @Log private double drivekD = 0;
+  @Log private double drivekF = 0;
+  @Log
   private final WPI_TalonFX m_turningMotor;
+  @Log private double turningkP = 0.25;
+  @Log private double turningkI = 0;
+  @Log private double turningkD = 0;
+  @Log private double turningkF = 0;
 
-  private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
+@Config.NumberSlider(defaultValue = 0.25, min = 0, max = 1)
+public void setDrivekP(double kP){
+  drivekP = kP;
+  m_driveMotor.config_kP(0, drivekP);
+}
 
-  private final ProfiledPIDController m_turningPIDController
-      = new ProfiledPIDController(1, 0, 0,
-      new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
+public void setDrivekI(double kI){
+  drivekP = kI;
+  m_driveMotor.config_kI(0, drivekI);
+}
 
-  // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
+public void setDrivekD(double kD){
+  drivekP = kD;
+  m_driveMotor.config_kD(0, drivekD);
+}
+
+@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
+public void setDrivekF(double kF){
+  drivekP = kF;
+  m_driveMotor.config_kF(0, drivekF);
+}
+
+@Config.NumberSlider(defaultValue = 0.25, min = 0, max = 1)
+public void setTurningkP(double kP){
+  turningkP = kP;
+  m_turningMotor.config_kP(0, turningkP);
+}
+
+@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
+public void setTurningkI(double kI){
+  turningkP = kI;
+  m_turningMotor.config_kI(0, turningkI);
+}
+
+@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
+public void setTurningkD(double kD){
+  turningkP = kD;
+  m_turningMotor.config_kD(0, turningkD);
+}
+
+@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
+public void setTurningkF(double kF){
+  turningkF = kF;
+  m_turningMotor.config_kF(0, turningkF);
+}
+
 
   /**
    * Constructs a SwerveModule.
@@ -51,15 +103,15 @@ public class SwerveModule {
    */
   public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
-    m_driveMotor.config_kP(0, 1);
-    m_driveMotor.config_kI(0, 0);
-    m_driveMotor.config_kD(0, 0);
-    m_driveMotor.config_kF(0, 0);
+    m_driveMotor.config_kP(0, drivekP);
+    m_driveMotor.config_kI(0, drivekI);
+    m_driveMotor.config_kD(0, drivekD);
+    m_driveMotor.config_kF(0, drivekF);
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
-    m_turningMotor.config_kP(0, 1);
-    m_turningMotor.config_kI(0, 0);
-    m_turningMotor.config_kD(0, 0);
-    m_turningMotor.config_kF(0, 0);
+    m_turningMotor.config_kP(0, turningkP);
+    m_turningMotor.config_kI(0, turningkI);
+    m_turningMotor.config_kD(0, turningkD);
+    m_turningMotor.config_kF(0, turningkF);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
@@ -94,11 +146,10 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState state) {
     // Calculate the drive output from the drive PID controller.
     
-    m_driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond
-    );
+    m_driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     //2048 encoder ticks per rotation, 2pi radians per rotation, so the conversion factor is 2048/2pi radians
-    m_driveMotor.set(TalonFXControlMode.Position, 2048/(2*Math.PI*state.angle.getRadians()));
+    m_turningMotor.set(TalonFXControlMode.Position, 2048/(2*Math.PI*state.angle.getRadians()));
   }
 }
