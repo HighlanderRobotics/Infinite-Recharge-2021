@@ -71,7 +71,7 @@ public final class Constants {
     public static int SHOOTERSUBSYSTEM_BACK_VICTOR = 5;
     public static int SHOOTERSUBSYSTEM_FRONT_VICTOR = 6;
     public static int INTAKESUBSYSTEM_VICTOR = 7;
-    public static int CLIMBERSUBSYSTEM_STRING_VICTOR = 8;
+    public static int CLIMBERSUBSYSTEM_WINCH_VICTOR = 8;
     public static int CLIMBERSUBSYSTEM_WHEEL_VICTOR = 9;
 
     // Solenoids
@@ -92,6 +92,10 @@ public final class Constants {
     public static boolean kEncoderReversed = false;
 
     // Climber Encoders
-    public static int[] kStringEncoderPorts = {4,5};
+    public static int[] kWinchEncoderPorts = {4,5};
     public static int[] kWheelEncoderPorts = {6,7};
+    public static int kEncoderCountsPerRevolution = 8192;
+    public static int kEncoderCyclesPerRevolution = 2048;
+    public static double kWheelCircumference = 2 * Math.PI * 0.0508;
+    public static double kEncoderDistancePerPulseWheel = kWheelCircumference/kEncoderCyclesPerRevolution;
 }

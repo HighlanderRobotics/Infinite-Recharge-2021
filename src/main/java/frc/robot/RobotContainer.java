@@ -90,6 +90,7 @@ public class RobotContainer {
 
 
         // m_functionsController button uses
+        /** 
         whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
         whileHeldFuncController(Button.kA, m_intakeSubsystem, m_intakeSubsystem::threeQuarterSpeed);
         whileHeldFuncController(Button.kBumperLeft, m_shooterSubsystem, m_shooterSubsystem::shootBalls);
@@ -106,6 +107,25 @@ public class RobotContainer {
 
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
             .toggleWhenPressed(new Climb(m_climberSubsystem));
+
+        */
+        new JoystickButton(m_functionsController, Button.kY.value)
+            .whenPressed(() -> m_climberSubsystem.increaseWheelSpeed(0.01), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kX.value)
+            .whenPressed(() -> m_climberSubsystem.decreaseWheelSpeed(0.01), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kB.value)
+            .whenPressed(() -> m_climberSubsystem.increaseWinchSpeed(0.01), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kA.value)
+            .whenPressed(() -> m_climberSubsystem.decreaseWinchSpeed(0.01), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kBumperLeft.value)
+            .whenPressed(() -> m_climberSubsystem.stopWheel(), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kBumperRight.value)
+            .whenPressed(() -> m_climberSubsystem.stopWinch(), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kStickLeft.value)
+            .whenPressed(() -> m_climberSubsystem.stopWheelAndWinch(), m_climberSubsystem);
+
+        SmartDashboard.putNumber("Climber Height", m_climberSubsystem.getDistanceWheelEncoder());
+        SmartDashboard.putNumber("Winch Angle", m_climberSubsystem.getDistanceWinchEncoder());
         
         // Driver Controller
         //new JoystickButton(m_driverController, Button.kBumperLeft.value)

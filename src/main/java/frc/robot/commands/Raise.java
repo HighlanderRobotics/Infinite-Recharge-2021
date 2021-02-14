@@ -22,8 +22,9 @@ public class Raise extends CommandBase {
   @Override
   public void initialize() {
 
-    m_climberSubsystem.setSpeed(0.5);
-    m_climberSubsystem.setRatio(0.5);
+    // m_climberSubsystem.resetWinchPID();
+    // m_climberSubsystem.setSpeed(0.5);
+    // m_climberSubsystem.setRatio(0.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,6 +33,8 @@ public class Raise extends CommandBase {
 
     // how to give an option to change speed with buttons
     // do I need separate commands?
+
+
   }
 
   // Called once the command ends or is interrupted.
