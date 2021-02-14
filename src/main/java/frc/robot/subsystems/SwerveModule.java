@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -26,7 +26,7 @@ public class SwerveModule {
   private static final int kEncoderResolution = 4096;
   double targetVelocity = 1 * 2048 / 600; // X RPM 
 
-  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
+  private static final double kModuleMaxAngularVelocity = SwerveDrive.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration
       = 2 * Math.PI; // radians per second squared
 
@@ -51,21 +51,29 @@ public class SwerveModule {
    */
   public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
+    m_driveMotor.config_kP(0, 1);
+    m_driveMotor.config_kI(0, 0);
+    m_driveMotor.config_kD(0, 0);
+    m_driveMotor.config_kF(0, 0);
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
+    m_turningMotor.config_kP(0, 1);
+    m_turningMotor.config_kI(0, 0);
+    m_turningMotor.config_kD(0, 0);
+    m_turningMotor.config_kF(0, 0);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
+   // m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
 
     // Set the distance (in this case, angle) per pulse for the turning encoder.
     // This is the the angle through an entire rotation (2 * wpi::math::pi)
     // divided by the encoder resolution.
-    m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
+    //m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
-    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    //m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   /**
@@ -74,7 +82,8 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveEncoder.getRate(), new Rotation2d(m_turningEncoder.get()));
+    return new SwerveModuleState(m_driveMotor.getSelectedSensorVelocity()
+    , new Rotation2d(2*Math.PI*m_turningMotor.getSelectedSensorPosition()/2048));
   }
 
   /**
@@ -85,17 +94,11 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState state) {
     // Calculate the drive output from the drive PID controller.
     
-    m_driveMotor.set(TalonFXControlMode.Velocity, targetVelocity);
-
-    // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = m_turningPIDController.calculate(
-        m_turningEncoder.get(), state.angle.getRadians()
+    m_driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond
     );
 
-    final double turnFeedforward =
-        m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
-
-    m_driveMotor.setVoltage(driveOutput + driveFeedforward);
-    m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+    // Calculate the turning motor output from the turning PID controller.
+    //2048 encoder ticks per rotation, 2pi radians per rotation, so the conversion factor is 2048/2pi radians
+    m_driveMotor.set(TalonFXControlMode.Position, 2048/(2*Math.PI*state.angle.getRadians()));
   }
 }
