@@ -35,16 +35,16 @@ public class SwerveModule implements Loggable{
 
   @Log
   private final WPI_TalonFX m_driveMotor;
-  @Log private double drivekP = 0.25;
-  @Log private double drivekI = 0;
-  @Log private double drivekD = 0;
-  @Log private double drivekF = 0;
+   private double drivekP = 0.25;
+   private double drivekI = 0;
+   private double drivekD = 0;
+   private double drivekF = 0;
   @Log
   private final WPI_TalonFX m_turningMotor;
-  @Log private double turningkP = 0.25;
-  @Log private double turningkI = 0;
-  @Log private double turningkD = 0;
-  @Log private double turningkF = 0;
+   private double turningkP = 0.25;
+   private double turningkI = 0;
+   private double turningkD = 0;
+   private double turningkF = 0;
   private final int driveMotorChannel;
   private final int turningMotorChannel;
 
@@ -52,51 +52,34 @@ public class SwerveModule implements Loggable{
 public String configureLogName() {
   return "SwerveModule " + driveMotorChannel + "-" + turningMotorChannel;
 }
-@Config.NumberSlider(defaultValue = 0.25, min = 0, max = 1)
-public void setDrivekP(double kP){
-  drivekP = kP;
+
+@Config
+void setDrivePIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p, 
+@Config.NumberSlider(name = "i", min = 0, max = 1) double i, 
+@Config.NumberSlider(name = "d", min = 0, max = 1) double d, 
+@Config.NumberSlider(name = "f", min = 0, max = 1) double f){
+  drivekP = p;
+  drivekI = i;
+  drivekD = d;
+  drivekF = f;
   m_driveMotor.config_kP(0, drivekP);
-}
-
-@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
-public void setDrivekI(double kI){
-  drivekI = kI;
   m_driveMotor.config_kI(0, drivekI);
-}
-
-@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
-public void setDrivekD(double kD){
-  drivekD = kD;
   m_driveMotor.config_kD(0, drivekD);
-}
-
-@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
-public void setDrivekF(double kF){
-  drivekF = kF;
   m_driveMotor.config_kF(0, drivekF);
 }
 
-@Config.NumberSlider(defaultValue = 0.25, min = 0, max = 1)
-public void setTurningkP(double kP){
-  turningkP = kP;
+@Config
+void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p, 
+@Config.NumberSlider(name = "i", min = 0, max = 1) double i, 
+@Config.NumberSlider(name = "d", min = 0, max = 1) double d, 
+@Config.NumberSlider(name = "f", min = 0, max = 1) double f){
+  turningkP = p;
+  turningkI = i;
+  turningkD = d;
+  turningkF = f;
   m_turningMotor.config_kP(0, turningkP);
-}
-
-@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
-public void setTurningkI(double kI){
-  turningkI = kI;
   m_turningMotor.config_kI(0, turningkI);
-}
-
-@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
-public void setTurningkD(double kD){
-  turningkD = kD;
   m_turningMotor.config_kD(0, turningkD);
-}
-
-@Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
-public void setTurningkF(double kF){
-  turningkF = kF;
   m_turningMotor.config_kF(0, turningkF);
 }
 
@@ -111,15 +94,9 @@ public void setTurningkF(double kF){
     this.driveMotorChannel = driveMotorChannel;
     this.turningMotorChannel = turningMotorChannel;
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
-    m_driveMotor.config_kP(0, drivekP);
-    m_driveMotor.config_kI(0, drivekI);
-    m_driveMotor.config_kD(0, drivekD);
-    m_driveMotor.config_kF(0, drivekF);
+    setDrivePIDF(0.25,0,0,0);
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
-    m_turningMotor.config_kP(0, turningkP);
-    m_turningMotor.config_kI(0, turningkI);
-    m_turningMotor.config_kD(0, turningkD);
-    m_turningMotor.config_kF(0, turningkF);
+    setTurningPIDF(0.25, 0, 0, 0);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
