@@ -45,7 +45,13 @@ public class SwerveModule implements Loggable{
   @Log private double turningkI = 0;
   @Log private double turningkD = 0;
   @Log private double turningkF = 0;
+  private final int driveMotorChannel;
+  private final int turningMotorChannel;
 
+@Override
+public String configureLogName() {
+  return "SwerveModule " + driveMotorChannel + "-" + turningMotorChannel;
+}
 @Config.NumberSlider(defaultValue = 0.25, min = 0, max = 1)
 public void setDrivekP(double kP){
   drivekP = kP;
@@ -54,19 +60,19 @@ public void setDrivekP(double kP){
 
 @Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
 public void setDrivekI(double kI){
-  drivekP = kI;
+  drivekI = kI;
   m_driveMotor.config_kI(0, drivekI);
 }
 
 @Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
 public void setDrivekD(double kD){
-  drivekP = kD;
+  drivekD = kD;
   m_driveMotor.config_kD(0, drivekD);
 }
 
 @Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
 public void setDrivekF(double kF){
-  drivekP = kF;
+  drivekF = kF;
   m_driveMotor.config_kF(0, drivekF);
 }
 
@@ -78,13 +84,13 @@ public void setTurningkP(double kP){
 
 @Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
 public void setTurningkI(double kI){
-  turningkP = kI;
+  turningkI = kI;
   m_turningMotor.config_kI(0, turningkI);
 }
 
 @Config.NumberSlider(defaultValue = 0, min = 0, max = 1)
 public void setTurningkD(double kD){
-  turningkP = kD;
+  turningkD = kD;
   m_turningMotor.config_kD(0, turningkD);
 }
 
@@ -102,6 +108,8 @@ public void setTurningkF(double kF){
    * @param turningMotorChannel ID for the turning motor.
    */
   public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
+    this.driveMotorChannel = driveMotorChannel;
+    this.turningMotorChannel = turningMotorChannel;
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
     m_driveMotor.config_kP(0, drivekP);
     m_driveMotor.config_kI(0, drivekI);
