@@ -20,7 +20,7 @@ import com.revrobotics.ColorSensorV3;
 import frc.robot.Constants;
 
 public class ControlPanelSubsystem extends SubsystemBase {
-  
+  /**
   // Color Sensor setup
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -41,13 +41,15 @@ public class ControlPanelSubsystem extends SubsystemBase {
    */
   public ControlPanelSubsystem() {
     
+    /**
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kGreenTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
     m_colorMatcher.addColorMatch(kYellowTarget);
+    */
   }
 
-
+/** 
   public void zeroSpeed() {
     panelMotor.set(ControlMode.PercentOutput, 0.0);
   }
@@ -110,7 +112,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
   //Rotation Control Psuedo Code
   /*
   *Create method that detects a color and returns a string corresponding to it
-  */
+  
   public String colorDetected(){
     Color detectedColor = m_colorSensor.getColor();
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
@@ -125,9 +127,10 @@ public class ControlPanelSubsystem extends SubsystemBase {
     return "none";
   }
 
+  */
   @Override
   public void periodic() {
-    SmartDashboard.putString("Color", colorDetected());
+    // SmartDashboard.putString("Color", colorDetected());
 
     // System.out.println(m_colorSensor.getRed() + ", " + m_colorSensor.getGreen() + ", " + m_colorSensor.getBlue());
     // This method will be called once per scheduler run

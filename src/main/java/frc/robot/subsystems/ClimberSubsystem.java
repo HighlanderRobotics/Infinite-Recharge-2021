@@ -8,12 +8,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+// import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-// import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.Solenoid;
 
 
 public class ClimberSubsystem extends SubsystemBase {
@@ -26,19 +29,23 @@ public class ClimberSubsystem extends SubsystemBase {
   private Encoder encoderWheel = new Encoder(Constants.kWheelEncoderPorts[0], Constants.kWheelEncoderPorts[1]);
 
   //Add two motors
-  private VictorSPX winchMotor = new VictorSPX(Constants.CLIMBERSUBSYSTEM_WINCH_VICTOR);
-  private VictorSPX wheelMotor = new VictorSPX(Constants.CLIMBERSUBSYSTEM_WHEEL_VICTOR);
+  private WPI_TalonSRX winchMotor = new WPI_TalonSRX(Constants.CLIMBERSUBSYSTEM_WINCH_TALON);
+  private WPI_TalonSRX wheelMotor = new WPI_TalonSRX(Constants.CLIMBERSUBSYSTEM_WHEEL_TALON);
+
+  // Ratchet Solenoid
+  // private Solenoid ratchet = new Solenoid(Constants.CLIMBER_RATCHET_CHANNEL);
 
   // Add two duplicate encoders and two duplicate motors
   // TBD because of motor shortage.
 
-  // private PIDController winchPID = new PIDController(0,0,0);
+  private PIDController winchPID = new PIDController(0,0,0);
   // private PIDController wheelPID = new PIDController(0,0,0);
   // Need to input PID constants from 
 
-  // double ratio = 0.5; // Multiply string speed by this to have wheel speed.
   double wheelSpeed = 0;
   double winchSpeed = 0;
+
+  boolean ratchetPower = false;
 
   public ClimberSubsystem() {
 
@@ -52,7 +59,13 @@ public class ClimberSubsystem extends SubsystemBase {
     // maxPeriod will be the maximum time between rising and falling edges before the FPGA will report the device stopped - expressed in seconds
     encoderWheel.setDistancePerPulse(Constants.kEncoderDistancePerPulseWheel);
     encoderWheel.setMaxPeriod(.1); //encoder configures itself stopped after .1 seconds.
+    // ratchet.set(ratchetPower);
     
+  }
+
+  public void turnOnWinch() {
+
+    winchMotor.set(ControlMode.PercentOutput, 0.3);
   }
 
   public void stopWheelAndWinch() {
@@ -140,13 +153,14 @@ public class ClimberSubsystem extends SubsystemBase {
 
     return encoderWinch.getDistance();
   }
+/** 
+  public void ratchetPowerSwitch() {
 
-  /** 
-  public void setSpeed(double speed) {
-
-    stringMotor.set(ControlMode.PercentOutput, speed * ratio);
-    wheelMotor.set(ControlMode.PercentOutput, speed);
+    if (ratchetPower) { ratchetPower = false; }
+    else if (!ratchetPower) { ratchetPower = true; }
+    ratchet.set(ratchetPower);
   }
+  */
 
   public void setWinchPIDSetpoint(double setpoint) {
 
@@ -157,32 +171,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     winchPID.reset();
   }
-
-  public void setRatio(double ratio) {
-
-    this.ratio = ratio;
-  }
-
-  public void slowWinch() {
-
-    ratio -= .05;
-  }
-
-  public void fastWinch() {
-
-    ratio += .05;
-  }
-
-  public void fullPowerString() {
-
-    stringMotor.set(ControlMode.PercentOutput, 1);
-  }
-
-  public void fullPowerWheel() {
-
-    wheelMotor.set(ControlMode.PercentOutput, 1);
-  }
-  */
 
   @Override
   public void periodic() {

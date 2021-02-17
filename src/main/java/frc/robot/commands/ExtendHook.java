@@ -7,12 +7,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class Climb extends CommandBase {
-  /** Creates a new Climb. */
+public class ExtendHook extends CommandBase {
+  /** Creates a new ExtendHook. */
 
   private final ClimberSubsystem m_climberSubsystem;
 
-  public Climb(ClimberSubsystem climberSubsystem) {
+  public ExtendHook(ClimberSubsystem climberSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climberSubsystem = climberSubsystem;
     addRequirements(m_climberSubsystem);
@@ -22,19 +22,19 @@ public class Climb extends CommandBase {
   @Override
   public void initialize() {
 
-    
+    // m_climberSubsystem.resetWinchPID();
+    // m_climberSubsystem.setSpeed(0.5);
+    // m_climberSubsystem.setRatio(0.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    // If the wheel stops spinning, the winch motor should stop as well
-    boolean stopped = false; // to be deleted once encoder placement is figured out
-    // encoderWheel.getStopped();
-    if (stopped) {
-      // Winch motor should stop - probably wheel too?
-    }
+    // how to give an option to change speed with buttons
+    // do I need separate commands?
+
+
   }
 
   // Called once the command ends or is interrupted.

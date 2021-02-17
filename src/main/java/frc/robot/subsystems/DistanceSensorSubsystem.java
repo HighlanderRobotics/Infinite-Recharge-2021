@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 /*----------------------------------------------------------------------------*/
 
 
-
+/** 
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -15,13 +15,13 @@ import frc.robot.Constants;
 public class DistanceSensorSubsystem extends SubsystemBase {
   /**
    * Creates a new distanceSensorSubsystem.
-   */
+   
   private final Ultrasonic front = new Ultrasonic(Constants.FRONT_PING_CHANNEL, Constants.FRONT_ECHO_CHANNEL);
   private final Ultrasonic controlPanel = new Ultrasonic(Constants.CONTROLPANEL_PING_CHANNEL, Constants.CONTROLPANEL_ECHO_CHANNEL);
 
   public DistanceSensorSubsystem() {
-    front.setAutomaticMode(true);
-    controlPanel.setAutomaticMode(true);
+    // front.setAutomaticMode(true);
+    // controlPanel.setAutomaticMode(true);
   }
 
   public double getFrontDistance() {
@@ -37,3 +37,4 @@ public class DistanceSensorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 }
+*/
