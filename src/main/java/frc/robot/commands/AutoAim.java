@@ -4,7 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
+/** 
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -21,7 +21,7 @@ public class AutoAim extends CommandBase {
   @Log boolean isAutoAimFinished;
   /**
    * Creates a new autoAim.
-   */
+   
   public AutoAim(DriveSubsystem driveSubsystem, LimeLightSubsystem limelightSubsystem, DistanceSensorSubsystem distanceSensorSubsystem) {
     m_driveSubsystem = driveSubsystem;
     m_limeLightSubsystem = limelightSubsystem;
@@ -80,3 +80,4 @@ public class AutoAim extends CommandBase {
     return m_distanceSensorSubsystem.getFrontDistance() <= 5;
   }
 }
+*/

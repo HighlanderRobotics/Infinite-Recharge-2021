@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/**
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -16,7 +17,7 @@ public class ControlPanelRotation extends CommandBase {
   private final ControlPanelSubsystem m_controlPanelSubsystem;
   /**
    * Creates a new ControlPanelPosistion.
-   */
+   
   //Creates a color string that can be used by both initialize() and execute()
   String startingColor = new String("");
   @Log boolean isRotationFinished;
@@ -76,3 +77,4 @@ public class ControlPanelRotation extends CommandBase {
     return counter == 6;
   }
 }
+*/

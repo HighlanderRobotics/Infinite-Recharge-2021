@@ -4,7 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
+/** 
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -23,7 +23,7 @@ public class SensorSlowCommand extends CommandBase {
   private final Runnable teleOpDriveFn;
   /**
    * Creates a new SensorSlowCommand.
-   */
+   
   public SensorSlowCommand(DistanceSensorSubsystem distanceSensorSubsystem, DriveSubsystem driveSubsystem, Runnable driveFn) {
     m_driveSubsystem = driveSubsystem;
     m_distanceSensorSubsystem = distanceSensorSubsystem;
@@ -71,3 +71,4 @@ public class SensorSlowCommand extends CommandBase {
     return false;
   }
 }
+*/

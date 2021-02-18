@@ -22,17 +22,16 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import frc.robot.commands.AutoAim;
-import frc.robot.commands.ControlPanelPosition;
-import frc.robot.commands.ControlPanelRotation;
-import frc.robot.commands.ColorWheelApproach;
-import frc.robot.commands.Climb;
+//import frc.robot.commands.AutoAim;
+//import frc.robot.commands.ControlPanelPosition;
+//import frc.robot.commands.ControlPanelRotation;
+//import frc.robot.commands.ColorWheelApproach;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
-import frc.robot.subsystems.DistanceSensorSubsystem;
+//import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import io.github.oblarg.oblog.Logger;
@@ -57,17 +56,17 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final ControlPanelSubsystem m_controlPanelSubsystem = new ControlPanelSubsystem();
-    private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
+    // private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
     private final LimeLightSubsystem m_limelightSubsystem = new LimeLightSubsystem();
     private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
     private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
-    private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
+   // private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
     private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
     private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
     private final XboxController m_functionsController = new XboxController(Constants.FUNCTIONS_CONTROLLER_PORT);
     private final XboxController m_driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
-    private final Runnable teleOpDriveFn = () -> m_driveSubsystem.teleOpDrive(-m_driverController.getY(Hand.kLeft), m_driverController.getX(Hand.kRight));
+    // private final Runnable teleOpDriveFn = () -> m_driveSubsystem.teleOpDrive(-m_driverController.getY(Hand.kLeft), m_driverController.getX(Hand.kRight));
 
     private boolean givingBalls = true; //set at beginning
     /**
@@ -90,6 +89,7 @@ public class RobotContainer {
 
 
         // m_functionsController button uses
+        /** 
         whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
         whileHeldFuncController(Button.kA, m_intakeSubsystem, m_intakeSubsystem::threeQuarterSpeed);
         whileHeldFuncController(Button.kBumperLeft, m_shooterSubsystem, m_shooterSubsystem::shootBalls);
@@ -106,11 +106,35 @@ public class RobotContainer {
 
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
             .toggleWhenPressed(new Climb(m_climberSubsystem));
+
+        */
+
+        // Climber Testing Buttons
+        new JoystickButton(m_functionsController, Button.kY.value)
+            .whenPressed(() -> m_climberSubsystem.increaseWheelSpeed(0.1), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kX.value)
+            .whenPressed(() -> m_climberSubsystem.decreaseWheelSpeed(0.1), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kB.value)
+            .whenPressed(() -> m_climberSubsystem.turnOnWinch(), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kA.value)
+            .whenPressed(() -> m_climberSubsystem.decreaseWinchSpeed(0.1), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kBumperLeft.value)
+            .whenPressed(() -> m_climberSubsystem.stopWheel(), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kBumperRight.value)
+            .whenPressed(() -> m_climberSubsystem.stopWinch(), m_climberSubsystem);
+        new JoystickButton(m_functionsController, Button.kStickLeft.value)
+            .whenPressed(() -> m_climberSubsystem.stopWheelAndWinch(), m_climberSubsystem);
+        //new JoystickButton(m_functionsController, Button.kStickRight.value)
+        //    .whenPressed(() -> m_climberSubsystem.ratchetPowerSwitch(), m_climberSubsystem);
+
+        SmartDashboard.putNumber("Climber Height", m_climberSubsystem.getDistanceWheelEncoder());
+        SmartDashboard.putNumber("Winch Angle", m_climberSubsystem.getDistanceWinchEncoder());
         
         // Driver Controller
         //new JoystickButton(m_driverController, Button.kBumperLeft.value)
         //    .whileHeld(new SensorSlowCommand(m_distanceSensorSubsystem, m_driveSubsystem, teleOpDriveFn));
 
+        /**
         new JoystickButton(m_driverController, Button.kB.value)
             .whileHeld(new ColorWheelApproach(m_driveSubsystem, m_distanceSensorSubsystem));
 
@@ -127,11 +151,12 @@ public class RobotContainer {
         //new JoystickButton(m_driverController, Button.kBumperLeft.value)
         //    .whenPressed(() ->     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0))
         //    .whenReleased(() ->    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1));
-
+*/
         
 
 
         // Defaults
+        /**
         m_controlPanelSubsystem.setDefaultCommand(new RunCommand(() -> m_controlPanelSubsystem.zeroSpeed(), m_controlPanelSubsystem));
         m_shooterSubsystem.setDefaultCommand(new RunCommand(() -> m_shooterSubsystem.zeroSpeed(), m_shooterSubsystem));
         m_intakeSubsystem.setDefaultCommand(new RunCommand(() -> m_intakeSubsystem.zeroSpeed(), m_intakeSubsystem));
@@ -143,7 +168,7 @@ public class RobotContainer {
         SmartDashboard.putData("Red", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("R")));
         SmartDashboard.putData("Green", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("G")));
         SmartDashboard.putData("Yellow", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("Y")));
-
+*/
     }
 
     private void whileHeldFuncController(Button button, Subsystem subsystem, Runnable runnable) {
@@ -160,6 +185,8 @@ public class RobotContainer {
      * 
      *         }
      */
+
+     /** 
 
     public Command getAutonomousCommand() {
         
@@ -273,6 +300,8 @@ public class RobotContainer {
             driveToPortCommand.andThen(() -> m_driveSubsystem.tankDriveVolts(0, 0)), 
             new RunCommand(() -> m_shooterSubsystem.shootBalls(), m_shooterSubsystem).withTimeout(2.0),
             new RunCommand(() -> m_shooterSubsystem.zeroSpeed(), m_shooterSubsystem).withTimeout(0.1));
+
         
     }
+    */
 }

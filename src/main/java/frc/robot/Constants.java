@@ -66,32 +66,37 @@ public final class Constants {
     public static int DRIVESUBSYSTEM_LEFT_BACK_TALON = 0;
     public static int DRIVESUBSYSTEM_LEFT_FRONT_VICTOR = 1;
     public static int DRIVESUBSYSTEM_RIGHT_BACK_TALON = 3;
-    public static int DRIVESUBSYSTEM_RIGHT_FRONT_VICTOR = 2;
+    public static int DRIVESUBSYSTEM_RIGHT_FRONT_VICTOR = 8;
     public static int CONTROLPANELSUBSYSTEM_VICTOR = 4;
     public static int SHOOTERSUBSYSTEM_BACK_VICTOR = 5;
     public static int SHOOTERSUBSYSTEM_FRONT_VICTOR = 6;
     public static int INTAKESUBSYSTEM_VICTOR = 7;
-    public static int CLIMBERSUBSYSTEM_STRING_VICTOR = 8;
-    public static int CLIMBERSUBSYSTEM_WHEEL_VICTOR = 9;
+    public static int CLIMBERSUBSYSTEM_WINCH_TALON = 2;
+    public static int CLIMBERSUBSYSTEM_WHEEL_TALON = 1;
 
     // Solenoids
     public static final int INTAKE_FORWARD_CHANNEL = 4;
     public static final int INTAKE_REVERSE_CHANNEL = 5;
     public static final int CONTROLPANEL_FORWARD_CHANNEL = 7;
     public static final int CONTROLPANEL_REVERSE_CHANNEL = 6;
+    // public static final int CLIMBER_RATCHET_CHANNEL = 8;
+    // public static final int CLIMBER_REVERSE_CHANNEL = 9;
     
     // Limiters
     public static final double SLEW_SPEED_LIMITER = 4;
     public static final double SLEW_ROTATION_LIMITER = 3.5;
 
 	public static boolean kGyroReversed = false;
-	public static int[] kLeftEncoderPorts = {0,1};
-    public static int[] kRightEncoderPorts = {2,3};
+	public static int[] kLeftEncoderPorts = {0,3};
+    public static int[] kRightEncoderPorts = {6,7};
     public static double kEncoderPulses = 1000;
     public static double kEncoderDistancePerPulse = 0.47879/kEncoderPulses;
     public static boolean kEncoderReversed = false;
 
     // Climber Encoders
-    public static int[] kStringEncoderPorts = {4,5};
-    public static int[] kWheelEncoderPorts = {6,7};
+    public static int[] kWinchEncoderPorts = {5,4};
+    public static int[] kWheelEncoderPorts = {1,2};
+    public static int kEncoderCyclesPerRevolution = 2048;
+    public static double kWheelCircumference = 2 * Math.PI * 0.0508;
+    public static double kEncoderDistancePerPulseWheel = kWheelCircumference/kEncoderCyclesPerRevolution;
 }
