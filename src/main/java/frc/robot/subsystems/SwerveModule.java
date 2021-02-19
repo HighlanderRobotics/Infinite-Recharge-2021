@@ -94,9 +94,9 @@ void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p,
     this.driveMotorChannel = driveMotorChannel;
     this.turningMotorChannel = turningMotorChannel;
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
-    setDrivePIDF(0.25,0,0,0);
+    setDrivePIDF(1,0,0.33,0.25);
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
-    setTurningPIDF(0.25, 0, 0, 0);
+    setTurningPIDF(0.25, 0, 0.1, 0.25);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
@@ -130,8 +130,8 @@ void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p,
    */
   public void setDesiredState(SwerveModuleState state) {
     // Calculate the drive output from the drive PID controller.
-    
-    m_driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond);
+    //2048 encoder ticks per rotation, input is m/s, we want ticks per 100ms
+    m_driveMotor.set(TalonFXControlMode.Velocity, 2048/(1000*2*kWheelRadius*Math.PI)*state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     //2048 encoder ticks per rotation, 2pi radians per rotation, so the conversion factor is 2048/2pi radians
