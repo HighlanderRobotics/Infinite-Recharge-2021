@@ -111,13 +111,13 @@ public class RobotContainer {
 
         // Climber Testing Buttons
         new JoystickButton(m_functionsController, Button.kY.value)
-            .whenPressed(() -> m_climberSubsystem.increaseWheelSpeed(0.1), m_climberSubsystem);
+            .whenPressed(() -> m_climberSubsystem.increaseWheelSpeed(0.05), m_climberSubsystem);
         new JoystickButton(m_functionsController, Button.kX.value)
-            .whenPressed(() -> m_climberSubsystem.decreaseWheelSpeed(0.1), m_climberSubsystem);
+            .whenPressed(() -> m_climberSubsystem.decreaseWheelSpeed(0.05), m_climberSubsystem);
         new JoystickButton(m_functionsController, Button.kB.value)
-            .whenPressed(() -> m_climberSubsystem.turnOnWinch(), m_climberSubsystem);
+            .whenPressed(() -> m_climberSubsystem.increaseWinchSpeed(0.05), m_climberSubsystem);
         new JoystickButton(m_functionsController, Button.kA.value)
-            .whenPressed(() -> m_climberSubsystem.decreaseWinchSpeed(0.1), m_climberSubsystem);
+            .whenPressed(() -> m_climberSubsystem.decreaseWinchSpeed(0.05), m_climberSubsystem);
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
             .whenPressed(() -> m_climberSubsystem.stopWheel(), m_climberSubsystem);
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
@@ -128,7 +128,7 @@ public class RobotContainer {
         //    .whenPressed(() -> m_climberSubsystem.ratchetPowerSwitch(), m_climberSubsystem);
 
         SmartDashboard.putNumber("Climber Height", m_climberSubsystem.getDistanceWheelEncoder());
-        SmartDashboard.putNumber("Winch Angle", m_climberSubsystem.getDistanceWinchEncoder());
+        // SmartDashboard.putNumber("Winch Angle", m_climberSubsystem.getDistanceWinchEncoder());
         
         // Driver Controller
         //new JoystickButton(m_driverController, Button.kBumperLeft.value)

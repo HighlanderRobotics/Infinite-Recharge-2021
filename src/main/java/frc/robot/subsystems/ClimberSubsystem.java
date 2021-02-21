@@ -52,7 +52,7 @@ public class ClimberSubsystem extends SubsystemBase {
     // Need to configure encoders here
     encoderWinch.reset();
     encoderWheel.reset();
-    encoderWinch.setDistancePerPulse(360 / Constants.kEncoderCyclesPerRevolution); 
+    // encoderWinch.setDistancePerPulse(360 / Constants.kEncoderCyclesPerRevolution); 
     // encoderString.setMinRate(double minRate); will depend on friction - when considered stopped
     // minRate is in distance per second
     // encoderString.setMaxPeriod(double maxPeriod); Set the max period for stopped detection
@@ -109,7 +109,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
       wheelSpeed = 0;
     }
-    wheelMotor.set(ControlMode.PercentOutput, winchSpeed);
+    wheelMotor.set(ControlMode.PercentOutput, wheelSpeed);
   }
 
   public void increaseWinchSpeed(double speed) {
