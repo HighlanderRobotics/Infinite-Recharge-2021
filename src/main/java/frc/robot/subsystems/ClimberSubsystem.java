@@ -107,7 +107,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     else {
 
-      wheelSpeed = 0;
+      wheelSpeed = -1.0;
     }
     wheelMotor.set(ControlMode.PercentOutput, wheelSpeed);
   }
@@ -133,7 +133,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     else {
 
-      winchSpeed = 0;
+      winchSpeed = -1.0;
     }
     winchMotor.set(ControlMode.PercentOutput, winchSpeed);
   }
