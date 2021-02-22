@@ -101,7 +101,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void decreaseWheelSpeed(double speed) {
 
-    if (wheelSpeed - speed >= 0) {
+    if (wheelSpeed - speed >= -1.0) {
       
       wheelSpeed -= speed;
     }
@@ -127,7 +127,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void decreaseWinchSpeed(double speed) {
 
-    if (winchSpeed - speed >= 0) {
+    if (winchSpeed - speed >= -1.0) {
       
       winchSpeed -= speed;
     }
