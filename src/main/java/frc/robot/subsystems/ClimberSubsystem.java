@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Solenoid;
 
 
@@ -52,7 +53,7 @@ public class ClimberSubsystem extends SubsystemBase {
     // Need to configure encoders here
     encoderWinch.reset();
     encoderWheel.reset();
-    // encoderWinch.setDistancePerPulse(360 / Constants.kEncoderCyclesPerRevolution); 
+    encoderWinch.setDistancePerPulse(360 / Constants.kEncoderCyclesPerRevolution); 
     // encoderString.setMinRate(double minRate); will depend on friction - when considered stopped
     // minRate is in distance per second
     // encoderString.setMaxPeriod(double maxPeriod); Set the max period for stopped detection
@@ -175,5 +176,7 @@ public class ClimberSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Climber Height", this.getDistanceWheelEncoder());
+    SmartDashboard.putNumber("Winch Angle", this.getDistanceWinchEncoder());
   }
 }

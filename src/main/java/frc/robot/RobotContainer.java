@@ -127,7 +127,7 @@ public class RobotContainer {
         //new JoystickButton(m_functionsController, Button.kStickRight.value)
         //    .whenPressed(() -> m_climberSubsystem.ratchetPowerSwitch(), m_climberSubsystem);
 
-        SmartDashboard.putNumber("Climber Height", m_climberSubsystem.getDistanceWheelEncoder());
+        // SmartDashboard.putNumber("Climber Height", m_climberSubsystem.getDistanceWheelEncoder());
         // SmartDashboard.putNumber("Winch Angle", m_climberSubsystem.getDistanceWinchEncoder());
         
         // Driver Controller
