@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -104,11 +105,17 @@ void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p,
       setDrivePIDF(0.128,0,0,0);
       m_turningMotor = new WPI_TalonFX(turningMotorChannel);
       setTurningPIDF(0.128,0,0,0);
+      m_driveMotor.configFactoryDefault();
+      m_turningMotor.configFactoryDefault();
+      m_turningMotor.setNeutralMode(NeutralMode.Brake);
     } else {
       m_driveMotor = new WPI_TalonSRX(driveMotorChannel);
       setDrivePIDF(0.128,0,0,0);
       m_turningMotor = new WPI_TalonSRX(turningMotorChannel);
       setTurningPIDF(0.128,0,0,0);
+      m_driveMotor.configFactoryDefault();
+      m_turningMotor.configFactoryDefault(); 
+      m_turningMotor.setNeutralMode(NeutralMode.Brake);
     }
     
 
