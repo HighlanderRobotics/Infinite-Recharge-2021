@@ -20,6 +20,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDrive;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.LinearFilter;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -38,6 +39,10 @@ public class Robot extends TimedRobot {
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+
+  private final LinearFilter m_xspeedAverage = LinearFilter.movingAverage(10);
+  private final LinearFilter m_yspeedAverage = LinearFilter.movingAverage(10);
+  private final LinearFilter m_rotAverage = LinearFilter.movingAverage(10);
 
  @Override
   public void robotPeriodic() {
@@ -63,14 +68,14 @@ public class Robot extends TimedRobot {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     final var xSpeed =
-        -m_xspeedLimiter.calculate(m_controller.getY(GenericHID.Hand.kLeft))
+        -m_xspeedLimiter.calculate(m_xspeedAverage.calculate(m_controller.getY(GenericHID.Hand.kLeft)))
             * SwerveDrive.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     final var ySpeed =
-        -m_yspeedLimiter.calculate(m_controller.getX(GenericHID.Hand.kLeft))
+        -m_yspeedLimiter.calculate(m_yspeedAverage.calculate(m_controller.getX(GenericHID.Hand.kLeft)))
             * SwerveDrive.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
@@ -78,7 +83,7 @@ public class Robot extends TimedRobot {
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.`
     final var rot =
-        -m_rotLimiter.calculate(m_controller.getX(GenericHID.Hand.kRight))
+        -m_rotLimiter.calculate(m_rotAverage.calculate(m_controller.getX(GenericHID.Hand.kRight)))
             * SwerveDrive.kMaxAngularSpeed;
 
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);

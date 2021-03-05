@@ -31,6 +31,7 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class SwerveModule implements Loggable{
   private static final double kWheelRadius = 0.0508;
+  private static final double kCircumference = kWheelRadius * 2 * Math.PI;
   private static final int kEncoderResolution = 4096;
   double targetVelocity = 1 * 2048 / 600; // X RPM 
 
@@ -59,7 +60,7 @@ public String configureLogName() {
 }
 
 @Config
-void setDrivePIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p, 
+void setDrivePIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValue = 0.5) double p, 
 @Config.NumberSlider(name = "i", min = 0, max = 1) double i, 
 @Config.NumberSlider(name = "d", min = 0, max = 1) double d, 
 @Config.NumberSlider(name = "f", min = 0, max = 1) double f){
@@ -74,7 +75,7 @@ void setDrivePIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p,
 }
 
 @Config
-void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p, 
+void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValue = 0.5) double p, 
 @Config.NumberSlider(name = "i", min = 0, max = 1) double i, 
 @Config.NumberSlider(name = "d", min = 0, max = 1) double d, 
 @Config.NumberSlider(name = "f", min = 0, max = 1) double f){
@@ -102,22 +103,16 @@ void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p,
     this.turningMotorChannel = turningMotorChannel;
     if(RobotBase.isReal()){
       m_driveMotor = new WPI_TalonFX(driveMotorChannel);
-      setDrivePIDF(0.128,0,0,0);
       m_turningMotor = new WPI_TalonFX(turningMotorChannel);
-      setTurningPIDF(0.128,0,0,0);
-      m_driveMotor.configFactoryDefault();
-      m_turningMotor.configFactoryDefault();
-      m_turningMotor.setNeutralMode(NeutralMode.Brake);
     } else {
       m_driveMotor = new WPI_TalonSRX(driveMotorChannel);
-      setDrivePIDF(0.128,0,0,0);
       m_turningMotor = new WPI_TalonSRX(turningMotorChannel);
-      setTurningPIDF(0.128,0,0,0);
-      m_driveMotor.configFactoryDefault();
-      m_turningMotor.configFactoryDefault(); 
-      m_turningMotor.setNeutralMode(NeutralMode.Brake);
     }
-    
+    m_driveMotor.configFactoryDefault();
+    m_turningMotor.configFactoryDefault();
+    m_turningMotor.setNeutralMode(NeutralMode.Brake);
+    setDrivePIDF(0.294,0,0,0);
+    setTurningPIDF(0.294,0,0,0);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
@@ -152,10 +147,10 @@ void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1) double p,
   public void setDesiredState(SwerveModuleState state) {
     // Calculate the drive output from the drive PID controller.
     //2048 encoder ticks per rotation, input is m/s, we want ticks per 100ms
-    m_driveMotor.set(ControlMode.Velocity, 2048/(1000*2*kWheelRadius*Math.PI)*state.speedMetersPerSecond);
+    m_driveMotor.set(ControlMode.Velocity, 2048/(10*kCircumference)*state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     //2048 encoder ticks per rotation, 2pi radians per rotation, so the conversion factor is 2048/2pi radians
-    m_turningMotor.set(ControlMode.Position, 2048/(2*Math.PI*state.angle.getRadians()));
+    m_turningMotor.set(ControlMode.Position, 2048/(2*Math.PI)*state.angle.getRadians());
   }
 }
