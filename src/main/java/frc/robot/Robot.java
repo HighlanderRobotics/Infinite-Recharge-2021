@@ -83,11 +83,12 @@ public class Robot extends TimedRobot {
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.`
-    final var rot =
-        -m_rotLimiter.calculate(m_rotAverage.calculate(m_controller.getX(GenericHID.Hand.kRight)))
-            * SwerveDrive.kMaxAngularSpeed;
+    final var rot = m_controller.getX(GenericHID.Hand.kRight);
+        /*-m_rotLimiter.calculate(m_rotAverage.calculate(m_controller.getX(GenericHID.Hand.kRight)))
+            * SwerveDrive.kMaxAngularSpeed;*/
 
-    m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
+    //m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
+    m_swerve.drive(0, 0, Math.PI/2, false);
   }
 
 }
