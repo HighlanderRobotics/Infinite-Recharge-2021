@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import com.analog.adis16448.frc.ADIS16448_IMU;
+
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -27,12 +29,12 @@ public class SwerveDrive implements Loggable{
   private final Translation2d m_backLeftLocation = new Translation2d(-0.404, 0.404);
   private final Translation2d m_backRightLocation = new Translation2d(-0.404, -0.404);
 
-  private final SwerveModule m_frontRight = new SwerveModule(8, 7);
   private final SwerveModule m_frontLeft = new SwerveModule(2, 1);
+  private final SwerveModule m_frontRight = new SwerveModule(8, 7);
   private final SwerveModule m_backLeft = new SwerveModule(4, 3);
   private final SwerveModule m_backRight = new SwerveModule(6, 5);
 
-  private final AnalogGyro m_gyro = new AnalogGyro(0);
+  public static final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
 
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation

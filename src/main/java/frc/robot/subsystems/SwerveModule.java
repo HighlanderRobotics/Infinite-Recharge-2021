@@ -62,7 +62,7 @@ public String configureLogName() {
 }
 
 @Config
-void setDrivePIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValue = 1) double p, 
+void setDrivePIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValue = 0.1) double p, 
 @Config.NumberSlider(name = "i", min = 0, max = 1) double i, 
 @Config.NumberSlider(name = "d", min = 0, max = 1) double d, 
 @Config.NumberSlider(name = "f", min = 0, max = 1) double f){
@@ -77,7 +77,7 @@ void setDrivePIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValu
 }
 
 @Config
-void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValue = 1) double p, 
+void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValue = .01) double p, 
 @Config.NumberSlider(name = "i", min = 0, max = 1) double i, 
 @Config.NumberSlider(name = "d", min = 0, max = 1) double d, 
 @Config.NumberSlider(name = "f", min = 0, max = 1) double f){

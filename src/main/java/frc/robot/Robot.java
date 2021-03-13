@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    driveWithJoystick(false);
+    driveWithJoystick(true);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
@@ -87,8 +87,8 @@ public class Robot extends TimedRobot {
         /*-m_rotLimiter.calculate(m_rotAverage.calculate(m_controller.getX(GenericHID.Hand.kRight)))
             * SwerveDrive.kMaxAngularSpeed;*/
 
-    //m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
-    m_swerve.drive(0, 0, Math.PI/2, false);
+    m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
+    //m_swerve.drive(0, 0, Math.PI/2, false);
   }
 
 }
