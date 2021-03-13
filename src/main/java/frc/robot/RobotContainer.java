@@ -25,8 +25,8 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.ControlPanelPosition;
 import frc.robot.commands.ControlPanelRotation;
+import frc.robot.commands.RaiseHook;
 import frc.robot.commands.ColorWheelApproach;
-import frc.robot.commands.Climb;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -60,8 +60,8 @@ public class RobotContainer {
     private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
     private final LimeLightSubsystem m_limelightSubsystem = new LimeLightSubsystem();
     private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-    private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
-    private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
+    // private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
+    // private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
     private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
     private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
@@ -90,13 +90,16 @@ public class RobotContainer {
 
 
         // m_functionsController button uses
-        whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
+        // whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
         whileHeldFuncController(Button.kA, m_intakeSubsystem, m_intakeSubsystem::threeQuarterSpeed);
         whileHeldFuncController(Button.kBumperLeft, m_shooterSubsystem, m_shooterSubsystem::shootBalls);
-        whileHeldFuncController(Button.kBumperRight, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendIntakePiston);
+        // whileHeldFuncController(Button.kBumperRight, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendIntakePiston);
 
-        new JoystickButton(m_functionsController, Button.kB.value)
-            .whileHeld(new ColorWheelApproach(m_driveSubsystem, m_distanceSensorSubsystem));
+        new JoystickButton(m_functionsController, Button.kA.value)
+            .whileHeld(new RaiseHook(3, 45, m_climberSubsystem));
+
+        // new JoystickButton(m_functionsController, Button.kB.value)
+            // .whileHeld(new ColorWheelApproach(m_driveSubsystem, m_distanceSensorSubsystem));
 
         new JoystickButton(m_functionsController, Button.kX.value)
             .toggleWhenPressed(new ControlPanelPosition(m_controlPanelSubsystem));
@@ -104,13 +107,13 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(new ControlPanelRotation(m_controlPanelSubsystem));
 
-        new JoystickButton(m_functionsController, Button.kBumperRight.value)
-            .toggleWhenPressed(new Climb(m_climberSubsystem));
+        //new JoystickButton(m_functionsController, Button.kBumperRight.value)
+         //   .toggleWhenPressed(new Climb(m_climberSubsystem));
         
         // Driver Controller
         //new JoystickButton(m_driverController, Button.kBumperLeft.value)
         //    .whileHeld(new SensorSlowCommand(m_distanceSensorSubsystem, m_driveSubsystem, teleOpDriveFn));
-
+/** 
         new JoystickButton(m_driverController, Button.kB.value)
             .whileHeld(new ColorWheelApproach(m_driveSubsystem, m_distanceSensorSubsystem));
 
@@ -119,6 +122,7 @@ public class RobotContainer {
             
         new JoystickButton(m_driverController, Button.kA.value)
             .whileHeld(new AutoAim(m_driveSubsystem, m_limelightSubsystem, m_distanceSensorSubsystem));
+            */
 
         new JoystickButton(m_driverController, Button.kBumperRight.value)
             .whenPressed(() -> m_driveSubsystem.setMaxOutput(0.6))
@@ -138,7 +142,7 @@ public class RobotContainer {
         m_driveSubsystem.setDefaultCommand(new RunCommand(teleOpDriveFn, m_driveSubsystem));
         //m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.driveStraight(), m_driveSubsystem));
         m_limelightSubsystem.setDefaultCommand(new RunCommand(() -> m_limelightSubsystem.lightOn(), m_limelightSubsystem));
-        m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
+        // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
         SmartDashboard.putData("Blue", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("B")));
         SmartDashboard.putData("Red", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("R")));
         SmartDashboard.putData("Green", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("G")));
@@ -265,10 +269,10 @@ public class RobotContainer {
         //return straightCommand.andThen(() -> m_driveSubsystem.tankDriveVolts(0, 0));
         
         return new SequentialCommandGroup(
-            new RunCommand(() -> m_pneumaticsSubsystem.extendIntakePiston(), m_pneumaticsSubsystem).withTimeout(0.1),
+            // new RunCommand(() -> m_pneumaticsSubsystem.extendIntakePiston(), m_pneumaticsSubsystem).withTimeout(0.1),
             new RunCommand(() -> m_intakeSubsystem.threeQuarterSpeed(), m_intakeSubsystem).withTimeout(0.1),
             collectFromTrenchCommand.andThen(() -> m_driveSubsystem.tankDriveVolts(0, 0)), 
-            new RunCommand(() -> m_pneumaticsSubsystem.retractIntakePiston(), m_pneumaticsSubsystem).withTimeout(0.1),
+            // new RunCommand(() -> m_pneumaticsSubsystem.retractIntakePiston(), m_pneumaticsSubsystem).withTimeout(0.1),
             new RunCommand(() -> m_intakeSubsystem.zeroSpeed(), m_intakeSubsystem).withTimeout(0.1),
             driveToPortCommand.andThen(() -> m_driveSubsystem.tankDriveVolts(0, 0)), 
             new RunCommand(() -> m_shooterSubsystem.shootBalls(), m_shooterSubsystem).withTimeout(2.0),

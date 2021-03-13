@@ -59,8 +59,8 @@ public final class Constants {
     // Distance Sensors
     public static int FRONT_PING_CHANNEL = 4;
     public static int FRONT_ECHO_CHANNEL = 5;
-    public static int CONTROLPANEL_PING_CHANNEL = 6;
-    public static int CONTROLPANEL_ECHO_CHANNEL = 7;
+    public static int CONTROLPANEL_PING_CHANNEL = 8;
+    public static int CONTROLPANEL_ECHO_CHANNEL = 9;
 
     // Motors
     public static int DRIVESUBSYSTEM_LEFT_BACK_TALON = 0;
@@ -85,16 +85,16 @@ public final class Constants {
     public static final double SLEW_ROTATION_LIMITER = 3.5;
 
 	public static boolean kGyroReversed = false;
-	public static int[] kLeftEncoderPorts = {0,1};
-    public static int[] kRightEncoderPorts = {2,3};
+	public static int[] kLeftEncoderPorts = {0,3};
+    public static int[] kRightEncoderPorts = {6,7};
     public static double kEncoderPulses = 1000;
     public static double kEncoderDistancePerPulse = 0.47879/kEncoderPulses;
     public static boolean kEncoderReversed = false;
 
     // Climber Encoders
-    public static int[] kWinchEncoderPorts = {4,5};
-    public static int[] kWheelEncoderPorts = {6,7};
-    public static int kEncoderCyclesPerRevolution = 2048;
+    public static int[] kWinchEncoderPorts = {5,4};
+    public static int[] kWheelEncoderPorts = {1,2};
+    public static double kEncoderCyclesPerRevolution = 2048.0;
     public static double kWheelCircumference = 2 * Math.PI * 0.0508;
     public static double kEncoderDistancePerPulseWheel = kWheelCircumference/kEncoderCyclesPerRevolution;
     public static double kHookFullExtension = 10; // Need to calculate

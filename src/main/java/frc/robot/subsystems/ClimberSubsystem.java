@@ -50,7 +50,7 @@ public class ClimberSubsystem extends SubsystemBase {
     // Need to configure encoders here
     winchEncoder.reset();
     wheelEncoder.reset();
-    winchEncoder.setDistancePerPulse(360 / Constants.kEncoderCyclesPerRevolution); 
+    winchEncoder.setDistancePerPulse(360.0 / Constants.kEncoderCyclesPerRevolution); 
     // encoderWinch.setMinRate(double minRate); will depend on friction - when considered stopped
     // minRate is in distance per second
     // encoderWinch.setMaxPeriod(double maxPeriod); Set the max period for stopped detection
@@ -67,10 +67,14 @@ public class ClimberSubsystem extends SubsystemBase {
     wheelEncoder.reset();
   }
 
-  public void setSpeed(double speed) {
+  public void setWheelSpeed(double speed) {
+
+    wheelMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void setWinchSpeed(double speed) {
 
     winchMotor.set(ControlMode.PercentOutput, speed);
-    wheelMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public double getDistanceWheelEncoder() {
@@ -78,7 +82,7 @@ public class ClimberSubsystem extends SubsystemBase {
     return wheelEncoder.getDistance();
   }
 
-  public double getDistanceWinchEncoder() {
+  public double getAngleWinchEncoder() {
 
     return winchEncoder.getDistance();
   }
@@ -86,6 +90,7 @@ public class ClimberSubsystem extends SubsystemBase {
   public void setWinchPIDSetpoint(double setpoint) {
 
     winchPID.setSetpoint(setpoint);
+    winchMotor.set(winchPID.calculate(winchEncoder.getDistance()));
   }
 
   public void resetWinchPID() {
@@ -107,6 +112,6 @@ public class ClimberSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Climber Height", this.getDistanceWheelEncoder());
-    SmartDashboard.putNumber("Winch Angle", this.getDistanceWinchEncoder());
+    SmartDashboard.putNumber("Winch Angle", this.getAngleWinchEncoder());
   }
 }

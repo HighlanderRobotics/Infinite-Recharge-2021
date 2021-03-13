@@ -10,6 +10,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class RaiseRobot extends CommandBase {
   /** Creates a new RaiseRobot. */
   private final ClimberSubsystem m_climberSubsystem;
+  private boolean finished = false;
 
   public RaiseRobot(ClimberSubsystem climberSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,6 +29,12 @@ public class RaiseRobot extends CommandBase {
   @Override
   public void execute() {
 
+    m_climberSubsystem.setWheelSpeed(-0.2); // Sets climber to retract
+    if (m_climberSubsystem.getDistanceWheelEncoder() < 5) { // if climber is extended < 5 meters
+
+      m_climberSubsystem.setWheelSpeed(0); // stop retracting
+      finished = true;
+    }
     //Using wheelEncoder and wheel PID, climb to a predetermined setpoint based on Climber team input
   }
 
@@ -39,6 +46,6 @@ public class RaiseRobot extends CommandBase {
   @Override
   public boolean isFinished() {
     // boolean method in climber subsystem for if climber is at appropriate height
-    return false;
+    return finished;
   }
 }
