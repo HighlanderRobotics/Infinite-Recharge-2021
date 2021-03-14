@@ -29,10 +29,12 @@ public class SwerveDrive implements Loggable{
   private final Translation2d m_backLeftLocation = new Translation2d(-0.404, 0.404);
   private final Translation2d m_backRightLocation = new Translation2d(-0.404, -0.404);
 
-  private final SwerveModule m_frontLeft = new SwerveModule(2, 1);
-  private final SwerveModule m_frontRight = new SwerveModule(8, 7);
-  private final SwerveModule m_backLeft = new SwerveModule(4, 3);
-  private final SwerveModule m_backRight = new SwerveModule(6, 5);
+
+  private final SwerveModule m_frontLeft = new SwerveModule(2, 1, 1);
+  private final SwerveModule m_frontRight = new SwerveModule(8, 7, 0);
+  private final SwerveModule m_backLeft = new SwerveModule(4, 3, 9);
+  private final SwerveModule m_backRight = new SwerveModule(6, 5, 8);
+
 
   public static final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
 
@@ -44,6 +46,10 @@ public class SwerveDrive implements Loggable{
 
   public SwerveDrive() {
     m_gyro.reset();
+    m_frontLeft.m_encoder.reset();
+    m_frontRight.m_encoder.reset();
+    m_backLeft.m_encoder.reset();
+    m_backRight.m_encoder.reset();
   }
 
   /**

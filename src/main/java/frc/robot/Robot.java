@@ -8,7 +8,7 @@
 package frc.robot;
 
 import java.util.Map;
-
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.SwerveModule;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.LinearFilter;
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj.XboxController;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
 public class Robot extends TimedRobot {
   private final XboxController m_controller = new XboxController(0);
   private final SwerveDrive m_swerve = new SwerveDrive();
@@ -51,7 +53,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    
     Logger.configureLoggingAndConfig(this, false);
+
   }
   @Override
   public void autonomousPeriodic() {
