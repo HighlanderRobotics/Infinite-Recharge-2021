@@ -8,7 +8,7 @@
 package frc.robot;
 
 import java.util.Map;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDrive;
-import frc.robot.subsystems.SwerveModule;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.LinearFilter;
@@ -32,7 +31,6 @@ import edu.wpi.first.wpilibj.XboxController;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-
 public class Robot extends TimedRobot {
   private final XboxController m_controller = new XboxController(0);
   private final SwerveDrive m_swerve = new SwerveDrive();
@@ -53,9 +51,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    
     Logger.configureLoggingAndConfig(this, false);
-
   }
   @Override
   public void autonomousPeriodic() {
@@ -71,14 +67,14 @@ public class Robot extends TimedRobot {
   private void driveWithJoystick(boolean fieldRelative) {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
-    final var xSpeed = -m_controller.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
+    final var xSpeed = -m_controller.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
         /*-m_xspeedLimiter.calculate(m_xspeedAverage.calculate(m_controller.getY(GenericHID.Hand.kLeft)))
             * SwerveDrive.kMaxSpeed;*/
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
-    final var ySpeed = -m_controller.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
+    final var ySpeed = -m_controller.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
         /*-m_yspeedLimiter.calculate(m_yspeedAverage.calculate(m_controller.getX(GenericHID.Hand.kLeft)))
             * SwerveDrive.kMaxSpeed; */
             
@@ -87,12 +83,12 @@ public class Robot extends TimedRobot {
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.`
-    final var rot = m_controller.getX(GenericHID.Hand.kRight);
+    final var rot = m_controller.getX(GenericHID.Hand.kRight) * SwerveDrive.kMaxAngularSpeed;
         /*-m_rotLimiter.calculate(m_rotAverage.calculate(m_controller.getX(GenericHID.Hand.kRight)))
             * SwerveDrive.kMaxAngularSpeed;*/
 
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
-    //m_swerve.drive(0, 0, Math.PI/2, false);
+    //m_swerve.drive(0, 0, Math.PI, false);
   }
 
 }

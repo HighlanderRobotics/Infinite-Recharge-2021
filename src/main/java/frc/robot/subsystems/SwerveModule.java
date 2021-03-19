@@ -8,15 +8,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -36,43 +35,38 @@ public class SwerveModule implements Loggable{
   private static final double kCircumference = kWheelRadius * 2 * Math.PI;
   private static final double kDriveRatio = 8.16;
   private static final double kTurningRatio = 12.8;
-  private static final int kEncoderResolution = 4096;
+  private static final int kEncoderResolution = 2048;
   double targetVelocity = 1 * 2048 / 600; // X RPM 
 
   private static final double kModuleMaxAngularVelocity = SwerveDrive.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration
       = 2 * Math.PI; // radians per second squared
   
-// 1, 0, 9, 8
-
-
-
   @Log
   private BaseTalon m_driveMotor;
-   private double drivekP = 0.128;
+   private double drivekP = 0.01;
    private double drivekI = 0;
    private double drivekD = 0;
    private double drivekF = 0;
   @Log
   private BaseTalon m_turningMotor;
-   private double turningkP = 0.128;
+   private double turningkP = 0.00015;
    private double turningkI = 0;
    private double turningkD = 0;
-   private double turningkF = 0;
+   private double turningkF = .025;
   private final int driveMotorChannel;
   private final int turningMotorChannel;
-  public DutyCycleEncoder m_encoder;
 
 @Override
 public String configureLogName() {
   return "SwerveModule " + driveMotorChannel + "-" + turningMotorChannel;
 }
 
-@Config
-void setDrivePIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValue = 0.1) double p, 
-@Config.NumberSlider(name = "i", min = 0, max = 1) double i, 
-@Config.NumberSlider(name = "d", min = 0, max = 1) double d, 
-@Config.NumberSlider(name = "f", min = 0, max = 1) double f){
+
+void setDrivePIDF( double p, 
+ double i, 
+ double d, 
+ double f){
   drivekP = p;
   drivekI = i;
   drivekD = d;
@@ -83,11 +77,11 @@ void setDrivePIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValu
   m_driveMotor.config_kF(0, drivekF);
 }
 
-@Config
-void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultValue = .01) double p, 
-@Config.NumberSlider(name = "i", min = 0, max = 1) double i, 
-@Config.NumberSlider(name = "d", min = 0, max = 1) double d, 
-@Config.NumberSlider(name = "f", min = 0, max = 1) double f){
+
+void setTurningPIDF( double p, 
+ double i, 
+ double d, 
+ double f){
   turningkP = p;
   turningkI = i;
   turningkD = d;
@@ -105,7 +99,7 @@ void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultVa
    * @param driveMotorChannel   ID for the drive motor.
    * @param turningMotorChannel ID for the turning motor.
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int encoderChannel) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
     
     
     this.driveMotorChannel = driveMotorChannel;
@@ -113,18 +107,22 @@ void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultVa
     if(RobotBase.isReal()){
       m_driveMotor = new WPI_TalonFX(driveMotorChannel);
       m_turningMotor = new WPI_TalonFX(turningMotorChannel);
-      m_encoder = new DutyCycleEncoder(encoderChannel);
-      m_encoder.setDistancePerRotation(2*Math.PI);
-
+      m_driveMotor.configFactoryDefault();
+      m_turningMotor.configFactoryDefault();
+      ((WPI_TalonFX) m_turningMotor).configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
     } else {
       m_driveMotor = new WPI_TalonSRX(driveMotorChannel);
       m_turningMotor = new WPI_TalonSRX(turningMotorChannel);
     }
-    m_driveMotor.configFactoryDefault();
-    m_turningMotor.configFactoryDefault();
+    
     m_turningMotor.setNeutralMode(NeutralMode.Brake);
-    setDrivePIDF(0.294,0,0,0);
-    setTurningPIDF(0.294,0,0,0);
+    setDrivePIDF(0.01,0,0,0.048);
+    setTurningPIDF(0.00015,0,0,0.048);
+
+    // 50% power to turning - gets 10610 units/100ms
+    // 50% power to driving - 10700 units/100ms
+
+
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
@@ -148,9 +146,9 @@ void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultVa
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(m_driveMotor.getSelectedSensorVelocity()
-    , new Rotation2d(m_encoder.get()));
+    , new Rotation2d(2*Math.PI*m_turningMotor.getSelectedSensorPosition()/2048));
   }
- 
+
   /**
    * Sets the desired state for the module.
    *
@@ -163,7 +161,6 @@ void setTurningPIDF(@Config.NumberSlider(name = "p", min = 0, max = 1, defaultVa
 
     // Calculate the turning motor output from the turning PID controller.
     //2048 encoder ticks per rotation, 2pi radians per rotation, so the conversion factor is 2048/2pi radians
-    //m_turningMotor.set(ControlMode.Position, 2048/(2*Math.PI)*state.angle.getRadians()*kTurningRatio);
-    m_turningMotor.set(ControlMode.Position, 124/(2*Math.PI)*m_encoder.get()*kTurningRatio);
+    m_turningMotor.set(ControlMode.Position, 2048/(2*Math.PI)*state.angle.getRadians()*kTurningRatio);
   }
 }
