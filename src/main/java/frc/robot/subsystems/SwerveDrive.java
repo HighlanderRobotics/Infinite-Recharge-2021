@@ -24,10 +24,10 @@ public class SwerveDrive implements Loggable{
   public static final double kMaxSpeed = 1.0; // 3 meters per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(0.404, 0.404);
-  private final Translation2d m_frontRightLocation = new Translation2d(-0.404, 0.404);
-  private final Translation2d m_backLeftLocation = new Translation2d(0.404, -0.404);
-  private final Translation2d m_backRightLocation = new Translation2d(-0.404, -0.404);
+  private final Translation2d m_frontLeftLocation = new Translation2d(-0.404, 0.404);
+  private final Translation2d m_frontRightLocation = new Translation2d(0.404, 0.404);
+  private final Translation2d m_backLeftLocation = new Translation2d(-0.404, -0.404);
+  private final Translation2d m_backRightLocation = new Translation2d(0.404, -0.404);
 
   private final SwerveModule m_frontLeft = new SwerveModule(2, 1); //2,1
   private final SwerveModule m_frontRight = new SwerveModule(8, 7); //8.7
