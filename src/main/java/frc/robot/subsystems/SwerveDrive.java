@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -34,7 +36,7 @@ public class SwerveDrive implements Loggable{
   private final SwerveModule m_backLeft = new SwerveModule(4, 3); //4,3
   private final SwerveModule m_backRight = new SwerveModule(6, 5); //6,5
 
-  public static final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
+  @Log public static final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
 
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation
@@ -76,6 +78,12 @@ public class SwerveDrive implements Loggable{
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
+
+    System.out.println();
+    System.out.println("[" + Math.round(SwerveModuleState.optimize(swerveModuleStates[0], m_frontLeft.getAngle()).angle.getDegrees())
+                            + "\t" + Math.round(SwerveModuleState.optimize(swerveModuleStates[1], m_frontRight.getAngle()).angle.getDegrees())
+                           + "\t" + Math.round(SwerveModuleState.optimize(swerveModuleStates[2], m_backLeft.getAngle()).angle.getDegrees())
+                           + "\t" + Math.round(SwerveModuleState.optimize(swerveModuleStates[3], m_backRight.getAngle()).angle.getDegrees()));
   }
 
   /**

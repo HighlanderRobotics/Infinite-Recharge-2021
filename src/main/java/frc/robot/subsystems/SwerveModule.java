@@ -117,7 +117,7 @@ void setTurningPIDF( double p,
     
     m_turningMotor.setNeutralMode(NeutralMode.Brake);
     setDrivePIDF(0.00015,0,0,0.048);
-    setTurningPIDF(0.0003,0,0,0.006);
+    setTurningPIDF(0.00015,0.0,0,0.024);
 
     // 50% power to turning - gets 10610 units/100ms
     // 50% power to driving - 10700 units/100ms
@@ -159,6 +159,7 @@ void setTurningPIDF( double p,
    * @param state Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState state) {
+    double setTurnValue = 2048/360*Math.round(state.angle.getDegrees())*kTurningRatio;
     state = SwerveModuleState.optimize(state, getAngle());
     // Calculate the drive output from the drive PID controller.
     //2048 encoder ticks per rotation, input is m/s, we want ticks per 100ms
@@ -166,6 +167,7 @@ void setTurningPIDF( double p,
 
     // Calculate the turning motor output from the turning PID controller.
     //2048 encoder ticks per rotation, 2pi radians per rotation, so the conversion factor is 2048/2pi radians
-    m_turningMotor.set(ControlMode.Position, 2048/(2*Math.PI)*state.angle.getRadians()*kTurningRatio);
+    m_turningMotor.set(ControlMode.Position, setTurnValue);
+    //System.out.print(setTurnValue + "\t");
   }
 }
