@@ -79,12 +79,18 @@ public class SwerveDrive implements Loggable{
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
 
+    
     System.out.println();
-    System.out.println("[" + Math.round(SwerveModuleState.optimize(swerveModuleStates[0], m_frontLeft.getAngle()).angle.getDegrees())
-                            + "\t" + Math.round(SwerveModuleState.optimize(swerveModuleStates[1], m_frontRight.getAngle()).angle.getDegrees())
-                           + "\t" + Math.round(SwerveModuleState.optimize(swerveModuleStates[2], m_backLeft.getAngle()).angle.getDegrees())
-                           + "\t" + Math.round(SwerveModuleState.optimize(swerveModuleStates[3], m_backRight.getAngle()).angle.getDegrees()));
+    System.out.println("Desired Angle " + "[" + Math.round(swerveModuleStates[0].angle.getDegrees())
+                           + "\t" + Math.round(swerveModuleStates[1].angle.getDegrees())
+                           + "\t" + Math.round(swerveModuleStates[2].angle.getDegrees())
+                           + "\t" + Math.round(swerveModuleStates[3].angle.getDegrees()));
+    System.out.println("Turning Voltage " + "[" + m_frontLeft.getTurningVolts()
+                           + "\t" + m_frontRight.getTurningVolts()
+                           + "\t" + m_backLeft.getTurningVolts()
+                           + "\t" + m_backRight.getTurningVolts());
   }
+
 
   /**
    * Updates the field relative position of the robot.
