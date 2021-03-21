@@ -23,7 +23,7 @@ import io.github.oblarg.oblog.annotations.Log;
  * Represents a swerve drive style drivetrain.
  */
 public class SwerveDrive implements Loggable{
-  public static final double kMaxSpeed = 2.0; // 3 meters per second
+  public static final double kMaxSpeed = 3.0; // 3 meters per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.404, 0.404);
@@ -31,10 +31,10 @@ public class SwerveDrive implements Loggable{
   private final Translation2d m_backLeftLocation = new Translation2d(-0.404, 0.404);
   private final Translation2d m_backRightLocation = new Translation2d(-0.404, -0.404);
 
-  private final SwerveModule m_frontLeft = new SwerveModule(2, 1); //2,1
-  private final SwerveModule m_frontRight = new SwerveModule(8, 7); //8.7
-  private final SwerveModule m_backLeft = new SwerveModule(4, 3); //4,3
-  private final SwerveModule m_backRight = new SwerveModule(6, 5); //6,5
+  private final SwerveModule m_frontLeft = new SwerveModule(2, 1, 188); //2,1
+  private final SwerveModule m_frontRight = new SwerveModule(8, 7, 168); //8.7
+  private final SwerveModule m_backLeft = new SwerveModule(4, 3, 131); //4,3
+  private final SwerveModule m_backRight = new SwerveModule(6, 5, 82); //6,5
 
   @Log public static final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
 

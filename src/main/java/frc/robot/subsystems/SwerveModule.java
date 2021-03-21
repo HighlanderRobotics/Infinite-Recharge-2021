@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -101,7 +102,7 @@ void setTurningPIDF( double p,
    * @param driveMotorChannel   ID for the drive motor.
    * @param turningMotorChannel ID for the turning motor.
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int offset) {
     
     
     this.driveMotorChannel = driveMotorChannel;
@@ -112,13 +113,18 @@ void setTurningPIDF( double p,
       m_turningMotor.configFactoryDefault();
       m_turningMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
       m_turningMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
+      TalonFXSensorCollection sensorCollection = m_turningMotor.getSensorCollection();
+      double absoluteValue = sensorCollection.getIntegratedSensorAbsolutePosition();
+      // Doesn't work, we need to use cancoders in order to get wheel position rather than motor shaft position
+      // Otherwise, will rotate past one rotation, giving us a value we can't use.
+      // sensorCollection.setIntegratedSensorPosition(absoluteValue - offset, 20);
       //m_turningMotor.setSensorPhase(PhaseSensor);
       //m_turningMotor.setInverted(true);
       
     
       m_turningMotor.setNeutralMode(NeutralMode.Brake);
     setDrivePIDF(0.00015,0,0,0.048);
-    setTurningPIDF(1.25,0.0,0,0.048);
+    setTurningPIDF(1,0.0,0,0.048);
 
     // 50% power to turning - gets 10610 units/100ms
     // 50% power to driving - 10700 units/100ms
