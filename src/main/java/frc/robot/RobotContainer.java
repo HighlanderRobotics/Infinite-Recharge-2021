@@ -26,14 +26,18 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.ControlPanelPosition;
 import frc.robot.commands.ControlPanelRotation;
 import frc.robot.commands.RaiseHook;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.SpinCircleThingy;
 import frc.robot.commands.ColorWheelApproach;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.CircleThingy;
 import frc.robot.subsystems.ClimberSubsystem;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -68,6 +72,12 @@ public class RobotContainer {
     private final XboxController m_functionsController = new XboxController(Constants.FUNCTIONS_CONTROLLER_PORT);
     private final XboxController m_driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
     private final Runnable teleOpDriveFn = () -> m_driveSubsystem.teleOpDrive(-m_driverController.getY(Hand.kLeft), m_driverController.getX(Hand.kRight));
+   
+   //from shooter repository
+    private final Shooter shooter = new Shooter();
+    public static boolean isButtonToggled = false;
+    private final CircleThingy circleThingy = new CircleThingy();
+    private final XboxController controller = new XboxController(0);
 
     private boolean givingBalls = true; //set at beginning
     /**
@@ -87,7 +97,7 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-
+        
 
         // m_functionsController button uses
         // whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
@@ -152,7 +162,17 @@ public class RobotContainer {
 
     private void whileHeldFuncController(Button button, Subsystem subsystem, Runnable runnable) {
         new JoystickButton(m_functionsController, button.value).whileHeld(new InstantCommand(runnable, subsystem));
-    }
+
+
+        new JoystickButton(controller, Button.kX.value)
+      .toggleWhenPressed(new ShooterCommand(shooter));
+    new JoystickButton(controller, Button.kY.value)
+      .whenPressed(() -> shooter.increaseRPM(50));
+    new JoystickButton(controller, Button.kA.value)
+      .whenPressed(() -> shooter.decreaseRPM(50));
+    new JoystickButton(controller, Button.kB.value)
+      .whileHeld(new SpinCircleThingy(circleThingy));
+  }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

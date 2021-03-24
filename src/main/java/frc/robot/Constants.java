@@ -98,4 +98,69 @@ public final class Constants {
     public static double kWheelCircumference = 2 * Math.PI * 0.0508;
     public static double kEncoderDistancePerPulseWheel = kWheelCircumference/kEncoderCyclesPerRevolution;
     public static double kHookFullExtension = 10; // Need to calculate
+
+
+
+
+
+    //Shooter + Routing + Hood Angle
+    public static int talonFirstChannel = 13;
+    public static int talonSecondChannel = 14;
+	public static int timesExecuted = 0;
+	public static int circleThingyVictorID = 11;
+	public static int hoodAnglePotentiometerAnalogInputID = 0;
+
+	
+	public static final int kSlotIdx = 0;
+
+
+	public static final int kPIDLoopIdx = 0;
+
+
+    public static final int kTimeoutMs = 0;
+
+	//min possible angle of the hood
+	public static int lowerBoundPotentiometer = 32;
+
+	//max possible angle of the hood
+	public static int upperBoundPotentiometer = 90;
+
+	//for hoodMotor
+    public static int deviceIDCANSparkMax = 15; //???? check this
+
+
+
+
+	  // PID coefficients
+	 public static double kP = 5e-5; 
+	 public static double kI = 1e-6;
+	 public static double kD = 0; 
+	 public static double kIz = 0; 
+	 public static double kFF = (1023 * 0.5) / 9400.0;
+	 public static double kMaxOutput = 1; 
+	 public static double kMinOutput = -1;
+	 public static double maxRPM = 5700; 
+	 //
+	 
+	 	//													kP   kI   kD   kF               Iz    PeakOut */
+	 public final static Gains kGains_Velocit  = new Gains(0.65, 0.0000205, 0.0, (1023 * 0.5) / 9400.0,  300,  1.00);
 }
+
+
+
+
+/* Shooter Empirical Testing:
+hood angle: fully extended
+
+6m: ~4300 (50% accuracy into back port)
+
+5m: ~4675 ????
+
+3m:
+
+2m:
+
+
+
+
+*/
