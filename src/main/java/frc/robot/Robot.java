@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
     final var rot = m_rotLimiter.calculate(m_controller.getX(GenericHID.Hand.kRight))
             * SwerveDrive.kMaxAngularSpeed;
 
-    m_swerve.drive(xSpeed, ySpeed, rot, false);
+    m_swerve.drive(xSpeed, ySpeed, rot, true);
     //m_swerve.drive(0, 0, 0, false);
   }
 

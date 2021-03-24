@@ -18,6 +18,7 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.*;
 
 public class ControlPanelSubsystem extends SubsystemBase {
   
@@ -35,7 +36,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
   //Pistons
 
-
+  private Solenoid controlPanel = new Solenoid(1,2);
    /**
    * Creates a new ExampleSubsystem.
    */
