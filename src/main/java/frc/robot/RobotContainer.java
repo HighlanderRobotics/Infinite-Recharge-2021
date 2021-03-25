@@ -11,6 +11,7 @@ import java.util.List;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
@@ -23,20 +24,16 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.AutoAim;
-import frc.robot.commands.ControlPanelPosition;
-import frc.robot.commands.ControlPanelRotation;
 import frc.robot.commands.RaiseHook;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SpinCircleThingy;
 import frc.robot.commands.ColorWheelApproach;
-import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DistanceSensorSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.CircleThingy;
 import frc.robot.subsystems.ClimberSubsystem;
 import io.github.oblarg.oblog.Logger;
@@ -60,10 +57,8 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private final ControlPanelSubsystem m_controlPanelSubsystem = new ControlPanelSubsystem();
     private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
     private final LimeLightSubsystem m_limelightSubsystem = new LimeLightSubsystem();
-    private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
     // private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
     // private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
     private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
@@ -77,7 +72,6 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     public static boolean isButtonToggled = false;
     private final CircleThingy circleThingy = new CircleThingy();
-    private final XboxController controller = new XboxController(0);
 
     private boolean givingBalls = true; //set at beginning
     /**
@@ -102,20 +96,19 @@ public class RobotContainer {
         // m_functionsController button uses
         // whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
         whileHeldFuncController(Button.kA, m_intakeSubsystem, m_intakeSubsystem::threeQuarterSpeed);
-        whileHeldFuncController(Button.kBumperLeft, m_shooterSubsystem, m_shooterSubsystem::shootBalls);
+       // whileHeldFuncController(Button.kBumperLeft, m_shooterSubsystem, m_shooterSubsystem::shootBalls);
         // whileHeldFuncController(Button.kBumperRight, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendIntakePiston);
 
         new JoystickButton(m_functionsController, Button.kA.value)
             .whileHeld(new RaiseHook(3, 45, m_climberSubsystem));
-
-        // new JoystickButton(m_functionsController, Button.kB.value)
-            // .whileHeld(new ColorWheelApproach(m_driveSubsystem, m_distanceSensorSubsystem));
-
         new JoystickButton(m_functionsController, Button.kX.value)
-            .toggleWhenPressed(new ControlPanelPosition(m_controlPanelSubsystem));
-        
-        new JoystickButton(m_functionsController, Button.kY.value)
-            .toggleWhenPressed(new ControlPanelRotation(m_controlPanelSubsystem));
+            .toggleWhenPressed(new ShooterCommand(shooter));
+        new JoystickButton(m_functionsController, Button.kBumperRight.value)
+            .whenPressed(() -> shooter.increaseRPM(50));
+        new JoystickButton(m_functionsController, Button.kBumperLeft.value)
+            .whenPressed(() -> shooter.decreaseRPM(50));
+        new JoystickButton(m_functionsController, Button.kB.value)
+            .whileHeld(new SpinCircleThingy(circleThingy));
 
         //new JoystickButton(m_functionsController, Button.kBumperRight.value)
          //   .toggleWhenPressed(new Climb(m_climberSubsystem));
@@ -146,17 +139,11 @@ public class RobotContainer {
 
 
         // Defaults
-        m_controlPanelSubsystem.setDefaultCommand(new RunCommand(() -> m_controlPanelSubsystem.zeroSpeed(), m_controlPanelSubsystem));
-        m_shooterSubsystem.setDefaultCommand(new RunCommand(() -> m_shooterSubsystem.zeroSpeed(), m_shooterSubsystem));
-        m_intakeSubsystem.setDefaultCommand(new RunCommand(() -> m_intakeSubsystem.zeroSpeed(), m_intakeSubsystem));
         m_driveSubsystem.setDefaultCommand(new RunCommand(teleOpDriveFn, m_driveSubsystem));
         //m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.driveStraight(), m_driveSubsystem));
         m_limelightSubsystem.setDefaultCommand(new RunCommand(() -> m_limelightSubsystem.lightOn(), m_limelightSubsystem));
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
-        SmartDashboard.putData("Blue", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("B")));
-        SmartDashboard.putData("Red", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("R")));
-        SmartDashboard.putData("Green", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("G")));
-        SmartDashboard.putData("Yellow", new InstantCommand(() -> m_controlPanelSubsystem.colorRotation("Y")));
+  
 
     }
 
@@ -164,14 +151,6 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, button.value).whileHeld(new InstantCommand(runnable, subsystem));
 
 
-        new JoystickButton(controller, Button.kX.value)
-      .toggleWhenPressed(new ShooterCommand(shooter));
-    new JoystickButton(controller, Button.kY.value)
-      .whenPressed(() -> shooter.increaseRPM(50));
-    new JoystickButton(controller, Button.kA.value)
-      .whenPressed(() -> shooter.decreaseRPM(50));
-    new JoystickButton(controller, Button.kB.value)
-      .whileHeld(new SpinCircleThingy(circleThingy));
   }
 
     /**
@@ -294,9 +273,10 @@ public class RobotContainer {
             collectFromTrenchCommand.andThen(() -> m_driveSubsystem.tankDriveVolts(0, 0)), 
             // new RunCommand(() -> m_pneumaticsSubsystem.retractIntakePiston(), m_pneumaticsSubsystem).withTimeout(0.1),
             new RunCommand(() -> m_intakeSubsystem.zeroSpeed(), m_intakeSubsystem).withTimeout(0.1),
-            driveToPortCommand.andThen(() -> m_driveSubsystem.tankDriveVolts(0, 0)), 
-            new RunCommand(() -> m_shooterSubsystem.shootBalls(), m_shooterSubsystem).withTimeout(2.0),
-            new RunCommand(() -> m_shooterSubsystem.zeroSpeed(), m_shooterSubsystem).withTimeout(0.1));
+            driveToPortCommand.andThen(() -> m_driveSubsystem.tankDriveVolts(0, 0)));
+
+            //new RunCommand(() -> m_shooterSubsystem.shootBalls(), m_shooterSubsystem).withTimeout(2.0),
+           // new RunCommand(() -> m_shooterSubsystem.zeroSpeed(), m_shooterSubsystem).withTimeout(0.1));
         
     }
 }

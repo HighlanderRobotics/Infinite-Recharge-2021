@@ -25,17 +25,16 @@ public class ShooterCommand extends CommandBase {
     public void initialize() {
         
         startTime = System.currentTimeMillis();
-        Constants.timesExecuted = 0;
        //shooter.hoodMotor.set(0.1);
 
-       //shooter.setRPM(4000);
+       shooter.setRPM(4000);
 
        //2000 rpm = 
     }
 
     @Override
     public void execute() { 
-     shooter.setAngle(45);
+     //shooter.setAngle(45);
       //System.out.println("Potentiometer Angle:" + shooter.getPotentiometerAngle());
     
      // shooter.firstMotor.set(TalonFXControlMode.PercentOutput, 0.5);

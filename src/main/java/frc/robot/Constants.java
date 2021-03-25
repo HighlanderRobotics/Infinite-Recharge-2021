@@ -67,12 +67,14 @@ public final class Constants {
     public static int DRIVESUBSYSTEM_LEFT_FRONT_VICTOR = 1;
     public static int DRIVESUBSYSTEM_RIGHT_BACK_TALON = 3;
     public static int DRIVESUBSYSTEM_RIGHT_FRONT_VICTOR = 2;
-    public static int CONTROLPANELSUBSYSTEM_VICTOR = 4;
-    public static int SHOOTERSUBSYSTEM_BACK_VICTOR = 5;
-    public static int SHOOTERSUBSYSTEM_FRONT_VICTOR = 6;
     public static int INTAKESUBSYSTEM_VICTOR = 7;
     public static int CLIMBERSUBSYSTEM_WINCH_TALON = 8;
     public static int CLIMBERSUBSYSTEM_WHEEL_TALON = 9;
+	public static int circleThingyVictorID = 11;
+    public static int talonFirstChannel = 13;
+    public static int talonSecondChannel = 14;
+    public static int deviceIDCANSparkMax = 15; //hoodMotor
+
 
     // Solenoids
     public static final int INTAKE_FORWARD_CHANNEL = 4;
@@ -98,26 +100,24 @@ public final class Constants {
     public static double kWheelCircumference = 2 * Math.PI * 0.0508;
     public static double kEncoderDistancePerPulseWheel = kWheelCircumference/kEncoderCyclesPerRevolution;
     public static double kHookFullExtension = 10; // Need to calculate
+    
+
+
+    // Analog Channels
+	public static int hoodAnglePotentiometerAnalogInputID = 0;
 
 
 
 
 
     //Shooter + Routing + Hood Angle
-    public static int talonFirstChannel = 13;
-    public static int talonSecondChannel = 14;
-	public static int timesExecuted = 0;
-	public static int circleThingyVictorID = 11;
-	public static int hoodAnglePotentiometerAnalogInputID = 0;
+   
+	//public static int timesExecuted = 0;
 
 	
 	public static final int kSlotIdx = 0;
-
-
 	public static final int kPIDLoopIdx = 0;
-
-
-    public static final int kTimeoutMs = 0;
+    public static final int kTimeoutMs = 20;
 
 	//min possible angle of the hood
 	public static int lowerBoundPotentiometer = 32;
@@ -126,24 +126,14 @@ public final class Constants {
 	public static int upperBoundPotentiometer = 90;
 
 	//for hoodMotor
-    public static int deviceIDCANSparkMax = 15; //???? check this
-
-
-
-
-	  // PID coefficients
-	 public static double kP = 5e-5; 
-	 public static double kI = 1e-6;
-	 public static double kD = 0; 
-	 public static double kIz = 0; 
-	 public static double kFF = (1023 * 0.5) / 9400.0;
-	 public static double kMaxOutput = 1; 
-	 public static double kMinOutput = -1;
-	 public static double maxRPM = 5700; 
-	 //
+    //???? check this
 	 
-	 	//													kP   kI   kD   kF               Iz    PeakOut */
-	 public final static Gains kGains_Velocit  = new Gains(0.65, 0.0000205, 0.0, (1023 * 0.5) / 9400.0,  300,  1.00);
+	 	//													kP   kI   kD   kF                  PeakOut */
+     public final static Gains kGains_Velocity  = new Gains(0.65, 0.0000205, 0.0, (1023 * 0.5) / 9400.0,  1.00);
+     
+     
+     public final static Gains kGains_Hood = new Gains(0.00005, 0.000001, 0, (1023* 0.5 / 9400),  1.00);
+     //fix kF and peakOut
 }
 
 

@@ -11,6 +11,7 @@ public class SpinCircleThingy extends CommandBase{
 
     public SpinCircleThingy(CircleThingy circleThingy) {
         SpinCircleThingy.circleThingy = circleThingy;
+        addRequirements(circleThingy);
     }
 
 @Override
