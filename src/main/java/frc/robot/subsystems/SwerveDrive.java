@@ -79,17 +79,7 @@ public class SwerveDrive extends SubsystemBase implements Loggable{
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
-
     
-    System.out.println();
-    System.out.println("Desired Angle " + "[" + Math.round(swerveModuleStates[0].angle.getDegrees())
-                           + "\t" + Math.round(swerveModuleStates[1].angle.getDegrees())
-                           + "\t" + Math.round(swerveModuleStates[2].angle.getDegrees())
-                           + "\t" + Math.round(swerveModuleStates[3].angle.getDegrees()));
-    System.out.println("Turning Voltage " + "[" + m_frontLeft.getTurningVolts()
-                           + "\t" + m_frontRight.getTurningVolts()
-                           + "\t" + m_backLeft.getTurningVolts()
-                           + "\t" + m_backRight.getTurningVolts());
   }
 
 

@@ -9,24 +9,26 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DistanceSensorSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.LimeLightSubsystem;
 import io.github.oblarg.oblog.annotations.Log;
 
+
+
 public class AutoAim extends CommandBase {
 
-  private final DriveSubsystem m_driveSubsystem;
+
+  private static final double maxAngle = 0.5;
+  private final SwerveDrive swerveDrive;
   private final LimeLightSubsystem m_limeLightSubsystem;
-  private final DistanceSensorSubsystem m_distanceSensorSubsystem;
   @Log boolean isAutoAimFinished;
   /**
    * Creates a new autoAim.
    */
-  public AutoAim(DriveSubsystem driveSubsystem, LimeLightSubsystem limelightSubsystem, DistanceSensorSubsystem distanceSensorSubsystem) {
-    m_driveSubsystem = driveSubsystem;
+  public AutoAim(SwerveDrive swerveDrive, LimeLightSubsystem limelightSubsystem) {
+    this.swerveDrive = swerveDrive;
     m_limeLightSubsystem = limelightSubsystem;
-    m_distanceSensorSubsystem = distanceSensorSubsystem;
-    addRequirements(m_driveSubsystem, m_limeLightSubsystem, m_distanceSensorSubsystem);
+    addRequirements(swerveDrive , m_limeLightSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -53,14 +55,10 @@ public class AutoAim extends CommandBase {
     m_limeLightSubsystem.lightOn();
     
     
-    if(m_limeLightSubsystem.getHorizontalOffset() > 7) {
-      m_driveSubsystem.turnDriveAtSpeed(0.5);
-    } else if(m_limeLightSubsystem.getHorizontalOffset() < -7) {
-      m_driveSubsystem.turnDriveAtSpeed(-0.5);
-    } else if(m_distanceSensorSubsystem.getFrontDistance() >= 10) {
-      m_driveSubsystem.straightDrive(0.5);
-    } else if(m_distanceSensorSubsystem.getFrontDistance() <= 10) {
-        m_driveSubsystem.straightDrive(0);
+    if(m_limeLightSubsystem.getHorizontalOffset() > maxAngle) {
+      swerveDrive.drive(0, 0, 1, false);
+    } else if(m_limeLightSubsystem.getHorizontalOffset() < -maxAngle) {
+      swerveDrive.drive(0, 0, -1, false);
     }
     
     
@@ -70,13 +68,13 @@ public class AutoAim extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     isAutoAimFinished = !interrupted;
-    m_limeLightSubsystem.lightOff();
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_distanceSensorSubsystem.getFrontDistance() <= 5;
+    return m_limeLightSubsystem.getHorizontalOffset() < maxAngle && 
+    m_limeLightSubsystem.getHorizontalOffset() > -maxAngle;
   }
 }

@@ -60,7 +60,6 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
 
-    private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
     private final LimeLightSubsystem limelight = new LimeLightSubsystem();
     // private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
     // private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
@@ -92,6 +91,7 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
+        SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
 
         Logger.configureLoggingAndConfig(this, false);
     }
@@ -118,9 +118,9 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, Button.kX.value)
             .toggleWhenPressed(new ShooterCommand(shooter, limelight));
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
-            .whenPressed(() -> shooter.increaseRPM(50));
+            .whenPressed(() -> shooter.increaseRPM(25));
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
-            .whenPressed(() -> shooter.decreaseRPM(50));
+            .whenPressed(() -> shooter.decreaseRPM(25));
         new JoystickButton(m_functionsController, Button.kB.value)
             .whileHeld(new SpinCircleThingy(circleThingy));
 

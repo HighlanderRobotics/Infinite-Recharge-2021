@@ -129,7 +129,7 @@ public final class Constants {
     //???? check this
 	 
 	 	//													kP   kI   kD   kF                  PeakOut */
-     public final static Gains kGains_Velocity  = new Gains(0.65, 0.0000205, 0.0, (1023 * 0.5) / 9400.0,  1.00);
+     public final static Gains kGains_Velocity  = new Gains(3.5, 0.00001, 0.0, (1023 * 0.5) / 9400.0,  1.00);
      
      
      public final static Gains kGains_Hood = new Gains(0.00005, 0.000001, 0, (1023* 0.5 / 9400),  1.00);
