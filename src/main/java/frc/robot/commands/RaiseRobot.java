@@ -7,21 +7,21 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class Climb extends CommandBase {
-  /** Creates a new Climb. */
-
+public class RaiseRobot extends CommandBase {
+  /** Creates a new RaiseRobot. */
   private final ClimberSubsystem m_climberSubsystem;
+  private boolean finished = false;
 
-  public Climb(ClimberSubsystem climberSubsystem) {
+  public RaiseRobot(ClimberSubsystem climberSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climberSubsystem = climberSubsystem;
     addRequirements(m_climberSubsystem);
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
     
   }
 
@@ -29,12 +29,13 @@ public class Climb extends CommandBase {
   @Override
   public void execute() {
 
-    // If the wheel stops spinning, the winch motor should stop as well
-    boolean stopped = false; // to be deleted once encoder placement is figured out
-    // encoderWheel.getStopped();
-    if (stopped) {
-      // Winch motor should stop - probably wheel too?
+    m_climberSubsystem.setWheelSpeed(-0.2); // Sets climber to retract
+    if (m_climberSubsystem.getDistanceWheelEncoder() < 5) { // if climber is extended < 5 meters
+
+      m_climberSubsystem.setWheelSpeed(0); // stop retracting
+      finished = true;
     }
+    //Using wheelEncoder and wheel PID, climb to a predetermined setpoint based on Climber team input
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +45,7 @@ public class Climb extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // boolean method in climber subsystem for if climber is at appropriate height
+    return finished;
   }
 }

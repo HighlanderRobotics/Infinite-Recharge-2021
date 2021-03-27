@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LimeLightSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import io.github.oblarg.oblog.Logger;
 
 /**
@@ -28,9 +27,7 @@ import io.github.oblarg.oblog.Logger;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private LimeLightSubsystem m_limelightSubsystem = new LimeLightSubsystem();
-  private NetworkTableEntry shooterSpeedSlider;  
  
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -116,11 +113,6 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    shooterSpeedSlider = Shuffleboard.getTab("Robot Sliders")
-    .add("Shooter Speed", 0)
-    .withWidget(BuiltInWidgets.kNumberSlider)
-    .withProperties(Map.of("min", -1, "max", 0))
-    .getEntry();
 
   }
 
@@ -129,9 +121,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    
-    double shooterSpeed = shooterSpeedSlider.getDouble(0.0);
-    m_shooterSubsystem.shootAtSpeed(-0.5, shooterSpeed);
+
   
   }
 }

@@ -8,13 +8,18 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Solenoid;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.controller.PIDController;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimberSubsystem extends SubsystemBase {
   /**
@@ -22,12 +27,15 @@ public class ClimberSubsystem extends SubsystemBase {
    */
 
   // To-do: initialize relevant motors/climber mechanism parts
-  private Encoder encoderString = new Encoder(Constants.kStringEncoderPorts[0], Constants.kStringEncoderPorts[1]);
-  private Encoder encoderWheel = new Encoder(Constants.kWheelEncoderPorts[0], Constants.kWheelEncoderPorts[1]);
+  private Encoder winchEncoder = new Encoder(Constants.kWinchEncoderPorts[0], Constants.kWinchEncoderPorts[1]);
+  private Encoder wheelEncoder = new Encoder(Constants.kWheelEncoderPorts[0], Constants.kWheelEncoderPorts[1]);
 
   //Add two motors
-  private VictorSPX stringMotor = new VictorSPX(Constants.CLIMBERSUBSYSTEM_STRING_VICTOR);
-  private VictorSPX wheelMotor = new VictorSPX(Constants.CLIMBERSUBSYSTEM_WHEEL_VICTOR);
+  private WPI_TalonSRX winchMotor = new WPI_TalonSRX(Constants.CLIMBERSUBSYSTEM_WINCH_TALON);
+  private WPI_TalonSRX wheelMotor = new WPI_TalonSRX(Constants.CLIMBERSUBSYSTEM_WHEEL_TALON);
+
+  // Ratchet Solenoid
+  // private Solenoid ratchet = new Solenoid(Constants.CLIMBER_RATCHET_CHANNEL);
 
   // Add two duplicate encoders and two duplicate motors
   // TBD because of motor shortage.
@@ -35,65 +43,75 @@ public class ClimberSubsystem extends SubsystemBase {
   private PIDController winchPID = new PIDController(0,0,0);
   // Need to input PID constants from 
 
-  double ratio = 0.5; // Multiply string speed by this to have wheel speed.
+  boolean ratchetPower = false;
 
   public ClimberSubsystem() {
 
     // Need to configure encoders here
-    encoderString.reset();
-    encoderWheel.reset();
-    // encoderString.setDistancePerPulse(distancePerPulse); 
-    // Need to calculate this based on the diameter of the shaft - will calculate distance angularly and translate I'm assuming
-    // Need clarification on how one would normally calculate this with pulses - confused
-    // encoderString.setMinRate(double minRate); will depend on friction - when considered stopped
+    winchEncoder.reset();
+    wheelEncoder.reset();
+    winchEncoder.setDistancePerPulse(360.0 / Constants.kEncoderCyclesPerRevolution); 
+    // encoderWinch.setMinRate(double minRate); will depend on friction - when considered stopped
     // minRate is in distance per second
-    // encoderString.setMaxPeriod(double maxPeriod); Set the max period for stopped detection
+    // encoderWinch.setMaxPeriod(double maxPeriod); Set the max period for stopped detection
     // maxPeriod will be the maximum time between rising and falling edges before the FPGA will report the device stopped - expressed in seconds
-    // encoderWheel.setDistancePerPulse();
+    wheelEncoder.setDistancePerPulse(Constants.kEncoderDistancePerPulseWheel);
+    wheelEncoder.setMaxPeriod(.1); //encoder configures itself stopped after .1 seconds.
+    // ratchet.set(ratchetPower);
     
   }
 
   public void resetEncoders() {
     
-    encoderString.reset();
-    encoderWheel.reset();
+    winchEncoder.reset();
+    wheelEncoder.reset();
   }
 
-  public void setSpeed(double speed) {
+  public void setWheelSpeed(double speed) {
 
-    stringMotor.set(ControlMode.PercentOutput, speed * ratio);
     wheelMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  public void setRatio(double ratio) {
+  public void setWinchSpeed(double speed) {
 
-    this.ratio = ratio;
+    winchMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  public void slowWinch() {
+  public double getDistanceWheelEncoder() {
 
-    ratio -= .05;
+    return wheelEncoder.getDistance();
   }
 
-  public void fastWinch() {
+  public double getAngleWinchEncoder() {
 
-    ratio += .05;
+    return winchEncoder.getDistance();
   }
 
-  /**
-  public void fullPowerString() {
+  public void setWinchPIDSetpoint(double setpoint) {
 
-    stringMotor.set(ControlMode.PercentOutput, 1);
+    winchPID.setSetpoint(setpoint);
+    winchMotor.set(winchPID.calculate(winchEncoder.getDistance()));
   }
 
-  public void fullPowerWheel() {
+  public void resetWinchPID() {
 
-    wheelMotor.set(ControlMode.PercentOutput, 1);
+    winchPID.reset();
   }
-  */
+
+  public boolean isHookFullyExtended() {
+
+    return (Math.abs(Constants.kHookFullExtension - wheelEncoder.getDistance()) < 0.1);
+  }
+
+  public boolean winchAtSetpoint() {
+
+    return winchPID.atSetpoint();
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Climber Height", this.getDistanceWheelEncoder());
+    SmartDashboard.putNumber("Winch Angle", this.getAngleWinchEncoder());
   }
 }

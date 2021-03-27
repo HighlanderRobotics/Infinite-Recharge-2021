@@ -59,20 +59,22 @@ public final class Constants {
     // Distance Sensors
     public static int FRONT_PING_CHANNEL = 4;
     public static int FRONT_ECHO_CHANNEL = 5;
-    public static int CONTROLPANEL_PING_CHANNEL = 6;
-    public static int CONTROLPANEL_ECHO_CHANNEL = 7;
+    public static int CONTROLPANEL_PING_CHANNEL = 8;
+    public static int CONTROLPANEL_ECHO_CHANNEL = 9;
 
     // Motors
     public static int DRIVESUBSYSTEM_LEFT_BACK_TALON = 0;
     public static int DRIVESUBSYSTEM_LEFT_FRONT_VICTOR = 1;
     public static int DRIVESUBSYSTEM_RIGHT_BACK_TALON = 3;
     public static int DRIVESUBSYSTEM_RIGHT_FRONT_VICTOR = 2;
-    public static int CONTROLPANELSUBSYSTEM_VICTOR = 4;
-    public static int SHOOTERSUBSYSTEM_BACK_VICTOR = 5;
-    public static int SHOOTERSUBSYSTEM_FRONT_VICTOR = 6;
     public static int INTAKESUBSYSTEM_VICTOR = 7;
-    public static int CLIMBERSUBSYSTEM_STRING_VICTOR = 8;
-    public static int CLIMBERSUBSYSTEM_WHEEL_VICTOR = 9;
+    public static int CLIMBERSUBSYSTEM_WINCH_TALON = 8;
+    public static int CLIMBERSUBSYSTEM_WHEEL_TALON = 9;
+	public static int circleThingyVictorID = 11;
+    public static int talonFirstChannel = 13;
+    public static int talonSecondChannel = 14;
+    public static int deviceIDCANSparkMax = 15; //hoodMotor
+
 
     // Solenoids
     public static final int INTAKE_FORWARD_CHANNEL = 4;
@@ -85,13 +87,109 @@ public final class Constants {
     public static final double SLEW_ROTATION_LIMITER = 3.5;
 
 	public static boolean kGyroReversed = false;
-	public static int[] kLeftEncoderPorts = {0,1};
-    public static int[] kRightEncoderPorts = {2,3};
+	public static int[] kLeftEncoderPorts = {0,3};
+    public static int[] kRightEncoderPorts = {6,7};
     public static double kEncoderPulses = 1000;
     public static double kEncoderDistancePerPulse = 0.47879/kEncoderPulses;
     public static boolean kEncoderReversed = false;
 
     // Climber Encoders
-    public static int[] kStringEncoderPorts = {4,5};
-    public static int[] kWheelEncoderPorts = {6,7};
+    public static int[] kWinchEncoderPorts = {5,4};
+    public static int[] kWheelEncoderPorts = {1,2};
+    public static double kEncoderCyclesPerRevolution = 2048.0;
+    public static double kWheelCircumference = 2 * Math.PI * 0.0508;
+    public static double kEncoderDistancePerPulseWheel = kWheelCircumference/kEncoderCyclesPerRevolution;
+    public static double kHookFullExtension = 10; // Need to calculate
+    
+
+
+    // Analog Channels
+	public static int hoodAnglePotentiometerAnalogInputID = 0;
+
+
+
+
+
+    //Shooter + Routing + Hood Angle
+   
+	//public static int timesExecuted = 0;
+
+	
+	public static final int kSlotIdx = 0;
+	public static final int kPIDLoopIdx = 0;
+    public static final int kTimeoutMs = 20;
+
+	//min possible angle of the hood
+	public static int lowerBoundPotentiometer = 32;
+
+	//max possible angle of the hood
+	public static int upperBoundPotentiometer = 90;
+
+	//for hoodMotor
+    //???? check this
+	 
+	 	//													kP   kI   kD   kF                  PeakOut */
+     public final static Gains kGains_Velocity  = new Gains(0.65, 0.0000205, 0.0, (1023 * 0.5) / 9400.0,  1.00);
+     
+     
+     public final static Gains kGains_Hood = new Gains(0.00005, 0.000001, 0, (1023* 0.5 / 9400),  1.00);
+     //fix kF and peakOut
 }
+
+
+
+
+/* Shooter Empirical Testing:
+hood angle: fully extended
+
+6m: ~4300 (50% accuracy into back port)
+
+5m: ~4675 ????
+
+3m:
+
+2m:
+
+
+
+1
+-----
+angle: 2.5 in between metal and point of purple part (perpendicular)
+
+distance: 280 cm
+
+2750 rpm 
+
+ty = -7.4
+
+-----
+
+2
+-----
+
+3000 rpm
+
+ty = -14
+
+
+3
+-----
+3300 rpm
+
+ty = -17.7
+
+
+
+4
+-----
+3900 rpm
+
+ty = -21.5
+
+
+5
+-----
+rpm
+
+ty = 
+*/
