@@ -152,5 +152,44 @@ hood angle: fully extended
 
 
 
+1
+-----
+angle: 2.5 in between metal and point of purple part (perpendicular)
 
+distance: 280 cm
+
+2750 rpm 
+
+ty = -7.4
+
+-----
+
+2
+-----
+
+3000 rpm
+
+ty = -14
+
+
+3
+-----
+3300 rpm
+
+ty = -17.7
+
+
+
+4
+-----
+3900 rpm
+
+ty = -21.5
+
+
+5
+-----
+rpm
+
+ty = 
 */

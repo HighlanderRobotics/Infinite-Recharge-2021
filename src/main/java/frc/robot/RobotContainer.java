@@ -58,7 +58,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-    private final LimeLightSubsystem m_limelightSubsystem = new LimeLightSubsystem();
+    private final LimeLightSubsystem limelight = new LimeLightSubsystem();
     // private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
     // private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
     private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
@@ -102,7 +102,7 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, Button.kA.value)
             .whileHeld(new RaiseHook(3, 45, m_climberSubsystem));
         new JoystickButton(m_functionsController, Button.kX.value)
-            .toggleWhenPressed(new ShooterCommand(shooter));
+            .toggleWhenPressed(new ShooterCommand(shooter, limelight));
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
             .whenPressed(() -> shooter.increaseRPM(50));
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
@@ -141,7 +141,7 @@ public class RobotContainer {
         // Defaults
         m_driveSubsystem.setDefaultCommand(new RunCommand(teleOpDriveFn, m_driveSubsystem));
         //m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.driveStraight(), m_driveSubsystem));
-        m_limelightSubsystem.setDefaultCommand(new RunCommand(() -> m_limelightSubsystem.lightOn(), m_limelightSubsystem));
+        limelight.setDefaultCommand(new RunCommand(() -> limelight.lightOn(), limelight));
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
   
 

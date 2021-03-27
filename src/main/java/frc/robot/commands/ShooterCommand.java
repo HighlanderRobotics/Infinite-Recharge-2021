@@ -3,22 +3,26 @@ package frc.robot.commands;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.Constants;
 
 
 
 public class ShooterCommand extends CommandBase {
-  public static Shooter shooter;
+  public Shooter shooter;
+  public LimeLightSubsystem limelight;
   public int timesExecuted = 0;
   public long startTime;
   public int threeSecondCount;
   public int increaseRPM;
   public double targetRPM;
 
-  public ShooterCommand(Shooter shooter) {
-    ShooterCommand.shooter = shooter;
-      addRequirements(shooter);
+  public ShooterCommand(Shooter shooter, LimeLightSubsystem limelight) {
+    this.shooter = shooter;
+    this.limelight = limelight;
+      addRequirements(shooter, limelight);
+    
     }
 
     @Override
@@ -27,13 +31,17 @@ public class ShooterCommand extends CommandBase {
         startTime = System.currentTimeMillis();
        //shooter.hoodMotor.set(0.1);
 
-       shooter.setRPM(4000);
+       //shooter.setRPM(3000);
 
        //2000 rpm = 
     }
 
     @Override
     public void execute() { 
+      double x = limelight.getVerticalOffset();
+      double targetRPM = (6.31991 * Math.pow(x, 2)) + (102.352 * x) + 3166.61;
+      shooter.setRPM(targetRPM);
+      
      //shooter.setAngle(45);
       //System.out.println("Potentiometer Angle:" + shooter.getPotentiometerAngle());
     

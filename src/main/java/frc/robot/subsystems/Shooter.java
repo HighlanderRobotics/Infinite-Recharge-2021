@@ -126,9 +126,11 @@ public PIDController hoodPIDController;
   public void setRPM (double targetRPM){
     double targetVelocity = (targetRPM * 2048) / 600;
     currentSetPoint = targetRPM;
-    System.out.println("Target Velocity:" + targetVelocity);
+    System.out.println("Target RPM:" + targetRPM);
     firstMotor.set(TalonFXControlMode.Velocity, targetVelocity);
   }
+
+  
 
     	/* Configured for Velocity Closed Loop on Integrated Sensors' Sum and Arbitrary FeedForward on joyX */
 			
