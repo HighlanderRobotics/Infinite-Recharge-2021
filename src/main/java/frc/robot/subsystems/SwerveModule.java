@@ -123,6 +123,7 @@ void setTurningPIDF( double p,
       
     
       m_turningMotor.setNeutralMode(NeutralMode.Brake);
+      m_driveMotor.setNeutralMode(NeutralMode.Brake);
     setDrivePIDF(0.00015,0,0,0.048);
     setTurningPIDF(1,0.0,0,0.048);
 

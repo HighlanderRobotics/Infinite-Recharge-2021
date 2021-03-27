@@ -17,7 +17,7 @@ public class SpinCircleThingy extends CommandBase{
 @Override
 public void initialize() { 
     //sets speed of motor (that controls the purple routing wheel) to 20%
-circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.2);
+circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.6);
 }
 
 @Override

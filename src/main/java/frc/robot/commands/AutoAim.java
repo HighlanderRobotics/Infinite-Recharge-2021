@@ -18,7 +18,7 @@ import io.github.oblarg.oblog.annotations.Log;
 public class AutoAim extends CommandBase {
 
 
-  private static final double maxAngle = 0.25;
+  private static final double maxAngle = 1;
   private final SwerveDrive swerveDrive;
   private final LimeLightSubsystem m_limeLightSubsystem;
   @Log boolean isAutoAimFinished;
@@ -55,9 +55,9 @@ public class AutoAim extends CommandBase {
     
 
     
-    if(m_limeLightSubsystem.getHorizontalOffset() > maxAngle) {
+    if(m_limeLightSubsystem.getHorizontalOffset() > maxAngle + 1) {
       swerveDrive.drive(0, 0, 0.4, false);
-    } else if(m_limeLightSubsystem.getHorizontalOffset() < -maxAngle) {
+    } else if(m_limeLightSubsystem.getHorizontalOffset() < -maxAngle + 1) {
       swerveDrive.drive(0, 0, -0.4, false);
     }
     else if(m_limeLightSubsystem.isPointingAtTarget()){

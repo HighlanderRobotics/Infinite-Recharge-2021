@@ -98,7 +98,7 @@ public class RobotContainer {
         Logger.configureLoggingAndConfig(this, false);
 
         
-        SmartDashboard.putData("Search Auto Aim", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
+        //SmartDashboard.putData("Search Auto Aim", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
     }
 
     /**
@@ -128,6 +128,8 @@ public class RobotContainer {
             .whenPressed(() -> shooter.decreaseRPM(25));
         new JoystickButton(m_functionsController, Button.kB.value)
             .whileHeld(new SpinCircleThingy(circleThingy));
+        new JoystickButton(m_functionsController, Button.kY.value)
+            .toggleWhenPressed(new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
 
         //new JoystickButton(m_functionsController, Button.kBumperRight.value)
          //   .toggleWhenPressed(new Climb(m_climberSubsystem));
@@ -192,7 +194,7 @@ public class RobotContainer {
         final var rot = m_rotLimiter.calculate(m_driverController.getX(GenericHID.Hand.kRight))
                 * SwerveDrive.kMaxAngularSpeed;
     
-        m_swerve.drive(xSpeed, ySpeed, rot, true);
+        m_swerve.drive(xSpeed, ySpeed, rot, false);
         //m_swerve.drive(0, 0, 0, false);
       }
     

@@ -62,13 +62,13 @@ public class SearchingLimelight extends CommandBase {
     }
     // 0 degrees is the front (shooter) of the robot pointed at the power port
     if(swerveDrive.getAngle().getDegrees() < 0 || !overshot) {
-        swerveDrive.drive(0, 0, 1, false);
+        swerveDrive.drive(0, 0, 1.25, false);
         if(Math.abs(startingAngle - swerveDrive.getAngle().getDegrees()) > 45.0)
         {
             overshot = true;
         }
     }
-    swerveDrive.drive(0, 0, -1, false);
+    swerveDrive.drive(0, 0, -1.25, false);
     
     
     
