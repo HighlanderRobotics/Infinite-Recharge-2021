@@ -53,11 +53,15 @@ public class AutoAim extends CommandBase {
     //  
     //  err_value * kP + integral(err_value) * kI + derivative(err_value) * kD
     
+
     
     if(m_limeLightSubsystem.getHorizontalOffset() > maxAngle) {
-      swerveDrive.drive(0, 0, 0.5, false);
+      swerveDrive.drive(0, 0, 0.4, false);
     } else if(m_limeLightSubsystem.getHorizontalOffset() < -maxAngle) {
-      swerveDrive.drive(0, 0, -0.5, false);
+      swerveDrive.drive(0, 0, -0.4, false);
+    }
+    else if(m_limeLightSubsystem.isPointingAtTarget()){
+      swerveDrive.drive(0, 0, 0, false);
     }
     
     

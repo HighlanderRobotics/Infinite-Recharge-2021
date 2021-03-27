@@ -76,7 +76,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     double x = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
     double y = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
     double area = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
-    isPointingAtTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0) == 0;
+    isPointingAtTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0) == 1;
     SmartDashboard.putNumber("limelightX", x);
     SmartDashboard.putNumber("limelightY", y);
     SmartDashboard.putNumber("limelightArea", area);
