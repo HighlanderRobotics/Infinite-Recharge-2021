@@ -15,17 +15,18 @@ import io.github.oblarg.oblog.annotations.Log;
 
 
 
-public class AutoAim extends CommandBase {
-
-
-  private static final double maxAngle = 0.25;
-  private final SwerveDrive swerveDrive;
-  private final LimeLightSubsystem m_limeLightSubsystem;
+public class SearchingLimelight extends CommandBase {
+//tv -> 0
+    private final SwerveDrive swerveDrive;
+    private final LimeLightSubsystem m_limeLightSubsystem;
+    public double startingAngle;
+    public boolean overshot;
+    public boolean pointingAtTarget;
   @Log boolean isAutoAimFinished;
   /**
    * Creates a new autoAim.
    */
-  public AutoAim(SwerveDrive swerveDrive, LimeLightSubsystem limelightSubsystem) {
+  public SearchingLimelight(SwerveDrive swerveDrive, LimeLightSubsystem limelightSubsystem) {
     this.swerveDrive = swerveDrive;
     m_limeLightSubsystem = limelightSubsystem;
     addRequirements(swerveDrive , m_limeLightSubsystem);
@@ -35,8 +36,10 @@ public class AutoAim extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    isAutoAimFinished = false;
     m_limeLightSubsystem.lightOn();
+    overshot = false;
+    pointingAtTarget = false;
+    startingAngle = swerveDrive.getAngle().getDegrees();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,13 +55,21 @@ public class AutoAim extends CommandBase {
     //  * 0.01 = 0.3
     //  
     //  err_value * kP + integral(err_value) * kI + derivative(err_value) * kD
+    m_limeLightSubsystem.lightOn();
     
-    
-    if(m_limeLightSubsystem.getHorizontalOffset() > maxAngle) {
-      swerveDrive.drive(0, 0, 0.5, false);
-    } else if(m_limeLightSubsystem.getHorizontalOffset() < -maxAngle) {
-      swerveDrive.drive(0, 0, -0.5, false);
+    if(m_limeLightSubsystem.isPointingAtTarget()){
+        return;
     }
+    // 0 degrees is the front (shooter) of the robot pointed at the power port
+    if(swerveDrive.getAngle().getDegrees() < 0 || !overshot) {
+        swerveDrive.drive(0, 0, 1, false);
+        if(Math.abs(startingAngle - swerveDrive.getAngle().getDegrees()) > 45.0)
+        {
+            overshot = true;
+        }
+    }
+    swerveDrive.drive(0, 0, -1, false);
+    
     
     
   }
@@ -66,14 +77,13 @@ public class AutoAim extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    isAutoAimFinished = !interrupted;
+    
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_limeLightSubsystem.getHorizontalOffset() < maxAngle && 
-    m_limeLightSubsystem.getHorizontalOffset() > -maxAngle;
+    return m_limeLightSubsystem.isPointingAtTarget();
   }
 }

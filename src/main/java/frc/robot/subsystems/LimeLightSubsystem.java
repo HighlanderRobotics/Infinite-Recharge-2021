@@ -23,9 +23,10 @@ public class LimeLightSubsystem extends SubsystemBase {
   NetworkTable table;
   public double x;
   public double y;
+  public boolean isPointingAtTarget;
   
   public LimeLightSubsystem() {
-
+    lightOn();
   }
 
  
@@ -65,15 +66,21 @@ public class LimeLightSubsystem extends SubsystemBase {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
   }
 
+  public boolean isPointingAtTarget() {
+    return isPointingAtTarget;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     double x = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
     double y = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
     double area = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
+    isPointingAtTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0) == 0;
     SmartDashboard.putNumber("limelightX", x);
     SmartDashboard.putNumber("limelightY", y);
     SmartDashboard.putNumber("limelightArea", area);
+    SmartDashboard.putBoolean("is limelight detecting target", isPointingAtTarget);
 
     horizontalOffset = x;
     verticalOffset = y;

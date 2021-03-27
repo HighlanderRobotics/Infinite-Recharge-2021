@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.RaiseHook;
+import frc.robot.commands.SearchingLimelight;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SpinCircleThingy;
 import frc.robot.commands.ColorWheelApproach;
@@ -74,6 +75,7 @@ public class RobotContainer {
 
     private final SwerveDrive m_swerve = new SwerveDrive();
 
+
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
@@ -94,6 +96,9 @@ public class RobotContainer {
         SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
 
         Logger.configureLoggingAndConfig(this, false);
+
+        
+        SmartDashboard.putData("Search Auto Aim", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
     }
 
     /**
@@ -166,6 +171,8 @@ public class RobotContainer {
      */
 
 
+    
+     
     private void driveWithJoystick(boolean fieldRelative) {
         // Get the x speed. We are inverting this because Xbox controllers return
         // negative values when we push forward.
