@@ -61,19 +61,28 @@ public class AutoAim extends CommandBase {
     //  err_value * kP + integral(err_value) * kI + derivative(err_value) * kD
     
     // then adjust for crosshair placement not exactly centered by adding some constant
-    //leftTurnSpeed = turnLeftPID.calculate(m_limeLightSubsystem.getHorizontalOffset(), 0.25);
-    //rightTurnSpeed = turnLeftPID.calculate(m_limeLightSubsystem.getHorizontalOffset(), -0.25);
+    leftTurnSpeed = turnLeftPID.calculate(m_limeLightSubsystem.getHorizontalOffset(), 0.25);
+    rightTurnSpeed = turnRightPID.calculate(m_limeLightSubsystem.getHorizontalOffset(), -0.25);
 
-    if(m_limeLightSubsystem.getHorizontalOffset() > maxAngle + 1) {
-      swerveDrive.drive(0, 0, 0.4, false);
-      //swerveDrive.drive(0,0,leftTurnSpeed, false);
-    } else if(m_limeLightSubsystem.getHorizontalOffset() < -maxAngle + 1) {
-      swerveDrive.drive(0, 0, -0.4, false);
-      //swerveDrive.drive(0,0, rightTurnSpeed, false);
+    // auto aiming using PID
+    if(m_limeLightSubsystem.getHorizontalOffset() > 0) {
+      swerveDrive.drive(0,0,leftTurnSpeed, false);
+    } else if(m_limeLightSubsystem.getHorizontalOffset() < 0) {
+      swerveDrive.drive(0,0, rightTurnSpeed, false);
     }
     else if(m_limeLightSubsystem.isPointingAtTarget()){
       swerveDrive.drive(0, 0, 0, false);
     }
+
+    // no PID auto aim
+    /*if(m_limeLightSubsystem.getHorizontalOffset() > maxAngle + 1) {
+      swerveDrive.drive(0, 0, 0.4, false);
+    } else if(m_limeLightSubsystem.getHorizontalOffset() < -maxAngle + 1) {
+      swerveDrive.drive(0, 0, -0.4, false);
+    }
+    else if(m_limeLightSubsystem.isPointingAtTarget()){
+      swerveDrive.drive(0, 0, 0, false);
+    }*/
     
     
   }
