@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.SwerveDrive;
@@ -21,6 +22,10 @@ public class AutoAim extends CommandBase {
   private static final double maxAngle = 1;
   private final SwerveDrive swerveDrive;
   private final LimeLightSubsystem m_limeLightSubsystem;
+  private PIDController turnLeftPID;
+  private PIDController turnRightPID;
+  private double leftTurnSpeed;
+  private double rightTurnSpeed; 
   @Log boolean isAutoAimFinished;
   /**
    * Creates a new autoAim.
@@ -28,6 +33,8 @@ public class AutoAim extends CommandBase {
   public AutoAim(SwerveDrive swerveDrive, LimeLightSubsystem limelightSubsystem) {
     this.swerveDrive = swerveDrive;
     m_limeLightSubsystem = limelightSubsystem;
+    turnLeftPID = new PIDController(1, 0, 0);
+    turnRightPID = new PIDController(1, 0, 0);
     addRequirements(swerveDrive , m_limeLightSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -53,12 +60,16 @@ public class AutoAim extends CommandBase {
     //  
     //  err_value * kP + integral(err_value) * kI + derivative(err_value) * kD
     
+    // then adjust for crosshair placement not exactly centered by adding some constant
+    //leftTurnSpeed = turnLeftPID.calculate(m_limeLightSubsystem.getHorizontalOffset(), 0.25);
+    //rightTurnSpeed = turnLeftPID.calculate(m_limeLightSubsystem.getHorizontalOffset(), -0.25);
 
-    
     if(m_limeLightSubsystem.getHorizontalOffset() > maxAngle + 1) {
       swerveDrive.drive(0, 0, 0.4, false);
+      //swerveDrive.drive(0,0,leftTurnSpeed, false);
     } else if(m_limeLightSubsystem.getHorizontalOffset() < -maxAngle + 1) {
       swerveDrive.drive(0, 0, -0.4, false);
+      //swerveDrive.drive(0,0, rightTurnSpeed, false);
     }
     else if(m_limeLightSubsystem.isPointingAtTarget()){
       swerveDrive.drive(0, 0, 0, false);
