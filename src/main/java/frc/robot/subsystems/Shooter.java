@@ -108,7 +108,12 @@ public PIDController hoodPIDController;
     return(Math.abs(hoodPIDController.getSetpoint() - getPotentiometerAngle()));
   }
 
-  
+  public boolean isRPMInRange(){
+    return (Math.abs(convertVelocitytoRPM(firstMotor.getSelectedSensorVelocity()) - currentSetPoint)) < 50;
+  }
+  public static double convertVelocitytoRPM(double velocity){
+    return velocity * (1.0/2048.0) * 600.0;
+  }
   /*targetVelocity is in units/100ms and the integrated encoder is based on 2048 units/revolution, so to convert from targetRPM to targetVelocity, 
    *(targetRPM) / ((100ms per 1 second = 10) (sec per min = 60)) 
    */

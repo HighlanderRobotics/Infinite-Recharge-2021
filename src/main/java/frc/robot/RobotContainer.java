@@ -42,10 +42,13 @@ import frc.robot.subsystems.ClimberSubsystem;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
@@ -94,6 +97,7 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
         SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
+        SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
 
         Logger.configureLoggingAndConfig(this, false);
 
@@ -129,7 +133,16 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, Button.kB.value)
             .whileHeld(new SpinCircleThingy(circleThingy));
         new JoystickButton(m_functionsController, Button.kY.value)
-            .toggleWhenPressed(new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
+            .toggleWhenPressed(
+                new SequentialCommandGroup(
+                    new SearchingLimelight(m_swerve, limelight), 
+                    new ParallelCommandGroup(
+                        new SequentialCommandGroup(
+                            new AutoAim(m_swerve, limelight),
+                            new WaitUntilCommand(shooter::isRPMInRange),
+                            new SpinCircleThingy(circleThingy)),
+                        new ShooterCommand(shooter, limelight))
+            ));
 
         //new JoystickButton(m_functionsController, Button.kBumperRight.value)
          //   .toggleWhenPressed(new Climb(m_climberSubsystem));
@@ -151,7 +164,7 @@ public class RobotContainer {
         //m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.driveStraight(), m_driveSubsystem));
         limelight.setDefaultCommand(new RunCommand(() -> limelight.lightOn(), limelight));
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
-  
+        shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(2000), shooter));
 
     }
 

@@ -19,30 +19,24 @@ import io.github.oblarg.oblog.annotations.Log;
 public class AutoAim extends CommandBase {
 
 
-  private static final double maxAngle = 1;
   private final SwerveDrive swerveDrive;
   private final LimeLightSubsystem m_limeLightSubsystem;
-  private PIDController turnLeftPID;
-  private PIDController turnRightPID;
-  private double leftTurnSpeed;
-  private double rightTurnSpeed; 
-  @Log boolean isAutoAimFinished;
+  private PIDController autoAimPID;
+
   /**
    * Creates a new autoAim.
    */
   public AutoAim(SwerveDrive swerveDrive, LimeLightSubsystem limelightSubsystem) {
     this.swerveDrive = swerveDrive;
     m_limeLightSubsystem = limelightSubsystem;
-    turnLeftPID = new PIDController(1, 0, 0);
-    turnRightPID = new PIDController(1, 0, 0);
-    addRequirements(swerveDrive , m_limeLightSubsystem);
+    autoAimPID = new PIDController(0.075, 0.05, 0);
+    addRequirements(swerveDrive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    isAutoAimFinished = false;
     m_limeLightSubsystem.lightOn();
   }
 
@@ -61,16 +55,12 @@ public class AutoAim extends CommandBase {
     //  err_value * kP + integral(err_value) * kI + derivative(err_value) * kD
     
     // then adjust for crosshair placement not exactly centered by adding some constant
-    leftTurnSpeed = turnLeftPID.calculate(m_limeLightSubsystem.getHorizontalOffset(), 0.25);
-    rightTurnSpeed = turnRightPID.calculate(m_limeLightSubsystem.getHorizontalOffset(), -0.25);
-
+   
     // auto aiming using PID
-    if(m_limeLightSubsystem.getHorizontalOffset() > 0) {
-      swerveDrive.drive(0,0,leftTurnSpeed, false);
-    } else if(m_limeLightSubsystem.getHorizontalOffset() < 0) {
-      swerveDrive.drive(0,0, rightTurnSpeed, false);
-    }
-    else if(m_limeLightSubsystem.isPointingAtTarget()){
+    if(!isFinished()) {
+      double speed = autoAimPID.calculate(m_limeLightSubsystem.getHorizontalOffset(), 0);
+      swerveDrive.drive(0,0, -speed, false);
+    }else{
       swerveDrive.drive(0, 0, 0, false);
     }
 
@@ -90,14 +80,12 @@ public class AutoAim extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    isAutoAimFinished = !interrupted;
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_limeLightSubsystem.getHorizontalOffset() < maxAngle && 
-    m_limeLightSubsystem.getHorizontalOffset() > -maxAngle;
+    return Math.abs(m_limeLightSubsystem.getHorizontalOffset()) < 0.25;
   }
 }

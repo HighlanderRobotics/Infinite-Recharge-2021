@@ -21,7 +21,7 @@ public class ShooterCommand extends CommandBase {
   public ShooterCommand(Shooter shooter, LimeLightSubsystem limelight) {
     this.shooter = shooter;
     this.limelight = limelight;
-      addRequirements(shooter, limelight);
+      addRequirements(shooter);
     
     }
 
@@ -57,13 +57,12 @@ public class ShooterCommand extends CommandBase {
     increaseRPM = threeSecondCount * 100;*/
     
 
-System.out.println(shooter.firstMotor.getSelectedSensorVelocity() * (1.0/2048.0) * 600.0);
+System.out.println(Shooter.convertVelocitytoRPM(shooter.firstMotor.getSelectedSensorVelocity()));
     }
   
     @Override
     public void end(boolean interrupted) {
       //System.out.println("Time to reach RPM: " + (System.currentTimeMillis() - startTime));
-    shooter.firstMotor.set(TalonFXControlMode.Disabled, 0);
     }
   
     @Override
