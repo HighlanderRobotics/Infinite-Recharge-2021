@@ -30,6 +30,7 @@ import frc.robot.commands.SearchingLimelight;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SpinCircleThingy;
 import frc.robot.commands.ColorWheelApproach;
+import frc.robot.commands.SetHoodAngle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
@@ -39,6 +40,7 @@ import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.CircleThingy;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.HoodAngle;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -51,6 +53,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+
 
 /**
  * 
@@ -88,6 +91,7 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     public static boolean isButtonToggled = false;
     private final CircleThingy circleThingy = new CircleThingy();
+    private final HoodAngle hoodAngle = new HoodAngle();
 
 
     /**
@@ -98,6 +102,7 @@ public class RobotContainer {
         configureButtonBindings();
         SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
         SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
+        SmartDashboard.putNumber("Potentiometer Reading in Degrees", hoodAngle.getPotentiometerAngle());
 
         Logger.configureLoggingAndConfig(this, false);
 
@@ -164,7 +169,7 @@ public class RobotContainer {
         //m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.driveStraight(), m_driveSubsystem));
         limelight.setDefaultCommand(new RunCommand(() -> limelight.lightOn(), limelight));
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
-        shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(2000), shooter));
+      //  shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(2000), shooter));
 
     }
 
