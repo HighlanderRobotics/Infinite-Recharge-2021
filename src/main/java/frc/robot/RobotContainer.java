@@ -126,7 +126,8 @@ public class RobotContainer {
        
        // whileHeldFuncController(Button.kBumperLeft, m_shooterSubsystem, m_shooterSubsystem::shootBalls);
         // whileHeldFuncController(Button.kBumperRight, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendIntakePiston);
-
+        new JoystickButton(m_functionsController, Button.kB.value)
+        .toggleWhenPressed(new SetHoodAngle(hoodAngle, limelight));
         new JoystickButton(m_functionsController, Button.kA.value)
             .whileHeld(new RaiseHook(3, 45, m_climberSubsystem));
         new JoystickButton(m_functionsController, Button.kX.value)
@@ -135,8 +136,6 @@ public class RobotContainer {
             .whenPressed(() -> shooter.increaseRPM(25));
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
             .whenPressed(() -> shooter.decreaseRPM(25));
-        new JoystickButton(m_functionsController, Button.kB.value)
-            .whileHeld(new SpinCircleThingy(circleThingy));
         new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(
                 new SequentialCommandGroup(

@@ -36,7 +36,7 @@ public class HoodAngle extends SubsystemBase {
   }
 
 
-  public AnalogPotentiometer potentiometer = new AnalogPotentiometer(Constants.hoodAnglePotentiometerAnalogInputID, Constants.upperBoundPotentiometer - Constants.lowerBoundPotentiometer, 0);
+  public AnalogPotentiometer potentiometer = new AnalogPotentiometer(Constants.hoodAnglePotentiometerAnalogInputID, Constants.upperBoundPotentiometer - Constants.lowerBoundPotentiometer, Constants.lowerBoundPotentiometer);
 
     public double getPotentiometerAngle(){
       return potentiometer.get(); //* (Constants.upperBoundPotentiometer - Constants.lowerBoundPotentiometer) + Constants.lowerBoundPotentiometer;
@@ -56,9 +56,7 @@ public class HoodAngle extends SubsystemBase {
       }
     }
     hoodMotor.set(hoodMotorSpeed);
-    if(calculateAngleError() < 1.5){
-      hoodMotor.disable();
-    }
+    
   }
 
   public double calculateAngleError(){

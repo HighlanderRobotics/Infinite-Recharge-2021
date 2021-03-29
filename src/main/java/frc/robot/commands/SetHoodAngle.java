@@ -30,19 +30,22 @@ public class SetHoodAngle extends CommandBase {
 
     @Override
     public void execute() { 
+      //hoodAngle.hoodMotor.set(0.2);
+      System.out.println(hoodAngle.getPotentiometerAngle());
      hoodAngle.setAngle(45);
+     
       //System.out.println("Potentiometer Angle:" + shooter.getPotentiometerAngle());
 
     }
   
     @Override
     public void end(boolean interrupted) {
+        hoodAngle.hoodMotor.disable();
       //System.out.println("Time to reach RPM: " + (System.currentTimeMillis() - startTime));
     }
   
     @Override
     public boolean isFinished() {
-     
-        return false;
+      return hoodAngle.calculateAngleError() < 0.25;
     }
   }
