@@ -59,8 +59,8 @@ public final class Constants {
     // Distance Sensors
     public static int FRONT_PING_CHANNEL = 4;
     public static int FRONT_ECHO_CHANNEL = 5;
-    public static int CONTROLPANEL_PING_CHANNEL = 6;
-    public static int CONTROLPANEL_ECHO_CHANNEL = 7;
+    public static int CONTROLPANEL_PING_CHANNEL = 8;
+    public static int CONTROLPANEL_ECHO_CHANNEL = 9;
 
     // Motors
     public static int DRIVESUBSYSTEM_LEFT_BACK_TALON = 0;
@@ -71,8 +71,8 @@ public final class Constants {
     public static int SHOOTERSUBSYSTEM_BACK_VICTOR = 5;
     public static int SHOOTERSUBSYSTEM_FRONT_VICTOR = 6;
     public static int INTAKESUBSYSTEM_VICTOR = 7;
-    public static int CLIMBERSUBSYSTEM_WINCH_TALON = 2;
-    public static int CLIMBERSUBSYSTEM_WHEEL_TALON = 1;
+    public static int CLIMBERSUBSYSTEM_WINCH_TALON = 10;
+    public static int CLIMBERSUBSYSTEM_WHEEL_TALON = 12;
 
     // Solenoids
     public static final int INTAKE_FORWARD_CHANNEL = 4;
@@ -94,9 +94,12 @@ public final class Constants {
     public static boolean kEncoderReversed = false;
 
     // Climber Encoders
-    public static int[] kWinchEncoderPorts = {5,4};
-    public static int[] kWheelEncoderPorts = {1,2};
-    public static int kEncoderCyclesPerRevolution = 2048;
+    public static int[] kWinchEncoderPorts = {6,7}; // winch is 2, 3
+    public static int[] kWheelEncoderPorts = {5,4};
+    public static int[] kWinchMotorEncoderPorts = {3,2};
+    public static int kWinchServoPort = 9;
+    public static double kEncoderCyclesPerRevolution = 2048.0;
     public static double kWheelCircumference = 2 * Math.PI * 0.0508;
     public static double kEncoderDistancePerPulseWheel = kWheelCircumference/kEncoderCyclesPerRevolution;
+    public static double kHookFullExtension = 10; // Need to calculate
 }
