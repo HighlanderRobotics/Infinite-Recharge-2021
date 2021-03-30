@@ -46,6 +46,7 @@ public class HoodAngle extends SubsystemBase {
   public void setAngle(double targetAngle){
     hoodPIDController.setSetpoint(targetAngle);
     double hoodMotorSpeed = hoodPIDController.calculate(getPotentiometerAngle());
+  
 
     //hoodMotor should not exceed 10% output, so this prevents it from exceeding 8% (to be safe)
     if (hoodMotorSpeed > 0.08 || hoodMotorSpeed < -0.08) {
@@ -62,5 +63,13 @@ public class HoodAngle extends SubsystemBase {
   public double calculateAngleError(){
     return(Math.abs(hoodPIDController.getSetpoint() - getPotentiometerAngle()));
   
+  }
+  public void increaseHoodAngle (double increment){
+    setAngle(getPotentiometerAngle() + increment);
+    System.out.println(getPotentiometerAngle());
+  }
+  public void decreaseHoodAngle (double decrement){
+    setAngle(getPotentiometerAngle() - decrement);
+    System.out.println(getPotentiometerAngle());
   }
 }

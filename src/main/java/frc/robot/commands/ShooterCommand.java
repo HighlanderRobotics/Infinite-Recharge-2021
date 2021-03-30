@@ -31,16 +31,16 @@ public class ShooterCommand extends CommandBase {
         startTime = System.currentTimeMillis();
        //shooter.hoodMotor.set(0.1);
 
-      //shooter.setRPM(3000);
+      shooter.setRPM(3500);
 
        //2000 rpm = 
     }
 
     @Override
     public void execute() { 
-      double x = limelight.getVerticalOffset();
-      double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1;
-      shooter.setRPM(targetRPM);
+      //double x = limelight.getVerticalOffset();
+      //double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1;
+      //shooter.setRPM(targetRPM);
       
      //shooter.setAngle(45);
       //System.out.println("Potentiometer Angle:" + shooter.getPotentiometerAngle());

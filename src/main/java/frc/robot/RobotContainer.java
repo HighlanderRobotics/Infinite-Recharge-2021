@@ -32,6 +32,7 @@ import frc.robot.commands.SpinCircleThingy;
 import frc.robot.commands.ColorWheelApproach;
 import frc.robot.commands.SetHoodAngle;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Extractor;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
@@ -44,6 +45,7 @@ import frc.robot.subsystems.HoodAngle;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -92,6 +94,7 @@ public class RobotContainer {
     public static boolean isButtonToggled = false;
     private final CircleThingy circleThingy = new CircleThingy();
     private final HoodAngle hoodAngle = new HoodAngle();
+    private final Extractor extractor = new Extractor();
 
 
     /**
@@ -136,6 +139,20 @@ public class RobotContainer {
             .whenPressed(() -> shooter.increaseRPM(25));
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
             .whenPressed(() -> shooter.decreaseRPM(25));
+        new JoystickButton(m_driverController, Button.kBumperRight.value)
+            .whenPressed(() -> hoodAngle.increaseHoodAngle(2.5));
+        new JoystickButton(m_driverController, Button.kBumperLeft.value)
+            .whenPressed(() -> hoodAngle.decreaseHoodAngle(2.5));
+            new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new PIDCommand(
+                new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
+                // Close the loop on the turn rate
+                hoodAngle::getPotentiometerAngle,
+                // Setpoint is 0
+                hoodAngle.getPotentiometerAngle() + 2.5,
+                // Pipe the output to the turning controls
+                output -> hoodAngle.hoodMotor.set(output),
+                // Require the robot drive
+                hoodAngle));
         new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(
                 new SequentialCommandGroup(
@@ -144,7 +161,9 @@ public class RobotContainer {
                         new SequentialCommandGroup(
                             new AutoAim(m_swerve, limelight),
                             new WaitUntilCommand(shooter::isRPMInRange),
-                            new SpinCircleThingy(circleThingy)),
+                            new ParallelCommandGroup(
+                                new RunCommand(extractor::extend, extractor),
+                                new SpinCircleThingy(circleThingy))),
                         new ShooterCommand(shooter, limelight))
             ));
 
@@ -166,7 +185,9 @@ public class RobotContainer {
         m_swerve.setDefaultCommand(new RunCommand(teleOpDriveFn, m_swerve));
      
         //m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.driveStraight(), m_driveSubsystem));
-        limelight.setDefaultCommand(new RunCommand(() -> limelight.lightOn(), limelight));
+        limelight.setDefaultCommand(new RunCommand(limelight::lightOn, limelight));
+
+        extractor.setDefaultCommand(new RunCommand(extractor::retract, extractor));
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
       //  shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(2000), shooter));
 
