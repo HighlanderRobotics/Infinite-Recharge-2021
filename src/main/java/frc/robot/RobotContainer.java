@@ -9,6 +9,8 @@ package frc.robot;
 
 import java.util.List;
 
+//import org.graalvm.compiler.code.DataSection.ZeroData;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
@@ -33,7 +35,7 @@ import frc.robot.commands.ColorWheelApproach;
 import frc.robot.commands.SetHoodAngle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Extractor;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.Shooter;
@@ -73,7 +75,7 @@ public class RobotContainer {
     // private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
     // private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
 
-    private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+    private final Intake intake = new Intake();
     private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
     private final XboxController m_functionsController = new XboxController(Constants.FUNCTIONS_CONTROLLER_PORT);
@@ -124,7 +126,7 @@ public class RobotContainer {
 
         // m_functionsController button uses
         // whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
-        whileHeldFuncController(Button.kA, m_intakeSubsystem, m_intakeSubsystem::threeQuarterSpeed);
+        //whileHeldFuncController(Button.kA, m_intakeSubsystem, m_intakeSubsystem::threeQuarterSpeed);
 
        
        // whileHeldFuncController(Button.kBumperLeft, m_shooterSubsystem, m_shooterSubsystem::shootBalls);
@@ -134,7 +136,7 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, Button.kA.value)
             .whileHeld(new RaiseHook(3, 45, m_climberSubsystem));
         new JoystickButton(m_functionsController, Button.kX.value)
-            .toggleWhenPressed(new ShooterCommand(shooter, limelight));
+            .toggleWhenPressed(new ShooterCommand(shooter, hoodAngle, limelight));
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
             .whenPressed(() -> shooter.increaseRPM(25));
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
@@ -153,6 +155,7 @@ public class RobotContainer {
                 output -> hoodAngle.hoodMotor.set(output),
                 // Require the robot drive
                 hoodAngle));
+        //autoshooting command group
         new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(
                 new SequentialCommandGroup(
@@ -164,7 +167,14 @@ public class RobotContainer {
                             new ParallelCommandGroup(
                                 new RunCommand(extractor::extend, extractor),
                                 new SpinCircleThingy(circleThingy))),
-                        new ShooterCommand(shooter, limelight))
+                        new ShooterCommand(shooter, hoodAngle, limelight))
+            ));
+        //intake command group
+        new JoystickButton(m_functionsController, Button.kStart.value)
+            .toggleWhenPressed(
+                new SequentialCommandGroup(
+                    new RunCommand(intake::extend, intake),
+                    new RunCommand(intake::halfSpeed, intake)
             ));
 
         //new JoystickButton(m_functionsController, Button.kBumperRight.value)
@@ -188,6 +198,11 @@ public class RobotContainer {
         limelight.setDefaultCommand(new RunCommand(limelight::lightOn, limelight));
 
         extractor.setDefaultCommand(new RunCommand(extractor::retract, extractor));
+        //defaults extractor to remain up
+
+        intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::retract, intake), new RunCommand(intake::zeroSpeed, intake)));
+        //defaults intake to remain up
+
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
       //  shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(2000), shooter));
 

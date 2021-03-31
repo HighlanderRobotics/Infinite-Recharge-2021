@@ -10,20 +10,35 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 
-public class IntakeSubsystem extends SubsystemBase {
+public class Intake extends SubsystemBase {
   /**
    * Creates a new IntakeSubsytem.
    */
+
+  DoubleSolenoid intakeSolenoid = new DoubleSolenoid(20, 0, 1);
+    
+
+    public void extend(){
+    intakeSolenoid.set(kForward);
+    }
+    public void retract(){
+    intakeSolenoid.set(kReverse);
+    }
+  
   private final VictorSPX intakeMotor = new VictorSPX(Constants.INTAKESUBSYSTEM_VICTOR);
 
 
-  public IntakeSubsystem() {
+  public Intake() {}
+    
+    
 
-  }
+
 
   public void zeroSpeed() {
     intakeMotor.set(ControlMode.PercentOutput, 0);

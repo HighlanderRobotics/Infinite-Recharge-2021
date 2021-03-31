@@ -6,21 +6,25 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.Constants;
+import frc.robot.subsystems.HoodAngle;
 
 
 
 public class ShooterCommand extends CommandBase {
   public Shooter shooter;
+  public HoodAngle hoodAngle;
   public LimeLightSubsystem limelight;
   public int timesExecuted = 0;
   public long startTime;
   public int threeSecondCount;
   public int increaseRPM;
   public double targetRPM;
+  
 
-  public ShooterCommand(Shooter shooter, LimeLightSubsystem limelight) {
+  public ShooterCommand(Shooter shooter, HoodAngle hoodAngle, LimeLightSubsystem limelight) {
     this.shooter = shooter;
     this.limelight = limelight;
+    this.hoodAngle = hoodAngle;
       addRequirements(shooter);
     
     }
@@ -38,9 +42,13 @@ public class ShooterCommand extends CommandBase {
 
     @Override
     public void execute() { 
-      //double x = limelight.getVerticalOffset();
-      //double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1;
-      //shooter.setRPM(targetRPM);
+      
+      double x = limelight.getVerticalOffset();
+      double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1;
+      double targetAngle = 45; //enter equation here
+     // hoodAngle.setAngle(targetAngle);
+      shooter.setRPM(targetRPM);
+      
       
      //shooter.setAngle(45);
       //System.out.println("Potentiometer Angle:" + shooter.getPotentiometerAngle());
