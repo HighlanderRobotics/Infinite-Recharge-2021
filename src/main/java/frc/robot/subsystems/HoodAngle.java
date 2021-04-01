@@ -49,12 +49,10 @@ public class HoodAngle extends SubsystemBase {
   
 
     //hoodMotor should not exceed 10% output, so this prevents it from exceeding 8% (to be safe)
-    if (hoodMotorSpeed > 0.08 || hoodMotorSpeed < -0.08) {
-      if(hoodMotorSpeed > 0) {
-        hoodMotorSpeed = 0.08;
-      }else{
-        hoodMotorSpeed = -0.08;
-      }
+    if(hoodMotorSpeed > 0.08) {
+      hoodMotorSpeed = 0.08;
+    }else if(hoodMotorSpeed < -0.08){
+      hoodMotorSpeed = -0.08;
     }
     hoodMotor.set(hoodMotorSpeed);
     
