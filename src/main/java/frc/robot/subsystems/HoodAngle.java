@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 
 
@@ -21,6 +22,13 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 
 public class HoodAngle extends SubsystemBase {
  
+  public static double potentiometerError = 13.33;
+	//min possible angle of the hood
+	public static double lowerBoundPotentiometer = 32 - potentiometerError;
+
+	//max possible angle of the hood
+    public static double upperBoundPotentiometer = 90 - potentiometerError;
+    
     public final CANSparkMax hoodMotor;
     public PIDController hoodPIDController;
   
@@ -36,7 +44,7 @@ public class HoodAngle extends SubsystemBase {
   }
 
 
-  public AnalogPotentiometer potentiometer = new AnalogPotentiometer(Constants.hoodAnglePotentiometerAnalogInputID, Constants.upperBoundPotentiometer - Constants.lowerBoundPotentiometer, Constants.lowerBoundPotentiometer);
+  public AnalogPotentiometer potentiometer = new AnalogPotentiometer(Constants.hoodAnglePotentiometerAnalogInputID, upperBoundPotentiometer - lowerBoundPotentiometer, lowerBoundPotentiometer);
 
     public double getPotentiometerAngle(){
       return potentiometer.get(); //* (Constants.upperBoundPotentiometer - Constants.lowerBoundPotentiometer) + Constants.lowerBoundPotentiometer;
@@ -46,6 +54,7 @@ public class HoodAngle extends SubsystemBase {
   public void setAngle(double targetAngle){
     hoodPIDController.setSetpoint(targetAngle);
     double hoodMotorSpeed = hoodPIDController.calculate(getPotentiometerAngle());
+    
   
 
     //hoodMotor should not exceed 10% output, so this prevents it from exceeding 8% (to be safe)
@@ -55,6 +64,7 @@ public class HoodAngle extends SubsystemBase {
       hoodMotorSpeed = -0.08;
     }
     hoodMotor.set(hoodMotorSpeed);
+    System.out.println(getPotentiometerAngle());
     
   }
 

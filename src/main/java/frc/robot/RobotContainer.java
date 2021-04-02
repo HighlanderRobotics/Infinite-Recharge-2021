@@ -9,6 +9,8 @@ package frc.robot;
 
 import java.util.List;
 
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+
 //import org.graalvm.compiler.code.DataSection.ZeroData;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -141,20 +143,29 @@ public class RobotContainer {
             .whenPressed(() -> shooter.increaseRPM(25));
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
             .whenPressed(() -> shooter.decreaseRPM(25));
-        new JoystickButton(m_driverController, Button.kBumperRight.value)
-            .whenPressed(() -> hoodAngle.increaseHoodAngle(2.5));
-        new JoystickButton(m_driverController, Button.kBumperLeft.value)
-            .whenPressed(() -> hoodAngle.decreaseHoodAngle(2.5));
-            new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new PIDCommand(
+            /*new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(new PIDCommand(
                 new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
                 // Close the loop on the turn rate
                 hoodAngle::getPotentiometerAngle,
                 // Setpoint is 0
-                hoodAngle.getPotentiometerAngle() + 2.5,
+                () -> hoodAngle.getPotentiometerAngle() - 2.5,
                 // Pipe the output to the turning controls
                 output -> hoodAngle.hoodMotor.set(output),
                 // Require the robot drive
                 hoodAngle));
+            new JoystickButton(m_driverController, Button.kBumperLeft.value).whenPressed(new PIDCommand(
+                new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
+                // Close the loop on the turn rate
+                hoodAngle::getPotentiometerAngle,
+                // Setpoint is 0
+                () -> hoodAngle.getPotentiometerAngle() + 2.5,
+                // Pipe the output to the turning controls
+                output -> {
+                    hoodAngle.hoodMotor.set(output);
+                    System.out.println(hoodAngle.getPotentiometerAngle());
+                },
+                // Require the robot drive
+                hoodAngle)); */
         //autoshooting command group
         new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(
@@ -204,7 +215,9 @@ public class RobotContainer {
         //defaults intake to remain up
 
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
-      //  shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(2000), shooter));
+      shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(0), shooter));
+
+      circleThingy.setDefaultCommand(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.25), circleThingy));
 
     }
 

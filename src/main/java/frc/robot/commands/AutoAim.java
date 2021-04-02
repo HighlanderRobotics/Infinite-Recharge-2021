@@ -29,7 +29,7 @@ public class AutoAim extends CommandBase {
   public AutoAim(SwerveDrive swerveDrive, LimeLightSubsystem limelightSubsystem) {
     this.swerveDrive = swerveDrive;
     m_limeLightSubsystem = limelightSubsystem;
-    autoAimPID = new PIDController(0.075, 0.05, 0);
+    autoAimPID = new PIDController(0.075, 0.06, 0);
     addRequirements(swerveDrive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -38,6 +38,7 @@ public class AutoAim extends CommandBase {
   @Override
   public void initialize() {
     m_limeLightSubsystem.lightOn();
+    autoAimPID.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -86,6 +87,6 @@ public class AutoAim extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_limeLightSubsystem.getHorizontalOffset()) < 0.25;
+    return Math.abs(m_limeLightSubsystem.getHorizontalOffset()) < 0.1;
   }
 }

@@ -119,11 +119,6 @@ public final class Constants {
 	public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 20;
 
-	//min possible angle of the hood
-	public static int lowerBoundPotentiometer = 32;
-
-	//max possible angle of the hood
-	public static int upperBoundPotentiometer = 90;
 
 	//for hoodMotor
     //???? check this

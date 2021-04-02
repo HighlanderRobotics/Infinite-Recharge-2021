@@ -15,9 +15,9 @@ public class Extractor extends SubsystemBase{
     DoubleSolenoid firstExtractorSolenoid = new DoubleSolenoid(20, 2, 3);
     
     public void extend(){
-    firstExtractorSolenoid.set(kForward);
+    firstExtractorSolenoid.set(kReverse);
     }
     public void retract(){
-    firstExtractorSolenoid.set(kReverse);
+    firstExtractorSolenoid.set(kForward);
     }
 }

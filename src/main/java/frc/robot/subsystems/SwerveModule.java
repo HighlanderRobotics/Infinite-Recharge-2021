@@ -113,8 +113,6 @@ void setTurningPIDF( double p,
       m_turningMotor.configFactoryDefault();
       m_turningMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
       m_turningMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
-      TalonFXSensorCollection sensorCollection = m_turningMotor.getSensorCollection();
-      double absoluteValue = sensorCollection.getIntegratedSensorAbsolutePosition();
       // Doesn't work, we need to use cancoders in order to get wheel position rather than motor shaft position
       // Otherwise, will rotate past one rotation, giving us a value we can't use.
       // sensorCollection.setIntegratedSensorPosition(absoluteValue - offset, 20);
@@ -160,22 +158,11 @@ void setTurningPIDF( double p,
   public Rotation2d getAngle() {
     return new Rotation2d((2*Math.PI/(2048*kTurningRatio))*(m_turningMotor.getSelectedSensorPosition()%(2048*kTurningRatio)));
   }
-  @Log.Graph
-  public double getAngleDegrees() {
-    return 360*(m_turningMotor.getSelectedSensorPosition()%(2048*kTurningRatio))/(2048*kTurningRatio);
-  }
-  @Log.Graph
-  public double getTurningVolts() {
-    return m_turningMotor.getMotorOutputVoltage();
-  }
 
-  @Log.Graph
   public double inputAngle;
 
-  @Log.Graph
   public double setpoint;
 
-  @Log.Graph
   public double inputVelocity;
 
     
