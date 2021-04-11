@@ -10,14 +10,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -29,10 +26,13 @@ public class ClimberSubsystem extends SubsystemBase {
   // To-do: initialize relevant motors/climber mechanism parts
   private Encoder winchEncoder = new Encoder(Constants.kWinchEncoderPorts[0], Constants.kWinchEncoderPorts[1]);
   private Encoder wheelEncoder = new Encoder(Constants.kWheelEncoderPorts[0], Constants.kWheelEncoderPorts[1]);
+  private Encoder winchMotorEncoder = new Encoder(Constants.kWinchMotorEncoderPorts[0], Constants.kWinchMotorEncoderPorts[1]);
 
   //Add two motors
   private WPI_TalonSRX winchMotor = new WPI_TalonSRX(Constants.CLIMBERSUBSYSTEM_WINCH_TALON);
   private WPI_TalonSRX wheelMotor = new WPI_TalonSRX(Constants.CLIMBERSUBSYSTEM_WHEEL_TALON);
+
+  private Servo ratchetServo = new Servo(Constants.kWinchServoPort);
 
   // Ratchet Solenoid
   // private Solenoid ratchet = new Solenoid(Constants.CLIMBER_RATCHET_CHANNEL);
@@ -40,8 +40,8 @@ public class ClimberSubsystem extends SubsystemBase {
   // Add two duplicate encoders and two duplicate motors
   // TBD because of motor shortage.
 
-  private PIDController winchPID = new PIDController(0,0,0);
-  // Need to input PID constants from 
+  double wheelSpeed = 0;
+  double winchSpeed = 0;
 
   boolean ratchetPower = false;
 
@@ -50,6 +50,7 @@ public class ClimberSubsystem extends SubsystemBase {
     // Need to configure encoders here
     winchEncoder.reset();
     wheelEncoder.reset();
+    winchMotorEncoder.reset();
     winchEncoder.setDistancePerPulse(360.0 / Constants.kEncoderCyclesPerRevolution); 
     // encoderWinch.setMinRate(double minRate); will depend on friction - when considered stopped
     // minRate is in distance per second
@@ -66,6 +67,13 @@ public class ClimberSubsystem extends SubsystemBase {
     winchEncoder.reset();
     wheelEncoder.reset();
   }
+
+  public void setRatchetServo(boolean engaged) {
+
+    if (engaged) { ratchetServo.setPosition(0); } // Goes from -1.0 to 1.0 range
+    else { ratchetServo.setPosition(0.4); }
+  }
+
 
   public void setWheelSpeed(double speed) {
 
@@ -86,26 +94,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
     return winchEncoder.getDistance();
   }
-
-  public void setWinchPIDSetpoint(double setpoint) {
-
-    winchPID.setSetpoint(setpoint);
-    winchMotor.set(winchPID.calculate(winchEncoder.getDistance()));
-  }
-
-  public void resetWinchPID() {
-
-    winchPID.reset();
-  }
-
   public boolean isHookFullyExtended() {
 
     return (Math.abs(Constants.kHookFullExtension - wheelEncoder.getDistance()) < 0.1);
-  }
-
-  public boolean winchAtSetpoint() {
-
-    return winchPID.atSetpoint();
   }
 
   @Override

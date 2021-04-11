@@ -68,8 +68,8 @@ public final class Constants {
     public static int DRIVESUBSYSTEM_RIGHT_BACK_TALON = 3;
     public static int DRIVESUBSYSTEM_RIGHT_FRONT_VICTOR = 2;
     public static int INTAKESUBSYSTEM_VICTOR = 7;
-    public static int CLIMBERSUBSYSTEM_WINCH_TALON = 8;
-    public static int CLIMBERSUBSYSTEM_WHEEL_TALON = 9;
+    public static int CLIMBERSUBSYSTEM_WINCH_TALON = 10;
+    public static int CLIMBERSUBSYSTEM_WHEEL_TALON = 12;
 	public static int circleThingyVictorID = 11;
     public static int talonFirstChannel = 13;
     public static int talonSecondChannel = 14;
@@ -94,13 +94,15 @@ public final class Constants {
     public static boolean kEncoderReversed = false;
 
     // Climber Encoders
-    public static int[] kWinchEncoderPorts = {5,4};
-    public static int[] kWheelEncoderPorts = {1,2};
+    // Distances in inches
+    public static int[] kWinchEncoderPorts = {6,7}; // winch is 2, 3
+    public static int[] kWheelEncoderPorts = {5,4};
+    public static int[] kWinchMotorEncoderPorts = {3,2};
+    public static int kWinchServoPort = 9;
     public static double kEncoderCyclesPerRevolution = 2048.0;
-    public static double kWheelCircumference = 2 * Math.PI * 0.0508;
+    public static double kWheelCircumference = 2 * Math.PI * 2;
     public static double kEncoderDistancePerPulseWheel = kWheelCircumference/kEncoderCyclesPerRevolution;
-    public static double kHookFullExtension = 10; // Need to calculate
-    
+    public static double kHookFullExtension = 53.5; // Need to calculate
 
 
     // Analog Channels

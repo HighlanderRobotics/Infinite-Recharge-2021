@@ -34,6 +34,7 @@ import frc.robot.commands.SearchingLimelight;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SpinCircleThingy;
 import frc.robot.commands.ColorWheelApproach;
+import frc.robot.commands.PrepareHook;
 import frc.robot.commands.SetHoodAngle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Extractor;
@@ -135,14 +136,17 @@ public class RobotContainer {
         // whileHeldFuncController(Button.kBumperRight, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendIntakePiston);
         new JoystickButton(m_functionsController, Button.kB.value)
         .toggleWhenPressed(new SetHoodAngle(hoodAngle, limelight));
-        new JoystickButton(m_functionsController, Button.kA.value)
-            .whileHeld(new RaiseHook(3, 45, m_climberSubsystem));
+        //new JoystickButton(m_functionsController, Button.kA.value)
+          //  .whileHeld(new RaiseHook(3, 45, m_climberSubsystem));
         new JoystickButton(m_functionsController, Button.kX.value)
             .toggleWhenPressed(new ShooterCommand(shooter, hoodAngle, limelight));
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
             .whenPressed(() -> shooter.increaseRPM(25));
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
             .whenPressed(() -> shooter.decreaseRPM(25));
+
+        new JoystickButton(m_functionsController, Button.kA.value)
+            .whenPressed(new PrepareHook(m_climberSubsystem));
             /*new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(new PIDCommand(
                 new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
                 // Close the loop on the turn rate
