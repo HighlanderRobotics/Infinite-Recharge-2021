@@ -77,17 +77,20 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void setWheelSpeed(double speed) {
 
+    this.wheelSpeed = speed;
+
     wheelMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public void setWinchSpeed(double speed) {
 
+    this.winchSpeed = speed;
     winchMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public double getDistanceWheelEncoder() {
 
-    return wheelEncoder.getDistance();
+    return wheelEncoder.getDistance() + 4;
   }
 
   public double getAngleWinchEncoder() {
@@ -99,10 +102,19 @@ public class ClimberSubsystem extends SubsystemBase {
     return (Math.abs(Constants.kHookFullExtension - wheelEncoder.getDistance()) < 0.1);
   }
 
+  public double getDistanceWinchEncoder() {
+
+    return winchMotorEncoder.getDistance();
+    // gives negative values to extend
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Climber Height", this.getDistanceWheelEncoder());
     SmartDashboard.putNumber("Winch Angle", this.getAngleWinchEncoder());
+    SmartDashboard.putNumber("Winch Distance", this.getDistanceWinchEncoder());
+    SmartDashboard.putNumber("Wheel Motor Power", this.wheelSpeed);
+    SmartDashboard.putNumber("Winch Motor Power", this.winchSpeed);
   }
 }

@@ -10,69 +10,44 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class RaiseHook extends CommandBase {
   /** Creates a new RaiseHook. */
   private final ClimberSubsystem m_climberSubsystem;
-  private double distance;
-  private double angle;
 
-  public RaiseHook(double distance, double angle, ClimberSubsystem climberSubsystem) {
+  public RaiseHook(ClimberSubsystem climberSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climberSubsystem = climberSubsystem;
     addRequirements(m_climberSubsystem);
-    this.distance = distance;
-    this.angle = angle;
 
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    //m_climberSubsystem.resetEncoders();
-    //m_climberSubsystem.resetWinchPID();
-    m_climberSubsystem.setWheelSpeed(.1);
-    // Should set the setpoint here
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    if ((m_climberSubsystem.getDistanceWheelEncoder() - distance) > .2) { // climber too tall
-      m_climberSubsystem.setWheelSpeed(-0.1); // Set the wheel motor to retract climber at speed of .1
-    }
-    else if ((m_climberSubsystem.getDistanceWheelEncoder() - distance) < -.2) { // climber too short
-      m_climberSubsystem.setWheelSpeed(0.1); // Set the wheel motor to extend climber at speed of .1
-    }
-    else { // climber just right :D
-      m_climberSubsystem.setWheelSpeed(0);
-      if (m_climberSubsystem.getAngleWinchEncoder() - angle < 10) { // Angle too small - too little tension
-        m_climberSubsystem.setWinchSpeed(-0.1); // Sets winch motor to retract
-      }
-      else if (m_climberSubsystem.getAngleWinchEncoder() - angle > 10) { // Angle too large - too much tension
-        m_climberSubsystem.setWinchSpeed(0.1); // Sets winch motor to extend
-      }
-    }
-    /**
-     * if (m_climberSubsystem.getDistanceWheelEncoder() <= TableValue1) {
-     * 
-     *  m_climberSubsystem.setWinchSetpoint(double setpoint - angle);
-     * }
-     * else if (m_climberSubsystem.getDistanceWheelEncoder() > TableValue1 && m_climberSubsystem.getDistanceWheelEncoder() <= Table Value2) {
-     *  m_climberSubsystem.setWinchSetpoint(double setpoint - angle);
-     * }
-     * else if (m_climberSubsystem.getDistanceWheelEncoder() >= end value)
-     * 
-     * Repeat for all of table values
-     * 
-     * 
-     */
-    // set motor speeds based on winch PIDController
+    double wheelSpeed =  (0.1 / 20.0) * m_climberSubsystem.getDistanceWheelEncoder() + 0.4;
+    m_climberSubsystem.setWheelSpeed(wheelSpeed);
+    //if (m_climberSubsystem.getAngleWinchEncoder() > getDesiredAngle()) {
+      m_climberSubsystem.setWinchSpeed(wheelSpeed);
+    //}
+    //else { m_climberSubsystem.setWinchSpeed(0); 
+    //}
+  }
+
+  public double getDesiredAngle() {
+
+
+    return 0.000881 * Math.pow(m_climberSubsystem.getDistanceWheelEncoder(), 3) 
+      - 0.121 * Math.pow(m_climberSubsystem.getDistanceWheelEncoder(), 2) + 21.5;
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
-    m_climberSubsystem.setWheelSpeed(0);
     m_climberSubsystem.setWinchSpeed(0);
     // Unwinch to have hook grab on to the bar - not for now
   }
@@ -80,6 +55,6 @@ public class RaiseHook extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_climberSubsystem.getAngleWinchEncoder() - angle) <= 10;
+    return m_climberSubsystem.getDistanceWheelEncoder() >= 60.5; // full hook extension
   }
 }

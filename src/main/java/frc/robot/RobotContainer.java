@@ -146,7 +146,10 @@ public class RobotContainer {
             .whenPressed(() -> shooter.decreaseRPM(25));
 
         new JoystickButton(m_functionsController, Button.kA.value)
-            .whenPressed(new PrepareHook(m_climberSubsystem));
+            .toggleWhenPressed(new SequentialCommandGroup(
+                new PrepareHook(m_climberSubsystem),
+                new RaiseHook(m_climberSubsystem),
+                new RunCommand(() -> m_climberSubsystem.setWheelSpeed(0.4), m_climberSubsystem)));
             /*new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(new PIDCommand(
                 new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
                 // Close the loop on the turn rate
@@ -222,6 +225,11 @@ public class RobotContainer {
       shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(0), shooter));
 
       circleThingy.setDefaultCommand(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.25), circleThingy));
+
+      m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
+            m_climberSubsystem.setWheelSpeed(0);
+            m_climberSubsystem.setWinchSpeed(0);
+        }, m_climberSubsystem));
 
     }
 
