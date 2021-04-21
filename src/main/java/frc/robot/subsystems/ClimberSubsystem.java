@@ -108,6 +108,16 @@ public class ClimberSubsystem extends SubsystemBase {
     // gives negative values to extend
   }
 
+  public void brake() {
+
+    if (getDistanceWheelEncoder() * 0.00833 < 0) {
+      setWheelSpeed(0);
+    }
+    else {
+      setWheelSpeed(getDistanceWheelEncoder() * 0.00833);
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

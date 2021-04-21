@@ -140,16 +140,21 @@ public class RobotContainer {
           //  .whileHeld(new RaiseHook(3, 45, m_climberSubsystem));
         new JoystickButton(m_functionsController, Button.kX.value)
             .toggleWhenPressed(new ShooterCommand(shooter, hoodAngle, limelight));
+        //new JoystickButton(m_functionsController, Button.kBumperRight.value)
+          //  .whenPressed(() -> shooter.increaseRPM(25));
+        //new JoystickButton(m_functionsController, Button.kBumperLeft.value)
+           // .whenPressed(() -> shooter.decreaseRPM(25));
+
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
-            .whenPressed(() -> shooter.increaseRPM(25));
+            .toggleWhenPressed(new RunCommand(() -> m_climberSubsystem.setWinchSpeed(-0.15), m_climberSubsystem));
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
-            .whenPressed(() -> shooter.decreaseRPM(25));
+            .toggleWhenPressed(new RunCommand(() -> m_climberSubsystem.setWinchSpeed(0.15), m_climberSubsystem));
 
         new JoystickButton(m_functionsController, Button.kA.value)
             .toggleWhenPressed(new SequentialCommandGroup(
                 new PrepareHook(m_climberSubsystem),
-                new RaiseHook(m_climberSubsystem),
-                new RunCommand(() -> m_climberSubsystem.setWheelSpeed(0.4), m_climberSubsystem)));
+                new RaiseHook(m_climberSubsystem)));
+                //new RunCommand(() -> m_climberSubsystem.setWheelSpeed(0.4), m_climberSubsystem)));
             /*new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(new PIDCommand(
                 new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
                 // Close the loop on the turn rate
@@ -227,7 +232,7 @@ public class RobotContainer {
       circleThingy.setDefaultCommand(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.25), circleThingy));
 
       m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
-            m_climberSubsystem.setWheelSpeed(0);
+            m_climberSubsystem.brake();
             m_climberSubsystem.setWinchSpeed(0);
         }, m_climberSubsystem));
 

@@ -55,6 +55,6 @@ public class RaiseHook extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_climberSubsystem.getDistanceWheelEncoder() >= 60.5; // full hook extension
+    return m_climberSubsystem.getDistanceWheelEncoder() >= 52.0; // full hook extension
   }
 }
