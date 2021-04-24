@@ -181,6 +181,7 @@ public class RobotContainer {
                 },
                 // Require the robot drive
                 hoodAngle)); */
+
         /*autoshooting command group: with a press of the Y button, this command will allow the robot to shoot quite accurately into the high port,
         regardless of the robot's current positon or orientation
 
@@ -191,7 +192,8 @@ public class RobotContainer {
         are spinning at the correct RPM, the extractor will extend, meanwhile the "circleThingy", aka the purple routing wheel which holds balls, will
         begin to spin. Press Y again once all the balls have been fired, and the command group is over.
         */
-        new JoystickButton(m_functionsController, Button.kY.value)
+
+        new JoystickButton(m_driverController, Button.kY.value)
             .toggleWhenPressed(
                 new SequentialCommandGroup(
                     new SearchingLimelight(m_swerve, limelight), 
@@ -212,8 +214,13 @@ public class RobotContainer {
                     new RunCommand(intake::halfSpeed, intake)
             ));
 
-        //new JoystickButton(m_functionsController, Button.kBumperRight.value)
-         //   .toggleWhenPressed(new Climb(m_climberSubsystem));
+        new JoystickButton(m_driverController, Button.kBumperLeft.value)
+            .toggleWhenPressed(new RunCommand(intake::extend, intake));
+
+        new JoystickButton(m_driverController, Button.kBumperRight.value)
+            .whileHeld(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), circleThingy));
+
+        
         
         // Driver Controller
         //new JoystickButton(m_driverController, Button.kBumperLeft.value)
@@ -222,9 +229,6 @@ public class RobotContainer {
         //new JoystickButton(m_driverController, Button.kBumperLeft.value)
         //    .whenPressed(() ->     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0))
         //    .whenReleased(() ->    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1));
-
-        
-
 
         // Defaults
         m_swerve.setDefaultCommand(new RunCommand(teleOpDriveFn, m_swerve));
@@ -239,15 +243,18 @@ public class RobotContainer {
         //defaults intake to remain up
 
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
-      shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(0), shooter));
-
-      // circleThingy.setDefaultCommand(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.25), circleThingy));
+        
+        //CHANGE THIS FOR SHOOTER RPM
+        shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(000), shooter));
 
       m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
             m_climberSubsystem.brake();
             //m_climberSubsystem.setWheelSpeed(0);
             m_climberSubsystem.setWinchSpeed(0);
         }, m_climberSubsystem));
+
+      circleThingy.setDefaultCommand(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0), circleThingy));
+
 
     }
 

@@ -30,11 +30,11 @@ public class PneumaticsSubsystem extends SubsystemBase {
     }
 
     public void extendIntakePiston() {
-      solenoidI.set(kForward);
+      solenoidI.set(kReverse);
     }
   
     public void retractIntakePiston() {
-      solenoidI.set(kReverse);
+      solenoidI.set(kForward);
     }
 
     public void extendControlPanelPiston() {

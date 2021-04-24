@@ -25,13 +25,13 @@ public class Intake extends SubsystemBase {
     
 
     public void extend(){
-    intakeSolenoid.set(kForward);
-    }
-    public void retract(){
     intakeSolenoid.set(kReverse);
     }
+    public void retract(){
+    intakeSolenoid.set(kForward);
+    }
   
-  private final VictorSPX intakeMotor = new VictorSPX(Constants.INTAKESUBSYSTEM_VICTOR);
+  public final VictorSPX intakeMotor = new VictorSPX(Constants.INTAKESUBSYSTEM_VICTOR);
 
 
   public Intake() {}
