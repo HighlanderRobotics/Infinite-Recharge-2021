@@ -30,16 +30,20 @@ public class RaiseHook extends CommandBase {
 
     double wheelSpeed =  (0.1 / 25.0) * m_climberSubsystem.getDistanceWheelEncoder() + 0.4;
     m_climberSubsystem.setWheelSpeed(wheelSpeed);
-    //if (m_climberSubsystem.getAngleWinchEncoder() > getDesiredAngle()) {
+    if (m_climberSubsystem.getAngleWinchEncoder() > getDesiredAngle()) {
+      m_climberSubsystem.setWinchSpeed(wheelSpeed * 3);
+
+    }
+      /** 
     if (m_climberSubsystem.getDistanceWheelEncoder() < 55) {
       m_climberSubsystem.setWinchSpeed(wheelSpeed);
     }
     else {
       m_climberSubsystem.setWinchSpeed(wheelSpeed * 1.5);
     }
-    //}
-    //else { m_climberSubsystem.setWinchSpeed(0); 
-    //}
+    */
+    else { m_climberSubsystem.setWinchSpeed(wheelSpeed); 
+    }
   }
 
   public double getDesiredAngle() {
