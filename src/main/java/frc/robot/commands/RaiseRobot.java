@@ -4,45 +4,41 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class PrepareHook extends CommandBase {
-  /** Creates a new PrepareHook. */
-private final ClimberSubsystem m_climberSubsystem;
+public class RaiseRobot extends CommandBase {
+  /** Creates a new RaiseRobot. */
+  private final ClimberSubsystem m_climberSubsystem;
 
-  public PrepareHook(ClimberSubsystem climberSubsystem) {
+  public RaiseRobot(ClimberSubsystem climberSubsystem) {
+    // Use addRequirements() here to declare subsystem dependencies.
     m_climberSubsystem = climberSubsystem;
     addRequirements(m_climberSubsystem);
-    // Use addRequirements() here to declare subsystem dependencies.
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    m_climberSubsystem.setRatchetServo(false);
+   // m_climberSubsystem.changeBrakeEnabled(false);
+    m_climberSubsystem.setRatchetServo(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    m_climberSubsystem.setWinchSpeed(-.2);
+    m_climberSubsystem.setWheelSpeed(0);
+    m_climberSubsystem.setWinchSpeed(-0.6);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-    m_climberSubsystem.setWinchSpeed(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_climberSubsystem.getAngleWinchEncoder() > 32.5;
+    return false;
   }
 }
