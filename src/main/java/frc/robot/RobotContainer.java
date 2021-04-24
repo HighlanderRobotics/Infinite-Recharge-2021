@@ -146,7 +146,10 @@ public class RobotContainer {
            // .whenPressed(() -> shooter.decreaseRPM(25));
 
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
-            .toggleWhenPressed(new RunCommand(() -> m_climberSubsystem.setWinchSpeed(-0.15), m_climberSubsystem));
+            .toggleWhenPressed(new RunCommand(() -> {
+                m_climberSubsystem.setWinchSpeed(-0.15);
+                m_climberSubsystem.setWheelSpeed(0); 
+            }, m_climberSubsystem));
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
             .toggleWhenPressed(new RunCommand(() -> m_climberSubsystem.setWinchSpeed(0.15), m_climberSubsystem));
 
@@ -229,10 +232,11 @@ public class RobotContainer {
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
       shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(0), shooter));
 
-      circleThingy.setDefaultCommand(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.25), circleThingy));
+      // circleThingy.setDefaultCommand(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.25), circleThingy));
 
       m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
             m_climberSubsystem.brake();
+            //m_climberSubsystem.setWheelSpeed(0);
             m_climberSubsystem.setWinchSpeed(0);
         }, m_climberSubsystem));
 

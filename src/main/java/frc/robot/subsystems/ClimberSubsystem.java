@@ -114,7 +114,7 @@ public class ClimberSubsystem extends SubsystemBase {
       setWheelSpeed(0);
     }
     else {
-      setWheelSpeed(getDistanceWheelEncoder() * 0.00833);
+      setWheelSpeed(getDistanceWheelEncoder() * 0.0045);
     }
   }
 

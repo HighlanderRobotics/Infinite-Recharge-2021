@@ -28,10 +28,15 @@ public class RaiseHook extends CommandBase {
   @Override
   public void execute() {
 
-    double wheelSpeed =  (0.1 / 20.0) * m_climberSubsystem.getDistanceWheelEncoder() + 0.4;
+    double wheelSpeed =  (0.1 / 25.0) * m_climberSubsystem.getDistanceWheelEncoder() + 0.4;
     m_climberSubsystem.setWheelSpeed(wheelSpeed);
     //if (m_climberSubsystem.getAngleWinchEncoder() > getDesiredAngle()) {
+    if (m_climberSubsystem.getDistanceWheelEncoder() < 55) {
       m_climberSubsystem.setWinchSpeed(wheelSpeed);
+    }
+    else {
+      m_climberSubsystem.setWinchSpeed(wheelSpeed * 1.5);
+    }
     //}
     //else { m_climberSubsystem.setWinchSpeed(0); 
     //}
@@ -55,6 +60,6 @@ public class RaiseHook extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_climberSubsystem.getDistanceWheelEncoder() >= 52.0; // full hook extension
+    return m_climberSubsystem.getDistanceWheelEncoder() >= 65.0; // full hook extension
   }
 }
