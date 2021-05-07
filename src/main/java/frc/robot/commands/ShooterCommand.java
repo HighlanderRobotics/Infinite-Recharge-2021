@@ -45,12 +45,32 @@ public class ShooterCommand extends CommandBase {
     @Override
     public void execute() { 
 
+    //change the argument on following line to desired hood angle in degrees
+    hoodAngle.setAngle(45);
+    
+
+
+
+
+
+/*    Autoaiming by changing hood angle:
+
       double x = limelight.getVerticalOffset();
       //double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1;
       double targetAngle = (-0.0514 * Math.pow(x, 2)) + (-1.586 * x) + 56.858;
 
-      hoodAngle.setAngle(targetAngle);
-    
+      hoodAngle.setAngle(targetAngle); 
+
+
+
+      -------------------- */
+
+    //1st zone: all 3 into hexagon, none into backport
+    //2nd zone: first two into hexagon, sometimes into backport, but third always hits bottom rim
+    //3rd zone: all 3 into hex with ~2 into backport
+    //4th zone: all 3 into hex with ~2 into backport
+
+
       //shooter.setRPM(targetRPM);
       
       

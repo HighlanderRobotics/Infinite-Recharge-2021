@@ -32,7 +32,7 @@ public class SetHoodAngle extends CommandBase {
     public void execute() { 
       //hoodAngle.hoodMotor.set(0.2);
       
-     hoodAngle.setAngle(50);
+     hoodAngle.setAngle(45);
      
       //System.out.println("Potentiometer Angle:" + shooter.getPotentiometerAngle());
 

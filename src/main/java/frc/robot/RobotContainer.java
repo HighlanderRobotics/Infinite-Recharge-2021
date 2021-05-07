@@ -158,7 +158,10 @@ public class RobotContainer {
                 new PrepareHook(m_climberSubsystem),
                 new RaiseHook(m_climberSubsystem)));
                 //new RunCommand(() -> m_climberSubsystem.setWheelSpeed(0.4), m_climberSubsystem)));
-            /*new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(new PIDCommand(
+
+
+            /*
+            new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(new PIDCommand(
                 new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
                 // Close the loop on the turn rate
                 hoodAngle::getPotentiometerAngle,
@@ -181,20 +184,18 @@ public class RobotContainer {
                 },
                 // Require the robot drive
                 hoodAngle)); */
+                
         //autoshooting command group
         new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(
-                new SequentialCommandGroup(
-                    new SearchingLimelight(m_swerve, limelight), 
                     new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                            new AutoAim(m_swerve, limelight),
                             new WaitUntilCommand(shooter::isRPMInRange),
                             new ParallelCommandGroup(
                                 new RunCommand(extractor::extend, extractor),
                                 new SpinCircleThingy(circleThingy))),
                         new ShooterCommand(shooter, hoodAngle, limelight))
-            ));
+            );
         //intake command group
         new JoystickButton(m_functionsController, Button.kStart.value)
             .toggleWhenPressed(
