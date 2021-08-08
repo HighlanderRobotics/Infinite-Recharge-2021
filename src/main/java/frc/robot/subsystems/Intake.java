@@ -36,9 +36,6 @@ public class Intake extends SubsystemBase {
 
   public Intake() {}
     
-    
-
-
 
   public void zeroSpeed() {
     intakeMotor.set(ControlMode.PercentOutput, 0);

@@ -1,10 +1,17 @@
+/* 
+The shooter subsystem has two main goals. The first is to declare, build, and configure all of the shooter
+paraphernalia (motors, encoders/sensors). The second purpose is to provide commands to regulate RPM of 
+the 2 shooter motor. 
+
+
+
+
+*/
 package frc.robot.subsystems;
 
-//import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -14,11 +21,6 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 
 
 
-
-
-//manually change the targetVoltage in Constants.java
-
-
 public class Shooter extends SubsystemBase {
   public final TalonFX firstMotor;
   public final TalonFX secondMotor;
@@ -26,58 +28,67 @@ public class Shooter extends SubsystemBase {
   
 
   public Shooter(){ 
-
-  firstMotor = new TalonFX(Constants.talonFirstChannel);
-  secondMotor = new TalonFX(Constants.talonSecondChannel);
+    //declare motors
+    firstMotor = new TalonFX(Constants.talonFirstChannel);
+    secondMotor = new TalonFX(Constants.talonSecondChannel);
   
+    
 
-  //configuring TalonFX motors 
-   /* Factory Default all hardware to prevent unexpected behaviour */
-   firstMotor.configFactoryDefault();
-		
-   /* Config neutral deadband to be the smallest possible */
-   firstMotor.configNeutralDeadband(0.001);
-   firstMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-  
-  
- firstMotor.config_kF(Constants.kPIDLoopIdx, Constants.kGains_Velocity.kF, Constants.kTimeoutMs);
- firstMotor.config_kP(Constants.kPIDLoopIdx, Constants.kGains_Velocity.kP, Constants.kTimeoutMs);
- firstMotor.config_kI(Constants.kPIDLoopIdx, Constants.kGains_Velocity.kI, Constants.kTimeoutMs);
- firstMotor.config_kD(Constants.kPIDLoopIdx, Constants.kGains_Velocity.kD, Constants.kTimeoutMs);
- 
- firstMotor.configNominalOutputForward(0, 20);
- firstMotor.configNominalOutputReverse(0, 20);
 
- firstMotor.configPeakOutputForward(1, 20);
- firstMotor.configPeakOutputReverse(-1, 20);
+    /*configuring TalonFX motors, nothing here should need changing (ever), the only things to change would
+    be the PID constant values, but these can be changed in the Constants.java
+    */
 
- firstMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 10, 0.5));
+    firstMotor.configFactoryDefault();
+    firstMotor.configNeutralDeadband(0.001);
+    firstMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+      
+    //assigns PID config values (using constant values in Constants.java)
+    firstMotor.config_kF(Constants.kPIDLoopIdx, Constants.kGains_Velocity.kF, Constants.kTimeoutMs);
+    firstMotor.config_kP(Constants.kPIDLoopIdx, Constants.kGains_Velocity.kP, Constants.kTimeoutMs);
+    firstMotor.config_kI(Constants.kPIDLoopIdx, Constants.kGains_Velocity.kI, Constants.kTimeoutMs);
+    firstMotor.config_kD(Constants.kPIDLoopIdx, Constants.kGains_Velocity.kD, Constants.kTimeoutMs);
+    
+    firstMotor.configNominalOutputForward(0, 20);
+    firstMotor.configNominalOutputReverse(0, 20);
 
- secondMotor.follow(firstMotor);
- secondMotor.setInverted(true);
+    firstMotor.configPeakOutputForward(1, 20);
+    firstMotor.configPeakOutputReverse(-1, 20);
+
+    firstMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 10, 0.5));
+
+    //configures the 2 shooter motors work together
+    secondMotor.follow(firstMotor);
+    secondMotor.setInverted(true);
   }
 
 
+
+//isRPMInRange is a simple command that can be called (continuously) to determine when the RPM gets into target range
   public boolean isRPMInRange(){
     return (Math.abs(convertVelocitytoRPM(firstMotor.getSelectedSensorVelocity()) - currentSetPoint)) < 50;
   }
+
+/*convertVelocityToRPM simply converts the encoder units to RPM
+double velocity is in units/100ms and the integrated encoder is based on 2048 units/revolution, so to convert 
+from targetRPM to targetVelocity:
+(targetRPM) / ((100ms per 1 second = 10) (sec per min = 60)) 
+   */
   public static double convertVelocitytoRPM(double velocity){
     return velocity * (1.0/2048.0) * 600.0;
   }
-  /*targetVelocity is in units/100ms and the integrated encoder is based on 2048 units/revolution, so to convert from targetRPM to targetVelocity, 
-   *(targetRPM) / ((100ms per 1 second = 10) (sec per min = 60)) 
-   */
-
-   //factor in gear ratio? (with wheels) ~*~
+ 
 
   double currentSensorVelocity;
   double currentSetPoint;
 
-  //targetVelocity is in pulses/100 ms (as opposed to 2048 pulses/revoluion)a
-   
-     // cert statement could function as a failsafe if necessary
-
   
+  //targetVelocity is in pulses/100 ms (as opposed to 2048 pulses/revoluion)
+
+  /*setRPM is a simple command which is able to take the target RPM (of the shooter motors) as an argument, convert
+  from RPM to velocity and assign the desired velocity to the motors (secondMotor will follow the firstMotor as
+  previously configured)
+  */
   public void setRPM (double targetRPM){
     double targetVelocity = (targetRPM * 2048) / 600;
     currentSetPoint = targetRPM;
@@ -85,14 +96,10 @@ public class Shooter extends SubsystemBase {
     firstMotor.set(TalonFXControlMode.Velocity, targetVelocity);
   }
 
-  
-
-    	/* Configured for Velocity Closed Loop on Integrated Sensors' Sum and Arbitrary FeedForward on joyX */
-			
-			/* Uncomment to view RPM in Driver Station */
-            // double actual_RPM = (_rightMaster.getSelectedSensorVelocity() / (double)Constants.kSensorUnitsPerRotation * 600f);
-            // System.out.println("Vel[RPM]: " + actual_RPM + " Pos: " + _rightMaster.getSelectedSensorPosition());
-  
+  /*increase or decrease RPM by an externally defined increment, used to manually increase/decrease RPM while 
+  robot is running, these commands are intended to be used only for diagnostics and testing by assigning each
+  to a button, so that re-building is not necessary to change the RPM
+  */
   public void increaseRPM (int increment){
     setRPM(currentSetPoint + increment);
   }

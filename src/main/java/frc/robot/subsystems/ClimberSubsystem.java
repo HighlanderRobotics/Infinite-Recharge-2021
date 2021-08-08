@@ -5,6 +5,53 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/* Temporary scattered notes (probably not useful) about climber to help my successor (-Robbie): (FEEL FREE TO DELETE)
+Cable guard, elastic band, automatically wants to roll up
+
+Controls: 1 pusher motor (on one side with two green wheels, one is powered, compliant wheels), 1 motor controls string (to keep from falling back)
+
+Angle arms controls how much you want to pull the string (far back it tilts back)
+
+Goal of the testing: find the right angle for the measurement arm
+Based on the angle pull out the string or pull out the cable guard more
+
+
+Kevin:
+Could directly predict winch tension based on how high up the hook had been pushed
+By the end, we had a ratio of where the tension line should be pulled compared to how high it was
+(simple stepwise function?)
+PrepareCommand: when everything starts, hook is slack, needs to be pulled into basic position, so this command pulls the line until there is tension on it, basically an angle measure (an encoder), might find that a simple ratio is equally effective
+
+Preparation works
+Extension (generally) works
+
+How to make driver actively put the hook on the bar?
+
+How to allow hook to go up to adjust?
+
+
+Doing set heights in testing
+
+Bunch of problems to solve, extension working, matter of how do we put it to a specific height? Something with PID? Tension related to height? Separate mode: we’ve extended, now use a different set of joystick bindings? Or something totally different?
+
+Line got caught in the gears cutting the paracord, which is the goal of the guard over the gears
+
+
+Front plate with a window where the paracord can actually come in, which would come back a bit to make sure it can’t go in the gears, trying to keep it simple. (simple is reasonable)
+
+
+First, we should figure out exactly how we are going to control the coming down/hanging portion of it? Make user interface better?
+
+More testing?
+
+Climbing only happens at the end, could swap out other controls near the end
+
+Tension is a major concern, need enough tension to prevent the chord from collapsing/falling, but not too much
+
+
+Not apparent in video in google drive folder: pieces of wood between the links to give extra rigidity
+
+*/
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;

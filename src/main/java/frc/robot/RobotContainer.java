@@ -181,7 +181,16 @@ public class RobotContainer {
                 },
                 // Require the robot drive
                 hoodAngle)); */
-        //autoshooting command group
+        /*autoshooting command group: with a press of the Y button, this command will allow the robot to shoot quite accurately into the high port,
+        regardless of the robot's current positon or orientation
+
+        The robot first checks if the limelight can see the target (defined by reflective tape). If it cannot, the robot will spin until it can.
+        Once the target can be seen, the robot will align itself to the target so that it has the best chance of making a shot. The robot then waits
+        until the RPM is in the desired range (currently set to 4000 RPM). While the robot is aligning itself and reaching the correct RPM, the necessary
+        hood angle is determined based on limelight readings, and then set. Now that the robot is properly aligned with the high port and the shooter motors
+        are spinning at the correct RPM, the extractor will extend, meanwhile the "circleThingy", aka the purple routing wheel which holds balls, will
+        begin to spin. Press Y again once all the balls have been fired, and the command group is over.
+        */
         new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(
                 new SequentialCommandGroup(
