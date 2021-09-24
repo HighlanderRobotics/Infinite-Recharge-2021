@@ -20,6 +20,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.wpilibj.Encoder;
+import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -57,6 +58,9 @@ public class SwerveModule implements Loggable{
    private double turningkI = 0;
    private double turningkD = 0;
    private double turningkF = .025;
+  
+  private CANCoder m_cancoder;
+
   private final int driveMotorChannel;
   private final int turningMotorChannel;
 
@@ -102,20 +106,23 @@ void setTurningPIDF( double p,
    * @param driveMotorChannel   ID for the drive motor.
    * @param turningMotorChannel ID for the turning motor.
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int offset) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int cancoderChannel, int offset) {
     
     
     this.driveMotorChannel = driveMotorChannel;
     this.turningMotorChannel = turningMotorChannel;
       m_driveMotor = new WPI_TalonFX(driveMotorChannel);
       m_turningMotor = new WPI_TalonFX(turningMotorChannel);
+      m_cancoder = new CANCoder(cancoderChannel);
       m_driveMotor.configFactoryDefault();
       m_turningMotor.configFactoryDefault();
       m_turningMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
       m_turningMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
       // Doesn't work, we need to use cancoders in order to get wheel position rather than motor shaft position
       // Otherwise, will rotate past one rotation, giving us a value we can't use.
-      // sensorCollection.setIntegratedSensorPosition(absoluteValue - offset, 20);
+
+      m_turningMotor.getSensorCollection().setIntegratedSensorPosition((m_cancoder.getAbsolutePosition() - offset) * kTurningRatio * (2048.0 / 360), 20);
+      //m_turningMotor.getSensorCollection().setIntegratedSensorPosition(512 * kTurningRatio, 20);
       //m_turningMotor.setSensorPhase(PhaseSensor);
       //m_turningMotor.setInverted(true);
       
@@ -190,3 +197,10 @@ void setTurningPIDF( double p,
     // System.out.print(inputAngle + "\t");
   }
 }
+
+
+
+
+
+
+
