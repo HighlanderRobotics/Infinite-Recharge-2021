@@ -275,6 +275,16 @@ public class RobotContainer {
      *         }
      */
 
+     public Command getAutonomousCommand() {
+         return new ParallelDeadlineGroup(
+             // run for first 15 seconds
+             new WaitUntilCommand(15),
+             new ParallelDeadlineGroup(
+                 // drive forward 5 seconds
+                 new WaitCommand(5),
+                 new DriveForward(m_swerve)));
+     }
+
 
     
      
