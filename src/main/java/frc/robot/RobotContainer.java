@@ -32,7 +32,7 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.RaiseHook;
 import frc.robot.commands.SearchingLimelight;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.SpinCircleThingy;
+import frc.robot.commands.SpinSpindexer;
 import frc.robot.commands.ColorWheelApproach;
 import frc.robot.commands.PrepareHook;
 import frc.robot.commands.SetHoodAngle;
@@ -44,7 +44,7 @@ import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.SwerveDrive;
-import frc.robot.subsystems.CircleThingy;
+import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.HoodAngle;
 import io.github.oblarg.oblog.Logger;
@@ -78,7 +78,7 @@ public class RobotContainer {
     // private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
     // private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
 
-    private final Intake intake = new Intake();
+    // private final Intake intake = new Intake();
     private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
     private final XboxController m_functionsController = new XboxController(Constants.FUNCTIONS_CONTROLLER_PORT);
@@ -97,7 +97,7 @@ public class RobotContainer {
    //from shooter repository
     private final Shooter shooter = new Shooter();
     public static boolean isButtonToggled = false;
-    private final CircleThingy circleThingy = new CircleThingy();
+    private final Spindexer circleThingy = new Spindexer();
     private final HoodAngle hoodAngle = new HoodAngle();
     private final Extractor extractor = new Extractor();
 
@@ -203,19 +203,19 @@ public class RobotContainer {
                             new WaitUntilCommand(shooter::isRPMInRange),
                             new ParallelCommandGroup(
                                 new RunCommand(extractor::extend, extractor),
-                                new SpinCircleThingy(circleThingy))),
+                                new SpinSpindexer(circleThingy))),
                         new ShooterCommand(shooter, hoodAngle, limelight))
             ));
         //intake command group
-        new JoystickButton(m_functionsController, Button.kStart.value)
-            .toggleWhenPressed(
-                new SequentialCommandGroup(
-                    new RunCommand(intake::extend, intake),
-                    new RunCommand(intake::halfSpeed, intake)
-            ));
+        // new JoystickButton(m_functionsController, Button.kStart.value)
+        //     .toggleWhenPressed(
+        //         new SequentialCommandGroup(
+        //             new RunCommand(intake::extend, intake),
+        //             new RunCommand(intake::halfSpeed, intake)
+        //     ));
 
-        new JoystickButton(m_driverController, Button.kBumperLeft.value)
-            .toggleWhenPressed(new RunCommand(intake::extend, intake));
+        // new JoystickButton(m_driverController, Button.kBumperLeft.value)
+        //     .toggleWhenPressed(new RunCommand(intake::extend, intake));
 
         new JoystickButton(m_driverController, Button.kBumperRight.value)
             .whileHeld(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), circleThingy));
@@ -239,7 +239,7 @@ public class RobotContainer {
         extractor.setDefaultCommand(new RunCommand(extractor::retract, extractor));
         //defaults extractor to remain up
 
-        intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::retract, intake), new RunCommand(intake::zeroSpeed, intake)));
+        // intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::retract, intake), new RunCommand(intake::zeroSpeed, intake)));
         //defaults intake to remain up
 
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));

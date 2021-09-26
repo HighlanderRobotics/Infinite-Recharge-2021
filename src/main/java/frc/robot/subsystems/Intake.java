@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase {
    * Creates a new IntakeSubsytem.
    */
 
-  DoubleSolenoid intakeSolenoid = new DoubleSolenoid(20, 0, 1);
+  DoubleSolenoid intakeSolenoid = new DoubleSolenoid(20, 1, 0);
     
 
     public void extend(){
