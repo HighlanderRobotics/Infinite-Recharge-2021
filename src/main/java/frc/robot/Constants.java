@@ -56,12 +56,6 @@ public final class Constants {
     public static double HALF_SPEED_MULTIPLIER = 0.5;
     public static double SLOW_TURN_MULTIPLE = 0.75;
 
-    // Distance Sensors
-    public static int FRONT_PING_CHANNEL = 4;
-    public static int FRONT_ECHO_CHANNEL = 5;
-    public static int CONTROLPANEL_PING_CHANNEL = 8;
-    public static int CONTROLPANEL_ECHO_CHANNEL = 9;
-
     // Motors
     public static int DRIVESUBSYSTEM_LEFT_BACK_TALON = 0;
     public static int DRIVESUBSYSTEM_LEFT_FRONT_VICTOR = 1;

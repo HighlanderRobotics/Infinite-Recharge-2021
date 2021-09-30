@@ -33,7 +33,7 @@ import frc.robot.commands.RaiseHook;
 import frc.robot.commands.SearchingLimelight;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SpinSpindexer;
-import frc.robot.commands.ColorWheelApproach;
+import frc.robot.commands.SpinSpindexerToPosition;
 import frc.robot.commands.PrepareHook;
 import frc.robot.commands.SetHoodAngle;
 import frc.robot.subsystems.DriveSubsystem;
@@ -42,7 +42,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -79,7 +78,9 @@ public class RobotContainer {
     // private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
 
     // private final Intake intake = new Intake();
-    private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+
+    // private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+    //commented to disable while climber extension encoders are unplugged, uncomment to fix later
 
     private final XboxController m_functionsController = new XboxController(Constants.FUNCTIONS_CONTROLLER_PORT);
     private final XboxController m_driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
@@ -97,7 +98,7 @@ public class RobotContainer {
    //from shooter repository
     private final Shooter shooter = new Shooter();
     public static boolean isButtonToggled = false;
-    private final Spindexer circleThingy = new Spindexer();
+    private final Spindexer spindexer = new Spindexer();
     private final HoodAngle hoodAngle = new HoodAngle();
     private final Extractor extractor = new Extractor();
 
@@ -131,6 +132,8 @@ public class RobotContainer {
         // whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
         //whileHeldFuncController(Button.kA, m_intakeSubsystem, m_intakeSubsystem::threeQuarterSpeed);
 
+        new JoystickButton(m_driverController, Button.kB.value)
+        .toggleWhenPressed(new SpinSpindexerToPosition(spindexer, 0.106));
        
        // whileHeldFuncController(Button.kBumperLeft, m_shooterSubsystem, m_shooterSubsystem::shootBalls);
         // whileHeldFuncController(Button.kBumperRight, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendIntakePiston);
@@ -145,18 +148,18 @@ public class RobotContainer {
         //new JoystickButton(m_functionsController, Button.kBumperLeft.value)
            // .whenPressed(() -> shooter.decreaseRPM(25));
 
-        new JoystickButton(m_functionsController, Button.kBumperRight.value)
-            .toggleWhenPressed(new RunCommand(() -> {
-                m_climberSubsystem.setWinchSpeed(-0.15);
-                m_climberSubsystem.setWheelSpeed(0); 
-            }, m_climberSubsystem));
-        new JoystickButton(m_functionsController, Button.kBumperLeft.value)
-            .toggleWhenPressed(new RunCommand(() -> m_climberSubsystem.setWinchSpeed(0.15), m_climberSubsystem));
+        // new JoystickButton(m_functionsController, Button.kBumperRight.value)
+        //     .toggleWhenPressed(new RunCommand(() -> {
+        //         m_climberSubsystem.setWinchSpeed(-0.15);
+        //         m_climberSubsystem.setWheelSpeed(0); 
+        //     }, m_climberSubsystem));
+        // new JoystickButton(m_functionsController, Button.kBumperLeft.value)
+        //     .toggleWhenPressed(new RunCommand(() -> m_climberSubsystem.setWinchSpeed(0.15), m_climberSubsystem));
 
-        new JoystickButton(m_functionsController, Button.kA.value)
-            .toggleWhenPressed(new SequentialCommandGroup(
-                new PrepareHook(m_climberSubsystem),
-                new RaiseHook(m_climberSubsystem)));
+        // new JoystickButton(m_functionsController, Button.kA.value)
+        //     .toggleWhenPressed(new SequentialCommandGroup(
+        //         new PrepareHook(m_climberSubsystem),
+        //         new RaiseHook(m_climberSubsystem)));
                 //new RunCommand(() -> m_climberSubsystem.setWheelSpeed(0.4), m_climberSubsystem)));
             /*new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(new PIDCommand(
                 new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
@@ -203,7 +206,7 @@ public class RobotContainer {
                             new WaitUntilCommand(shooter::isRPMInRange),
                             new ParallelCommandGroup(
                                 new RunCommand(extractor::extend, extractor),
-                                new SpinSpindexer(circleThingy))),
+                                new SpinSpindexer(spindexer))),
                         new ShooterCommand(shooter, hoodAngle, limelight))
             ));
         //intake command group
@@ -218,7 +221,7 @@ public class RobotContainer {
         //     .toggleWhenPressed(new RunCommand(intake::extend, intake));
 
         new JoystickButton(m_driverController, Button.kBumperRight.value)
-            .whileHeld(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), circleThingy));
+            .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
 
         
         
@@ -247,13 +250,13 @@ public class RobotContainer {
         //CHANGE THIS FOR SHOOTER RPM
         shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(000), shooter));
 
-      m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
-            m_climberSubsystem.brake();
-            //m_climberSubsystem.setWheelSpeed(0);
-            m_climberSubsystem.setWinchSpeed(0);
-        }, m_climberSubsystem));
+    //   m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
+    //         m_climberSubsystem.brake();
+    //         //m_climberSubsystem.setWheelSpeed(0);
+    //         m_climberSubsystem.setWinchSpeed(0);
+    //     }, m_climberSubsystem));
 
-      circleThingy.setDefaultCommand(new RunCommand(() -> circleThingy.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0), circleThingy));
+      spindexer.setDefaultCommand(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0), spindexer));
 
 
     }
