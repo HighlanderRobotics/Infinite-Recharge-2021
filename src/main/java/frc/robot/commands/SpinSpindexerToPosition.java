@@ -24,7 +24,7 @@ public class SpinSpindexerToPosition extends PIDCommand {
         // This should return the setpoint (can also be a constant)
         targetPosition,
         // This uses the output
-        output -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, output)
+        output -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -output)
           // Use the output here
         );
     // Use addRequirements() here to declare subsystem dependencies.
