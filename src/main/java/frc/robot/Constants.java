@@ -100,8 +100,7 @@ public final class Constants {
 
 
     // Analog Channels
-	public static int hoodAnglePotentiometerAnalogInputID = 0;
-
+	public static int hoodAnglePotentiometerAnalogInputID = 2;
 
 
 
