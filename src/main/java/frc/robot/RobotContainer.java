@@ -77,7 +77,7 @@ public class RobotContainer {
     // private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
     // private final DistanceSensorSubsystem m_distanceSensorSubsystem = new DistanceSensorSubsystem();
 
-    // private final Intake intake = new Intake();
+    private final Intake intake = new Intake();
 
     // private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
     //commented to disable while climber extension encoders are unplugged, uncomment to fix later
@@ -130,7 +130,7 @@ public class RobotContainer {
 
         // m_functionsController button uses
         // whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
-        //whileHeldFuncController(Button.kA, m_intakeSubsystem, m_intakeSubsystem::threeQuarterSpeed);
+        whileHeldFuncController(Button.kA, intake, intake::threeQuarterSpeed);
 
         new JoystickButton(m_driverController, Button.kB.value)
         .toggleWhenPressed(new SpinSpindexerToPosition(spindexer, 0.106));
@@ -242,7 +242,7 @@ public class RobotContainer {
         extractor.setDefaultCommand(new RunCommand(extractor::retract, extractor));
         //defaults extractor to remain up
 
-        // intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::retract, intake), new RunCommand(intake::zeroSpeed, intake)));
+        intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::retract, intake), new RunCommand(intake::zeroSpeed, intake)));
         //defaults intake to remain up
 
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));

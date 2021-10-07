@@ -61,7 +61,7 @@ public final class Constants {
     public static int DRIVESUBSYSTEM_LEFT_FRONT_VICTOR = 1;
     public static int DRIVESUBSYSTEM_RIGHT_BACK_TALON = 3;
     public static int DRIVESUBSYSTEM_RIGHT_FRONT_VICTOR = 2;
-    public static int INTAKESUBSYSTEM_VICTOR = 7;
+    public static int INTAKESUBSYSTEM_VICTOR = 9;
     public static int CLIMBERSUBSYSTEM_WINCH_TALON = 10;
     public static int CLIMBERSUBSYSTEM_WHEEL_TALON = 12;
 	public static int circleThingyVictorID = 11;
