@@ -103,6 +103,8 @@ public final class Constants {
 	public static int hoodAnglePotentiometerAnalogInputID = 2;
 
 
+    // spindexer positions
+    public static double spindexerStart = 0.5;
 
 
     //Shooter + Routing + Hood Angle

@@ -18,7 +18,7 @@ public class SpinSpindexer extends CommandBase{
 public void initialize() { 
     //sets speed of motor (that controls the purple routing wheel) to 20%
 
-spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.2);
+spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.2);
 }
 
 @Override

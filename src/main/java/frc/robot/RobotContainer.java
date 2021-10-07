@@ -199,6 +199,7 @@ public class RobotContainer {
         new JoystickButton(m_driverController, Button.kY.value)
             .toggleWhenPressed(
                 new SequentialCommandGroup(
+                    new SpinSpindexerToPosition(spindexer, Constants.spindexerStart),
                     new SearchingLimelight(m_swerve, limelight), 
                     new ParallelCommandGroup(
                         new SequentialCommandGroup(

@@ -16,7 +16,10 @@ public class Spindexer extends SubsystemBase{
     @Log
     public DutyCycleEncoder spindexerEncoder = new DutyCycleEncoder(4);
     public VictorSPX circleMotorVictorSPX = new VictorSPX(Constants.circleThingyVictorID);
-
+    public Spindexer() {
+        circleMotorVictorSPX.configPeakOutputForward(0.2);
+        circleMotorVictorSPX.configPeakOutputReverse(-0.2);
+    }
     /*public void spinUp(double percentage) {
         
 
