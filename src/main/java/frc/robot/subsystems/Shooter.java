@@ -12,6 +12,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -56,6 +57,9 @@ public class Shooter extends SubsystemBase {
     firstMotor.configPeakOutputReverse(-1, 20);
 
     firstMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 10, 0.5));
+
+    firstMotor.setNeutralMode(NeutralMode.Coast);
+    secondMotor.setNeutralMode(NeutralMode.Coast);
 
     //configures the 2 shooter motors work together
     secondMotor.follow(firstMotor);

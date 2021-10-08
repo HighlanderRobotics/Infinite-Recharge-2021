@@ -9,6 +9,7 @@ package frc.robot;
 
 import java.util.List;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 
 //import org.graalvm.compiler.code.DataSection.ZeroData;
@@ -249,7 +250,7 @@ public class RobotContainer {
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
         
         //CHANGE THIS FOR SHOOTER RPM
-        shooter.setDefaultCommand(new RunCommand(() -> shooter.setRPM(000), shooter));
+        shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 0);}, shooter));
 
     //   m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
     //         m_climberSubsystem.brake();
