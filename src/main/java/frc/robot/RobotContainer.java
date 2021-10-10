@@ -91,10 +91,10 @@ public class RobotContainer {
     private final SwerveDrive m_swerve = new SwerveDrive();
 
 
-  // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+    // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
+    private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
+    private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
+    private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
    //from shooter repository
     private final Shooter shooter = new Shooter();
@@ -128,63 +128,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         
-
-        // m_functionsController button uses
-        // whileHeldFuncController(Button.kB, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendControlPanelPiston);
         whileHeldFuncController(Button.kA, intake, intake::threeQuarterSpeed);
 
-        new JoystickButton(m_driverController, Button.kB.value)
-        .toggleWhenPressed(new SpinSpindexerToPosition(spindexer, 0.106));
-       
-       // whileHeldFuncController(Button.kBumperLeft, m_shooterSubsystem, m_shooterSubsystem::shootBalls);
-        // whileHeldFuncController(Button.kBumperRight, m_pneumaticsSubsystem, m_pneumaticsSubsystem::extendIntakePiston);
-        new JoystickButton(m_functionsController, Button.kB.value)
-        .toggleWhenPressed(new SetHoodAngle(hoodAngle, limelight));
-        //new JoystickButton(m_functionsController, Button.kA.value)
-          //  .whileHeld(new RaiseHook(3, 45, m_climberSubsystem));
-        new JoystickButton(m_functionsController, Button.kX.value)
-            .toggleWhenPressed(new ShooterCommand(shooter, hoodAngle, limelight));
-        //new JoystickButton(m_functionsController, Button.kBumperRight.value)
-          //  .whenPressed(() -> shooter.increaseRPM(25));
-        //new JoystickButton(m_functionsController, Button.kBumperLeft.value)
-           // .whenPressed(() -> shooter.decreaseRPM(25));
-
-        // new JoystickButton(m_functionsController, Button.kBumperRight.value)
-        //     .toggleWhenPressed(new RunCommand(() -> {
-        //         m_climberSubsystem.setWinchSpeed(-0.15);
-        //         m_climberSubsystem.setWheelSpeed(0); 
-        //     }, m_climberSubsystem));
-        // new JoystickButton(m_functionsController, Button.kBumperLeft.value)
-        //     .toggleWhenPressed(new RunCommand(() -> m_climberSubsystem.setWinchSpeed(0.15), m_climberSubsystem));
-
-        // new JoystickButton(m_functionsController, Button.kA.value)
-        //     .toggleWhenPressed(new SequentialCommandGroup(
-        //         new PrepareHook(m_climberSubsystem),
-        //         new RaiseHook(m_climberSubsystem)));
-                //new RunCommand(() -> m_climberSubsystem.setWheelSpeed(0.4), m_climberSubsystem)));
-            /*new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(new PIDCommand(
-                new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
-                // Close the loop on the turn rate
-                hoodAngle::getPotentiometerAngle,
-                // Setpoint is 0
-                () -> hoodAngle.getPotentiometerAngle() - 2.5,
-                // Pipe the output to the turning controls
-                output -> hoodAngle.hoodMotor.set(output),
-                // Require the robot drive
-                hoodAngle));
-            new JoystickButton(m_driverController, Button.kBumperLeft.value).whenPressed(new PIDCommand(
-                new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD),
-                // Close the loop on the turn rate
-                hoodAngle::getPotentiometerAngle,
-                // Setpoint is 0
-                () -> hoodAngle.getPotentiometerAngle() + 2.5,
-                // Pipe the output to the turning controls
-                output -> {
-                    hoodAngle.hoodMotor.set(output);
-                    System.out.println(hoodAngle.getPotentiometerAngle());
-                },
-                // Require the robot drive
-                hoodAngle)); */
 
         /*autoshooting command group: with a press of the Y button, this command will allow the robot to shoot quite accurately into the high port,
         regardless of the robot's current positon or orientation
@@ -218,13 +163,6 @@ public class RobotContainer {
                     ),
                     new RunCommand(intake::extend, intake)
             ));
-        //intake command group
-        // new JoystickButton(m_functionsController, Button.kStart.value)
-        //     .toggleWhenPressed(
-        //         new SequentialCommandGroup(
-        //             new RunCommand(intake::extend, intake),
-        //             new RunCommand(intake::halfSpeed, intake)
-        //     ));
 
         // new JoystickButton(m_driverController, Button.kBumperLeft.value)
         //     .toggleWhenPressed(new RunCommand(intake::extend, intake));
@@ -234,14 +172,6 @@ public class RobotContainer {
 
         
         
-        // Driver Controller
-        //new JoystickButton(m_driverController, Button.kBumperLeft.value)
-        //    .whileHeld(new SensorSlowCommand(m_distanceSensorSubsystem, m_driveSubsystem, teleOpDriveFn));
-
-        //new JoystickButton(m_driverController, Button.kBumperLeft.value)
-        //    .whenPressed(() ->     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0))
-        //    .whenReleased(() ->    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1));
-
         // Defaults
         m_swerve.setDefaultCommand(new RunCommand(teleOpDriveFn, m_swerve));
      
@@ -254,8 +184,6 @@ public class RobotContainer {
         intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::extend, intake), new RunCommand(intake::zeroSpeed, intake)));
         //defaults intake to remain up
 
-        // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));
-        
         //CHANGE THIS FOR SHOOTER RPM
         shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 0);}, shooter));
 
@@ -265,9 +193,20 @@ public class RobotContainer {
     //         m_climberSubsystem.setWinchSpeed(0);
     //     }, m_climberSubsystem));
 
-      spindexer.setDefaultCommand(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0), spindexer));
+        spindexer.setDefaultCommand(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0), spindexer));
 
 
+    }
+
+    public void configureTestBindings() {
+        new JoystickButton(m_driverController, Button.kB.value)
+        .toggleWhenPressed(new SpinSpindexerToPosition(spindexer, 0.106));
+       
+        new JoystickButton(m_functionsController, Button.kB.value)
+        .toggleWhenPressed(new SetHoodAngle(hoodAngle, limelight));
+
+        new JoystickButton(m_functionsController, Button.kX.value)
+            .toggleWhenPressed(new ShooterCommand(shooter, hoodAngle, limelight));
     }
 
     private void whileHeldFuncController(Button button, Subsystem subsystem, Runnable runnable) {

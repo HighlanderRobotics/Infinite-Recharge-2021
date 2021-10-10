@@ -112,7 +112,14 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
+    // uncomment to stop teleop from running in test mode
+    // CommandScheduler.getInstance().cancelAll();
+
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
+
+    m_robotContainer.configureTestBindings();
 
   }
 
