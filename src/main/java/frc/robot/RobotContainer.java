@@ -199,17 +199,20 @@ public class RobotContainer {
 
         new JoystickButton(m_driverController, Button.kY.value)
             .toggleWhenPressed(
-                new SequentialCommandGroup(
-                    new SpinSpindexerToPosition(spindexer, Constants.spindexerStart),
-                    new SearchingLimelight(m_swerve, limelight), 
-                    new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                            new AutoAim(m_swerve, limelight),
-                            new WaitUntilCommand(shooter::isRPMInRange),
-                            new ParallelCommandGroup(
-                                new RunCommand(extractor::extend, extractor),
-                                new SpinSpindexer(spindexer))),
-                        new ShooterCommand(shooter, hoodAngle, limelight))
+                new ParallelDeadlineGroup(
+                    new SequentialCommandGroup(
+                        new SpinSpindexerToPosition(spindexer, Constants.spindexerStart),
+                        new SearchingLimelight(m_swerve, limelight), 
+                        new ParallelCommandGroup(
+                            new SequentialCommandGroup(
+                                new AutoAim(m_swerve, limelight),
+                                new WaitUntilCommand(shooter::isRPMInRange),
+                                new ParallelCommandGroup(
+                                    new RunCommand(extractor::extend, extractor),
+                                    new SpinSpindexer(spindexer))),
+                            new ShooterCommand(shooter, hoodAngle, limelight))
+                    ),
+                    new RunCommand(intake::extend, intake)
             ));
         //intake command group
         // new JoystickButton(m_functionsController, Button.kStart.value)
@@ -244,7 +247,7 @@ public class RobotContainer {
         extractor.setDefaultCommand(new RunCommand(extractor::retract, extractor));
         //defaults extractor to remain up
 
-        intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::retract, intake), new RunCommand(intake::zeroSpeed, intake)));
+        intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::extend, intake), new RunCommand(intake::zeroSpeed, intake)));
         //defaults intake to remain up
 
         // m_pneumaticsSubsystem.setDefaultCommand(new RunCommand(() -> m_pneumaticsSubsystem.retractBothPistons(), m_pneumaticsSubsystem));

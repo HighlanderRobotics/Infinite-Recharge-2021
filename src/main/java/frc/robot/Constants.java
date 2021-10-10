@@ -57,17 +57,17 @@ public final class Constants {
     public static double SLOW_TURN_MULTIPLE = 0.75;
 
     // Motors
-    public static int DRIVESUBSYSTEM_LEFT_BACK_TALON = 0;
-    public static int DRIVESUBSYSTEM_LEFT_FRONT_VICTOR = 1;
-    public static int DRIVESUBSYSTEM_RIGHT_BACK_TALON = 3;
-    public static int DRIVESUBSYSTEM_RIGHT_FRONT_VICTOR = 2;
-    public static int INTAKESUBSYSTEM_VICTOR = 9;
-    public static int CLIMBERSUBSYSTEM_WINCH_TALON = 10;
-    public static int CLIMBERSUBSYSTEM_WHEEL_TALON = 12;
-	public static int circleThingyVictorID = 11;
-    public static int talonFirstChannel = 13;
-    public static int talonSecondChannel = 14;
-    public static int deviceIDCANSparkMax = 15; //hoodMotor
+    public static final int DRIVESUBSYSTEM_LEFT_BACK_TALON = 0;
+    public static final int DRIVESUBSYSTEM_LEFT_FRONT_VICTOR = 1;
+    public static final int DRIVESUBSYSTEM_RIGHT_BACK_TALON = 3;
+    public static final int DRIVESUBSYSTEM_RIGHT_FRONT_VICTOR = 2;
+    public static final int INTAKESUBSYSTEM_VICTOR = 9;
+    public static final int CLIMBERSUBSYSTEM_WINCH_TALON = 10;
+    public static final int CLIMBERSUBSYSTEM_WHEEL_TALON = 12;
+	public static final int circleThingyVictorID = 11;
+    public static final int talonFirstChannel = 13;
+    public static final int talonSecondChannel = 14;
+    public static final int deviceIDCANSparkMax = 15; //hoodMotor
 
 
     // Solenoids
