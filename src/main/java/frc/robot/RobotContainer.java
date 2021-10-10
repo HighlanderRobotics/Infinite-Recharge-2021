@@ -201,12 +201,16 @@ public class RobotContainer {
             .toggleWhenPressed(
                 new ParallelDeadlineGroup(
                     new SequentialCommandGroup(
-                        new SpinSpindexerToPosition(spindexer, Constants.spindexerStart),
                         new SearchingLimelight(m_swerve, limelight), 
                         new ParallelCommandGroup(
                             new SequentialCommandGroup(
-                                new AutoAim(m_swerve, limelight),
-                                new WaitUntilCommand(shooter::isRPMInRange),
+                                new ParallelCommandGroup(
+                                    new SequentialCommandGroup(
+                                        new AutoAim(m_swerve, limelight),
+                                        new WaitUntilCommand(shooter::isRPMInRange)
+                                    ),
+                                    new SpinSpindexerToPosition(spindexer, Constants.spindexerStart)
+                                ),
                                 new ParallelCommandGroup(
                                     new RunCommand(extractor::extend, extractor),
                                     new SpinSpindexer(spindexer))),
