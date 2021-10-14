@@ -164,8 +164,8 @@ public class RobotContainer {
                     new RunCommand(intake::extend, intake)
             ));
 
-        // new JoystickButton(m_driverController, Button.kBumperLeft.value)
-        //     .toggleWhenPressed(new RunCommand(intake::extend, intake));
+        new JoystickButton(m_driverController, Button.kBumperLeft.value)
+            .toggleWhenPressed(new RunCommand(intake::retract, intake));
 
         new JoystickButton(m_driverController, Button.kBumperRight.value)
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
