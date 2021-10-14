@@ -192,7 +192,7 @@ public class RobotContainer {
         extractor.setDefaultCommand(new RunCommand(extractor::retract, extractor));
         //defaults extractor to remain up
 
-        intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::extend, intake), new RunCommand(intake::zeroSpeed, intake)));
+        intake.setDefaultCommand(new RunCommand(() -> {intake.retract(); intake.zeroSpeed();}, intake));
         //defaults intake to remain up
 
         //CHANGE THIS FOR SHOOTER RPM
