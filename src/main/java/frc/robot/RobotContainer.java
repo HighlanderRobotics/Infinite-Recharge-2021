@@ -142,8 +142,7 @@ public class RobotContainer {
         begin to spin. Press Y again once all the balls have been fired, and the command group is over.
         */
 
-        new JoystickButton(m_driverController, Button.kY.value)
-            .toggleWhenPressed(
+        Command shootCommand = 
                 new ParallelDeadlineGroup(
                     new SequentialCommandGroup(
                         new SearchingLimelight(m_swerve, limelight), 
@@ -161,14 +160,26 @@ public class RobotContainer {
                                     new SpinSpindexer(spindexer))),
                             new ShooterCommand(shooter, hoodAngle, limelight))
                     ),
-                    new RunCommand(intake::extend, intake)
-            ));
+                    new RunCommand(intake::extend, intake));
 
-        // new JoystickButton(m_driverController, Button.kBumperLeft.value)
-        //     .toggleWhenPressed(new RunCommand(intake::extend, intake));
+        new JoystickButton(m_driverController, Axis.kRightTrigger.value)
+            .toggleWhenPressed(shootCommand);
 
-        new JoystickButton(m_driverController, Button.kBumperRight.value)
+        new JoystickButton(m_functionsController, Axis.kRightTrigger.value)
+            .toggleWhenPressed(shootCommand);
+
+        new JoystickButton(m_functionsController, Button.kBumperRight.value)
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
+
+        new JoystickButton(m_functionsController, Button.kBumperLeft.value)
+            .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.3), spindexer));
+
+        new JoystickButton(m_functionsController, Axis.kLeftTrigger.value)
+            .whileHeld(new RunCommand(intake::halfSpeed, intake));
+
+        new JoystickButton(m_functionsController, Button.kA.value)
+            .toggleWhenPressed(new RunCommand(intake::extend, intake));
+
 
         
         
