@@ -181,6 +181,9 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, Button.kA.value)
             .toggleWhenPressed(new RunCommand(intake::halfSpeed, intake));
 
+        new JoystickButton(m_functionsController, Button.kB.value)
+            .toggleWhenPressed(new InstantCommand(m_swerve::resetOdometry, m_swerve));
+
 
         
         

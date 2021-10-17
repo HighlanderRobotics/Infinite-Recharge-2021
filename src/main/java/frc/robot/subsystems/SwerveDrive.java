@@ -103,6 +103,10 @@ public class SwerveDrive extends SubsystemBase implements Loggable{
         m_backRight.getState()
     );
   }
+
+  public void resetOdometry() {
+    m_odometry.resetPosition(new Pose2d(), getAngle());
+  }
   
   @Override
   public void periodic() {
