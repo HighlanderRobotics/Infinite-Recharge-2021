@@ -12,6 +12,7 @@ import com.analog.adis16448.frc.ADIS16448_IMU;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
+import com.kauailabs.navx.frc.AHRS;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -42,7 +44,8 @@ public class SwerveDrive extends SubsystemBase implements Loggable{
   private final SwerveModule m_backLeft = new SwerveModule(4, 3, 20, 88); //4,3 (was 67)
   private final SwerveModule m_backRight = new SwerveModule(6, 5, 21, 16); //6,5 (was 37)
 
-  @Log public static final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
+  //@Log public static final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
+  @Log public static final AHRS m_imu = new AHRS(I2C.Port.kMXP);
   public static Pose2d m_pose = new Pose2d(5.0, 13.5, new Rotation2d());
   private final Field2d m_field = new Field2d();
 
@@ -53,7 +56,7 @@ public class SwerveDrive extends SubsystemBase implements Loggable{
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, getAngle(), m_pose);
 
   public SwerveDrive() {
-    m_gyro.reset();
+    m_imu.reset();
     SmartDashboard.putData("Field", m_field);
   }
 
@@ -64,7 +67,7 @@ public class SwerveDrive extends SubsystemBase implements Loggable{
    */
   public Rotation2d getAngle() {
     // Negating the angle because WPILib gyros are CW positive.
-    return Rotation2d.fromDegrees(-m_gyro.getAngle());
+    return Rotation2d.fromDegrees(-m_imu.getAngle());
   }
 
   /**
