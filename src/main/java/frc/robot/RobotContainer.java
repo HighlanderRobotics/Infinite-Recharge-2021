@@ -30,9 +30,11 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.AutoAim;
+import frc.robot.commands.DriveForward;
 import frc.robot.commands.RaiseHook;
 import frc.robot.commands.SearchingLimelight;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinSpindexer;
 import frc.robot.commands.SpinSpindexerToPosition;
 import frc.robot.commands.PrepareHook;
@@ -57,6 +59,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -143,31 +146,13 @@ public class RobotContainer {
         begin to spin. Press Y again once all the balls have been fired, and the command group is over.
         */
 
-        Command shootCommand = 
-                new ParallelDeadlineGroup(
-                    new SequentialCommandGroup(
-                        new SearchingLimelight(m_swerve, limelight), 
-                        new ParallelCommandGroup(
-                            new SequentialCommandGroup(
-                                new ParallelCommandGroup(
-                                    new SequentialCommandGroup(
-                                        new AutoAim(m_swerve, limelight),
-                                        new WaitUntilCommand(shooter::isRPMInRange)
-                                    ),
-                                    new SpinSpindexerToPosition(spindexer, Constants.spindexerStart)
-                                ),
-                                new ParallelCommandGroup(
-                                    new RunCommand(extractor::extend, extractor),
-                                    new SpinSpindexer(spindexer))),
-                            new ShooterCommand(shooter, hoodAngle, limelight))
-                    ),
-                    new RunCommand(intake::extend, intake));
+        new JoystickButton(m_driverController, Button.kY.value)
+            .toggleWhenPressed(
+                new ShootingSequence(m_swerve, limelight, shooter, spindexer, extractor, intake, hoodAngle)
+            );
 
-        new JoystickButton(m_driverController, Button.kX.value)
-            .toggleWhenPressed(shootCommand);
-
-        new JoystickButton(m_functionsController, Button.kX.value)
-            .toggleWhenPressed(shootCommand);
+        new JoystickButton(m_driverController, Button.kBumperLeft.value)
+            .toggleWhenPressed(new RunCommand(intake::retract, intake));
 
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
@@ -237,6 +222,15 @@ public class RobotContainer {
      * 
      *         }
      */
+
+     public Command getAutonomousCommand() {
+         return new SequentialCommandGroup(
+             new ParallelDeadlineGroup(
+                 // drive forward 5 seconds
+                 new WaitCommand(1),
+                 new DriveForward(m_swerve)),
+             new ShootingSequence(m_swerve, limelight, shooter, spindexer, extractor, intake, hoodAngle));
+     }
 
 
     
