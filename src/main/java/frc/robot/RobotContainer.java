@@ -176,10 +176,10 @@ public class RobotContainer {
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.3), spindexer));
 
         new Trigger(() -> m_functionsController.getRawAxis(2) > 0.5)
-            .whileActiveContinuous(new RunCommand(intake::halfSpeed, intake));
+            .whileActiveContinuous(new RunCommand(() -> {intake.extend(); intake.halfSpeed();}, intake));
 
         new JoystickButton(m_functionsController, Button.kA.value)
-            .toggleWhenPressed(new RunCommand(intake::extend, intake));
+            .toggleWhenPressed(new RunCommand(intake::halfSpeed, intake));
 
 
         
