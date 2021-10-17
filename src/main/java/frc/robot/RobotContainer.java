@@ -57,6 +57,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -144,25 +145,8 @@ public class RobotContainer {
 
         new JoystickButton(m_driverController, Button.kY.value)
             .toggleWhenPressed(
-                new ParallelDeadlineGroup(
-                    new SequentialCommandGroup(
-                        new SearchingLimelight(m_swerve, limelight), 
-                        new ParallelCommandGroup(
-                            new SequentialCommandGroup(
-                                new ParallelCommandGroup(
-                                    new SequentialCommandGroup(
-                                        new AutoAim(m_swerve, limelight),
-                                        new WaitUntilCommand(shooter::isRPMInRange)
-                                    ),
-                                    new SpinSpindexerToPosition(spindexer, Constants.spindexerStart)
-                                ),
-                                new ParallelCommandGroup(
-                                    new RunCommand(extractor::extend, extractor),
-                                    new SpinSpindexer(spindexer))),
-                            new ShooterCommand(shooter, hoodAngle, limelight))
-                    ),
-                    new RunCommand(intake::extend, intake)
-            ));
+                new ShootingSequence(m_swerve, limelight, shooter, spindexer, extractor, intake, hoodAngle)
+            );
 
         new JoystickButton(m_driverController, Button.kBumperLeft.value)
             .toggleWhenPressed(new RunCommand(intake::retract, intake));
