@@ -30,9 +30,11 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.AutoAim;
+import frc.robot.commands.DriveForward;
 import frc.robot.commands.RaiseHook;
 import frc.robot.commands.SearchingLimelight;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinSpindexer;
 import frc.robot.commands.SpinSpindexerToPosition;
 import frc.robot.commands.PrepareHook;
@@ -211,13 +213,12 @@ public class RobotContainer {
      */
 
      public Command getAutonomousCommand() {
-         return new ParallelDeadlineGroup(
-             // run for first 15 seconds
-             new WaitUntilCommand(15),
+         return new SequentialCommandGroup(
              new ParallelDeadlineGroup(
                  // drive forward 5 seconds
-                 new WaitCommand(5),
-                 new DriveForward(m_swerve)));
+                 new WaitCommand(1),
+                 new DriveForward(m_swerve)),
+             new ShootingSequence(m_swerve, limelight, shooter, spindexer, extractor, intake, hoodAngle));
      }
 
 
