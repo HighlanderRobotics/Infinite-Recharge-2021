@@ -163,10 +163,10 @@ public class RobotContainer {
                     ),
                     new RunCommand(intake::extend, intake));
 
-        new JoystickButton(m_driverController, Axis.kRightTrigger.value)
+        new JoystickButton(m_driverController, Button.kX.value)
             .toggleWhenPressed(shootCommand);
 
-        new JoystickButton(m_functionsController, Axis.kRightTrigger.value)
+        new JoystickButton(m_functionsController, Button.kX.value)
             .toggleWhenPressed(shootCommand);
 
         new JoystickButton(m_functionsController, Button.kBumperRight.value)

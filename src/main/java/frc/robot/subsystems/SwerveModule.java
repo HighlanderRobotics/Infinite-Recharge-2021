@@ -118,6 +118,7 @@ void setTurningPIDF( double p,
       m_turningMotor.configFactoryDefault();
       m_turningMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
       m_turningMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
+      m_cancoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
       // Doesn't work, we need to use cancoders in order to get wheel position rather than motor shaft position
       // Otherwise, will rotate past one rotation, giving us a value we can't use.
 
