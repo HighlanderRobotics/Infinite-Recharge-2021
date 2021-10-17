@@ -9,13 +9,18 @@ package frc.robot.subsystems;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -38,15 +43,18 @@ public class SwerveDrive extends SubsystemBase implements Loggable{
   private final SwerveModule m_backRight = new SwerveModule(6, 5, 21, 9); //6,5 (was 37)
 
   @Log public static final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
+  public static Pose2d m_pose = new Pose2d(5.0, 13.5, new Rotation2d());
+  private final Field2d m_field = new Field2d();
 
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation
   );
 
-  private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, getAngle());
+  private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, getAngle(), m_pose);
 
   public SwerveDrive() {
     m_gyro.reset();
+    SmartDashboard.putData("Field", m_field);
   }
 
   /**
@@ -87,12 +95,19 @@ public class SwerveDrive extends SubsystemBase implements Loggable{
    * Updates the field relative position of the robot.
    */
   public void updateOdometry() {
-    m_odometry.update(
+    m_pose = m_odometry.update(
         getAngle(),
         m_frontLeft.getState(),
         m_frontRight.getState(),
         m_backLeft.getState(),
         m_backRight.getState()
     );
+  }
+  
+  @Override
+  public void periodic() {
+    // automatically update odometry
+    updateOdometry();
+    m_field.setRobotPose(m_odometry.getPoseMeters());
   }
 }
