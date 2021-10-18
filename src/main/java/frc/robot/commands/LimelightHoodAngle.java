@@ -33,7 +33,7 @@ import frc.robot.subsystems.HoodAngle;
 
 
 
-public class ShooterCommand extends CommandBase {
+public class LimelightHoodAngle extends CommandBase {
   public Shooter shooter;
   public HoodAngle hoodAngle;
   public LimeLightSubsystem limelight;
@@ -45,22 +45,15 @@ public class ShooterCommand extends CommandBase {
   private double hoodAngleOffset = -5;
   
 
-  public ShooterCommand(Shooter shooter, HoodAngle hoodAngle, LimeLightSubsystem limelight) {
-    this.shooter = shooter;
+  public LimelightHoodAngle(HoodAngle hoodAngle, LimeLightSubsystem limelight) {
     this.limelight = limelight;
     this.hoodAngle = hoodAngle;
-      addRequirements(shooter);
+      addRequirements(hoodAngle);
     
     }
 
     @Override
     public void initialize() {
-        
-       //shooter.hoodMotor.set(0.1);
-
-      
-
-      shooter.setRPM(4000);
 
     }
 
@@ -74,26 +67,8 @@ public class ShooterCommand extends CommandBase {
       double targetAngle = (-0.0514 * Math.pow(x, 2)) + (-1.586 * x) + 56.858 + hoodAngleOffset;
 
       hoodAngle.setAngle(targetAngle);
-    
-      //shooter.setRPM(targetRPM);
-      
-      
-     //shooter.setAngle(45);
-      //System.out.println("Potentiometer Angle:" + shooter.getPotentiometerAngle());
-    
-     // shooter.firstMotor.set(TalonFXControlMode.PercentOutput, 0.5);
-      //shooter.secondMotor.set(TalonFXControlMode.PercentOutput, 0.5);
-    // System.out.println(encoderRate);
 
-
-    
-    /*shooter.setRPM(1000 + increaseRPM);
-    timesExecuted += 1;
-    threeSecondCount = (int)(timesExecuted / 15);
-    increaseRPM = threeSecondCount * 100;*/
-    
-
-System.out.println(Shooter.convertVelocitytoRPM(shooter.firstMotor.getSelectedSensorVelocity()));
+      System.out.println(Shooter.convertVelocitytoRPM(shooter.firstMotor.getSelectedSensorVelocity()));
     }
   
     @Override
@@ -103,7 +78,6 @@ System.out.println(Shooter.convertVelocitytoRPM(shooter.firstMotor.getSelectedSe
   
     @Override
     public boolean isFinished() {
-     
-        return false;
+        return hoodAngle.calculateAngleError() < 0.25;
     }
   }

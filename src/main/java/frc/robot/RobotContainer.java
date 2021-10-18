@@ -33,7 +33,7 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.RaiseHook;
 import frc.robot.commands.SearchingLimelight;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.LimelightHoodAngle;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinSpindexer;
 import frc.robot.commands.SpinSpindexerToPosition;
@@ -203,7 +203,7 @@ public class RobotContainer {
         .toggleWhenPressed(new SetHoodAngle(hoodAngle, limelight));
 
         new JoystickButton(m_functionsController, Button.kX.value)
-            .toggleWhenPressed(new ShooterCommand(shooter, hoodAngle, limelight));
+            .toggleWhenPressed(new LimelightHoodAngle(hoodAngle, limelight));
     }
 
     private void whileHeldFuncController(Button button, Subsystem subsystem, Runnable runnable) {

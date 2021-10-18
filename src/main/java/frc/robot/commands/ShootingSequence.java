@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -22,6 +23,7 @@ public class ShootingSequence extends ParallelDeadlineGroup {
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
                     new ParallelCommandGroup(
+                        new LimelightHoodAngle(hoodAngle, limelight),
                         new SequentialCommandGroup(
                             new AutoAim(swerve, limelight),
                             new WaitUntilCommand(shooter::isRPMInRange)
@@ -31,7 +33,7 @@ public class ShootingSequence extends ParallelDeadlineGroup {
                     new ParallelCommandGroup(
                         new RunCommand(extractor::extend, extractor),
                         new SpinSpindexer(spindexer))),
-                new ShooterCommand(shooter, hoodAngle, limelight))
+                new InstantCommand(() -> shooter.setRPM(4000)))
         ),
         new RunCommand(intake::extend, intake));
     }
