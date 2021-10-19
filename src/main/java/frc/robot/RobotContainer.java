@@ -62,6 +62,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 
@@ -131,7 +132,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         
-        whileHeldFuncController(Button.kA, intake, intake::threeQuarterSpeed);
+        //whileHeldFuncController(Button.kA, intake, intake::threeQuarterSpeed);
 
 
         /*autoshooting command group: with a press of the Y button, this command will allow the robot to shoot quite accurately into the high port,
@@ -156,8 +157,21 @@ public class RobotContainer {
                     new RunCommand(() -> {intake.extend(); intake.threeQuarterSpeed();}, intake),
                     new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.3), spindexer)));
 
-        new JoystickButton(m_driverController, Button.kBumperRight.value)
-            .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
+        new JoystickButton(m_functionsController, Button.kBumperRight.value)
+            .whileHeld(new RunCommand(() -> {spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3); intake.halfSpeed();}, spindexer));
+
+        new JoystickButton(m_functionsController, Button.kBumperLeft.value)
+            .whileHeld(new RunCommand(() -> {spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.3); intake.halfSpeed();}, spindexer));
+
+        new Trigger(() -> m_functionsController.getRawAxis(2) > 0.5)
+            .whileActiveContinuous(new RunCommand(() -> {intake.extend(); intake.halfSpeed();}, intake));
+
+        new Trigger(() -> m_driverController.getRawAxis(2) > 0.5)
+            .whileActiveContinuous(new RunCommand(() -> {intake.extend(); intake.halfSpeed();}, intake));
+
+        new JoystickButton(m_functionsController, Button.kA.value)
+            .toggleWhenPressed(new RunCommand(intake::halfSpeed, intake));
+
 
         
         
@@ -174,7 +188,7 @@ public class RobotContainer {
         //defaults intake to remain up
 
         //CHANGE THIS FOR SHOOTER RPM
-        shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 0);}, shooter));
+        shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
 
     //   m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
     //         m_climberSubsystem.brake();
