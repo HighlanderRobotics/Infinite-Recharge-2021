@@ -151,7 +151,10 @@ public class RobotContainer {
             );
 
         new JoystickButton(m_driverController, Button.kBumperLeft.value)
-            .toggleWhenPressed(new RunCommand(intake::retract, intake));
+            .toggleWhenPressed(
+                new ParallelCommandGroup(
+                    new RunCommand(() -> {intake.extend(); intake.threeQuarterSpeed();}, intake),
+                    new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.3), spindexer)));
 
         new JoystickButton(m_driverController, Button.kBumperRight.value)
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
@@ -167,7 +170,7 @@ public class RobotContainer {
         extractor.setDefaultCommand(new RunCommand(extractor::retract, extractor));
         //defaults extractor to remain up
 
-        intake.setDefaultCommand(new SequentialCommandGroup(new RunCommand(intake::extend, intake), new RunCommand(intake::zeroSpeed, intake)));
+        intake.setDefaultCommand(new RunCommand(() -> {intake.retract(); intake.zeroSpeed();}, intake));
         //defaults intake to remain up
 
         //CHANGE THIS FOR SHOOTER RPM
