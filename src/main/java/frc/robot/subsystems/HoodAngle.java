@@ -33,7 +33,7 @@ public class HoodAngle extends SubsystemBase {
     public PIDController hoodPIDController;
   
 
-    public HoodAngle(){ 
+    public HoodAngle(){
 
   // canSparkMAX for controlling hood angle
   
@@ -41,6 +41,10 @@ public class HoodAngle extends SubsystemBase {
 
   //intializing + configuring hoodPIDController
     hoodPIDController = new PIDController(Constants.kGains_Hood.kP, Constants.kGains_Hood.kI, Constants.kGains_Hood.kD);
+
+    addChild("Hood Angle PID", hoodPIDController);
+    addChild("Potentiometer", potentiometer);
+    //addChild("Hood Angle Motor", hoodMotor);
   }
 
 

@@ -33,7 +33,7 @@ public class ShootingSequence extends ParallelDeadlineGroup {
                     new ParallelCommandGroup(
                         new RunCommand(extractor::extend, extractor),
                         new SpinSpindexer(spindexer))),
-                new InstantCommand(() -> shooter.setRPM(4000)))
+                new InstantCommand(() -> shooter.setRPM(4000), shooter))
         ),
         new RunCommand(intake::extend, intake));
     }

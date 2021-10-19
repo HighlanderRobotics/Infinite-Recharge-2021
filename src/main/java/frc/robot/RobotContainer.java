@@ -181,6 +181,8 @@ public class RobotContainer {
         intake.setDefaultCommand(new RunCommand(() -> {intake.retract(); intake.zeroSpeed();}, intake));
         //defaults intake to remain up
 
+        hoodAngle.setDefaultCommand(new RunCommand(() -> hoodAngle.hoodMotor.set(0.0), hoodAngle));
+
         //CHANGE THIS FOR SHOOTER RPM
         shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 0);}, shooter));
 
