@@ -33,7 +33,7 @@ import frc.robot.subsystems.HoodAngle;
 
 
 
-public class LimelightHoodAngle extends CommandBase {
+public class HoodAnglePID extends CommandBase {
   public Shooter shooter;
   public HoodAngle hoodAngle;
   public LimeLightSubsystem limelight;
@@ -46,8 +46,8 @@ public class LimelightHoodAngle extends CommandBase {
    
   
 
-  public LimelightHoodAngle(HoodAngle hoodAngle, LimeLightSubsystem limelight) {
-    this.limelight = limelight;
+  public HoodAnglePID(HoodAngle hoodAngle) {
+    
     this.hoodAngle = hoodAngle;
       addRequirements(hoodAngle);
     
@@ -60,17 +60,9 @@ public class LimelightHoodAngle extends CommandBase {
 
     @Override
     public void execute() { 
+      hoodAngle.setAngle(hoodAngle.targetAngle);
 
-      double x = limelight.getVerticalOffset();
-      //double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1; (less accurate, archived equation)
-
-      //equation derived from test points which calculates the needed angle for each shot based on limelight readings
-      //double targetAngle = (-0.0514 * Math.pow(x, 2)) + (-1.586 * x) + 56.858 + hoodAngleOffset;
-      double targetAngle = 68.0;
-
-      hoodAngle.setAngle(targetAngle);
-
-      System.out.println("Target angle: " + targetAngle);
+      System.out.println("Target angle: " + hoodAngle.targetAngle);
     }
   
     @Override

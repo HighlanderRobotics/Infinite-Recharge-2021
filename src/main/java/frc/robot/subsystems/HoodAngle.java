@@ -27,13 +27,15 @@ public class HoodAngle extends SubsystemBase {
 	public static double lowerBoundPotentiometer = 32 - potentiometerError;
 
 	//max possible angle of the hood
-    public static double upperBoundPotentiometer = 90 - potentiometerError;
+  public static double upperBoundPotentiometer = 90 - potentiometerError;
     
-    public final CANSparkMax hoodMotor;
-    public PIDController hoodPIDController;
+  public final CANSparkMax hoodMotor;
+  public PIDController hoodPIDController;
+  public double targetAngle = 0;
+
   
 
-    public HoodAngle(){
+  public HoodAngle(){
 
   // canSparkMAX for controlling hood angle
   
@@ -56,16 +58,19 @@ public class HoodAngle extends SubsystemBase {
   
   //setAngle should be called periodically in order for PID control to occur
   public void setAngle(double targetAngle){
+    // make sure angle is within physical limits
+    targetAngle = Math.max(targetAngle, Constants.hoodMin);
+    targetAngle = Math.min(targetAngle, Constants.hoodMax);
+
     hoodPIDController.setSetpoint(targetAngle);
     double hoodMotorSpeed = hoodPIDController.calculate(getPotentiometerAngle());
     
-  
-
     //hoodMotor should not exceed 10% output, so this prevents it from exceeding 8% (to be safe)
-    if(hoodMotorSpeed > 0.08) {
-      hoodMotorSpeed = 0.08;
-    }else if(hoodMotorSpeed < -0.08){
-      hoodMotorSpeed = -0.08;
+    double maxHood = 0.25;
+    if(hoodMotorSpeed > maxHood) {
+      hoodMotorSpeed = maxHood;
+    }else if(hoodMotorSpeed < -maxHood){
+      hoodMotorSpeed = -maxHood;
     }
     hoodMotor.set(hoodMotorSpeed);
     System.out.println(getPotentiometerAngle());
@@ -83,5 +88,8 @@ public class HoodAngle extends SubsystemBase {
   public void decreaseHoodAngle (double decrement){
     setAngle(getPotentiometerAngle() - decrement);
     System.out.println(getPotentiometerAngle());
+  }
+  public void setTargetAngle (double targetAngle){
+      this.targetAngle = targetAngle;
   }
 }

@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveForward;
+import frc.robot.commands.HoodAnglePID;
 import frc.robot.commands.RaiseHook;
 import frc.robot.commands.SearchingLimelight;
 import frc.robot.commands.LimelightHoodAngle;
@@ -115,6 +116,7 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
         SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
+        SmartDashboard.putData("Hood angle", new LimelightHoodAngle(hoodAngle, limelight));
         SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
         SmartDashboard.putNumber("Potentiometer Reading in Degrees", hoodAngle.getPotentiometerAngle());
 
@@ -181,7 +183,7 @@ public class RobotContainer {
         intake.setDefaultCommand(new RunCommand(() -> {intake.retract(); intake.zeroSpeed();}, intake));
         //defaults intake to remain up
 
-        hoodAngle.setDefaultCommand(new RunCommand(() -> hoodAngle.hoodMotor.set(0.0), hoodAngle));
+        hoodAngle.setDefaultCommand(new HoodAnglePID(hoodAngle));
 
         //CHANGE THIS FOR SHOOTER RPM
         shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 0);}, shooter));
