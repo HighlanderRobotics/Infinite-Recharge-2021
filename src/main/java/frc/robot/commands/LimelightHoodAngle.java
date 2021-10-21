@@ -67,6 +67,8 @@ public class LimelightHoodAngle extends CommandBase {
       double targetAngle = (-0.0514 * Math.pow(x, 2)) + (-1.586 * x) + 56.858 + hoodAngleOffset;
 
       hoodAngle.setAngle(targetAngle);
+
+      System.out.println("Target angle: " + targetAngle);
     }
   
     @Override
