@@ -23,7 +23,7 @@ public class ShootingSequence extends ParallelDeadlineGroup {
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
                     new ParallelCommandGroup(
-                        new LimelightHoodAngle(hoodAngle, limelight),
+                        new LimelightHoodAngle(limelight),
                         new SequentialCommandGroup(
                             new AutoAim(swerve, limelight),
                             new WaitUntilCommand(shooter::isRPMInRange)

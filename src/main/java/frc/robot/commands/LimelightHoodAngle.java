@@ -46,40 +46,36 @@ public class LimelightHoodAngle extends CommandBase {
    
   
 
-  public LimelightHoodAngle(HoodAngle hoodAngle, LimeLightSubsystem limelight) {
+  public LimelightHoodAngle(LimeLightSubsystem limelight) {
     this.limelight = limelight;
-    this.hoodAngle = hoodAngle;
-      addRequirements(hoodAngle);
-    
-    }
-
-    @Override
-    public void initialize() {
-
-    }
-
-    @Override
-    public void execute() { 
-
-      double x = limelight.getVerticalOffset();
-      //double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1; (less accurate, archived equation)
-
-      //equation derived from test points which calculates the needed angle for each shot based on limelight readings
-      //double targetAngle = (-0.0514 * Math.pow(x, 2)) + (-1.586 * x) + 56.858 + hoodAngleOffset;
-      double targetAngle = 68.0;
-
-      hoodAngle.setAngle(targetAngle);
-
-      System.out.println("Target angle: " + targetAngle);
-    }
-  
-    @Override
-    public void end(boolean interrupted) {
-      //System.out.println("Time to reach RPM: " + (System.currentTimeMillis() - startTime));
-    }
-  
-    @Override
-    public boolean isFinished() {
-        return hoodAngle.calculateAngleError() < 0.25;
-    }
   }
+
+  @Override
+  public void initialize() {
+
+  }
+
+  @Override
+  public void execute() { 
+
+    double x = limelight.getVerticalOffset();
+    //double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1; (less accurate, archived equation)
+
+    //equation derived from test points which calculates the needed angle for each shot based on limelight readings
+    double targetAngle = (-0.0514 * Math.pow(x, 2)) + (-1.586 * x) + 56.858 + hoodAngleOffset;
+
+    hoodAngle.setTargetAngle(targetAngle);
+
+    System.out.println("Target angle: " + targetAngle);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    //System.out.println("Time to reach RPM: " + (System.currentTimeMillis() - startTime));
+  }
+
+  @Override
+  public boolean isFinished() {
+      return hoodAngle.calculateAngleError() < 0.25;
+  }
+}
