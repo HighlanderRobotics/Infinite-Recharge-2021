@@ -46,6 +46,10 @@ public class SwerveDrive extends SubsystemBase implements Loggable{
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, getAngle());
 
   public SwerveDrive() {
+    addChild("Front left swerve module", m_frontLeft);
+    addChild("Front right swerve module", m_frontRight);
+    addChild("Back left swerve module", m_backLeft);
+    addChild("Back right swerve module", m_backRight);
     m_gyro.reset();
   }
 

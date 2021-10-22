@@ -14,9 +14,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
 
-public class Intake extends SubsystemBase {
+public class Intake extends SubsystemBase implements Loggable {
   /**
    * Creates a new IntakeSubsytem.
    */
@@ -34,7 +36,14 @@ public class Intake extends SubsystemBase {
   public final VictorSPX intakeMotor = new VictorSPX(Constants.INTAKESUBSYSTEM_VICTOR);
 
 
-  public Intake() {}
+  public Intake() {
+    addChild("Intake Solenoid", intakeSolenoid);
+  }
+
+  @Log
+  public double getMotorSpeed(){
+    return intakeMotor.getSelectedSensorVelocity();
+  }
     
 
   public void zeroSpeed() {

@@ -30,11 +30,12 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
-public class SwerveModule implements Loggable{
+public class SwerveModule extends SubsystemBase implements Loggable{
   private static final double kWheelRadius = 0.0508;
   private static final double kCircumference = kWheelRadius * 2 * Math.PI;
   private static final double kDriveRatio = 8.16;
@@ -133,6 +134,9 @@ void setTurningPIDF( double p,
     setDrivePIDF(0.00015,0,0,0.048);
     setTurningPIDF(1,0.0,0,0.048);
 
+    addChild("Drive motor", m_driveMotor);
+    addChild("Turning motor", m_turningMotor);
+
     // 50% power to turning - gets 10610 units/100ms
     // 50% power to driving - 10700 units/100ms
 
@@ -197,6 +201,12 @@ void setTurningPIDF( double p,
     m_turningMotor.set(TalonFXControlMode.Position, setpoint);
     // System.out.print(inputAngle + "\t");
   }
+
+  @Log
+  public double getCANCoder(){
+    return m_cancoder.getAbsolutePosition();
+  }
+
 }
 
 

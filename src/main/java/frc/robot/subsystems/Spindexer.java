@@ -19,6 +19,7 @@ public class Spindexer extends SubsystemBase{
     public Spindexer() {
         circleMotorVictorSPX.configPeakOutputForward(0.35);
         circleMotorVictorSPX.configPeakOutputReverse(-0.35);
+        addChild("Spindexer Encoder", spindexerEncoder);
     }
     /*public void spinUp(double percentage) {
         
