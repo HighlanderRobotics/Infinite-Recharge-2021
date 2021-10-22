@@ -116,7 +116,7 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
         SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
-        SmartDashboard.putData("Hood angle", new LimelightHoodAngle(hoodAngle, limelight));
+        SmartDashboard.putData("Hood angle", new LimelightHoodAngle(limelight));
         SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
         SmartDashboard.putNumber("Potentiometer Reading in Degrees", hoodAngle.getPotentiometerAngle());
 
@@ -157,7 +157,7 @@ public class RobotContainer {
             .toggleWhenPressed(new RunCommand(intake::retract, intake));
 
         new JoystickButton(m_functionsController, Button.kBumperRight.value)
-            .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
+            .whileHeld(new SpinSpindexer(spindexer));
 
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.3), spindexer));
@@ -207,7 +207,7 @@ public class RobotContainer {
         .toggleWhenPressed(new SetHoodAngle(hoodAngle, limelight));
 
         new JoystickButton(m_functionsController, Button.kX.value)
-            .toggleWhenPressed(new LimelightHoodAngle(hoodAngle, limelight));
+            .toggleWhenPressed(new LimelightHoodAngle(limelight));
     }
 
     private void whileHeldFuncController(Button button, Subsystem subsystem, Runnable runnable) {
