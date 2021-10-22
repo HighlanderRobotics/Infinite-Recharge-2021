@@ -31,7 +31,7 @@ public class HoodAngle extends SubsystemBase {
     
   public final CANSparkMax hoodMotor;
   public PIDController hoodPIDController;
-  public double targetAngle = 0;
+  public double targetAngle = 45;
 
   
 
