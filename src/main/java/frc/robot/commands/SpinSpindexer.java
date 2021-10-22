@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Spindexer;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
@@ -10,6 +11,8 @@ public class SpinSpindexer extends CommandBase{
     public static Spindexer spindexer;
 
     double lastPosition = 0.0;
+    @Log
+    boolean isJammed = false;
 
     public SpinSpindexer(Spindexer spindexer) {
         SpinSpindexer.spindexer = spindexer;
@@ -28,6 +31,9 @@ public class SpinSpindexer extends CommandBase{
         double position = spindexer.spindexerEncoder.get();
         if (Math.abs(position - lastPosition) < 5.0) {
             System.out.println("Jam? spindexer only moved by " + Math.abs(position - lastPosition));
+            isJammed = true;
+        }else {
+            isJammed = false;
         }
         lastPosition = position;
     }

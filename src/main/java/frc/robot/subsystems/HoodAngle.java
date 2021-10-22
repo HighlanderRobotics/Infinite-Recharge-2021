@@ -73,7 +73,7 @@ public class HoodAngle extends SubsystemBase {
       hoodMotorSpeed = -maxHood;
     }
     hoodMotor.set(hoodMotorSpeed);
-    System.out.println(getPotentiometerAngle());
+    //System.out.println(getPotentiometerAngle());
     
   }
 
