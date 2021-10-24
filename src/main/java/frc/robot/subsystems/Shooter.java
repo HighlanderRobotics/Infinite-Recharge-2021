@@ -70,7 +70,7 @@ public class Shooter extends SubsystemBase {
 
 //isRPMInRange is a simple command that can be called (continuously) to determine when the RPM gets into target range
   public boolean isRPMInRange(){
-    return (Math.abs(convertVelocitytoRPM(firstMotor.getSelectedSensorVelocity()) - currentSetPoint)) < 50;
+    return (Math.abs(convertVelocitytoRPM(firstMotor.getSelectedSensorVelocity()) - currentSetPoint)) < 200;
   }
 
 /*convertVelocityToRPM simply converts the encoder units to RPM

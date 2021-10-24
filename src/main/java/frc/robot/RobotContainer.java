@@ -40,6 +40,7 @@ import frc.robot.commands.SpinSpindexer;
 import frc.robot.commands.SpinSpindexerToPosition;
 import frc.robot.commands.PrepareHook;
 import frc.robot.commands.SetHoodAngle;
+import frc.robot.commands.ShootWithoutLimelight;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Extractor;
 import frc.robot.subsystems.Intake;
@@ -156,6 +157,11 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(
               new ShootingSequence(m_swerve, limelight, shooter, spindexer, extractor, intake, hoodAngle)
+        );
+
+        new JoystickButton(m_functionsController, Button.kX.value)
+            .toggleWhenPressed(
+              new ShootWithoutLimelight(m_swerve, Constants.hoodMin, shooter, spindexer, extractor, intake, hoodAngle)
         );
 
         new JoystickButton(m_driverController, Button.kBumperLeft.value)
