@@ -197,7 +197,8 @@ public class RobotContainer {
         hoodAngle.setDefaultCommand(new HoodAnglePID(hoodAngle));
 
         //CHANGE THIS FOR SHOOTER RPM
-        shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
+        //shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
+        shooter.setDefaultCommand(new RunCommand(() -> {shooter.setRPM(4000);}, shooter));
 
     //   m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
     //         m_climberSubsystem.brake();
