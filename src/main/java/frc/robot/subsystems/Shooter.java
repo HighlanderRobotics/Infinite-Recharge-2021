@@ -57,6 +57,9 @@ public class Shooter extends SubsystemBase {
     firstMotor.configPeakOutputForward(1, 20);
     firstMotor.configPeakOutputReverse(-1, 20);
 
+    firstMotor.configClosedloopRamp(5.0);
+    firstMotor.configOpenloopRamp(5.0);
+
     firstMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 10, 0.5));
 
     firstMotor.setNeutralMode(NeutralMode.Coast);
