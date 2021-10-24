@@ -116,7 +116,7 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
         SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
-        SmartDashboard.putData("Hood angle", new LimelightHoodAngle(limelight));
+        SmartDashboard.putData("Hood angle", new LimelightHoodAngle(limelight, hoodAngle));
         SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
         SmartDashboard.putNumber("Potentiometer Reading in Degrees", hoodAngle.getPotentiometerAngle());
 
@@ -153,6 +153,11 @@ public class RobotContainer {
                 new ShootingSequence(m_swerve, limelight, shooter, spindexer, extractor, intake, hoodAngle)
             );
 
+        new JoystickButton(m_functionsController, Button.kY.value)
+            .toggleWhenPressed(
+              new ShootingSequence(m_swerve, limelight, shooter, spindexer, extractor, intake, hoodAngle)
+        );
+
         new JoystickButton(m_driverController, Button.kBumperLeft.value)
             .toggleWhenPressed(new RunCommand(intake::retract, intake));
 
@@ -186,7 +191,7 @@ public class RobotContainer {
         hoodAngle.setDefaultCommand(new HoodAnglePID(hoodAngle));
 
         //CHANGE THIS FOR SHOOTER RPM
-        shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 0);}, shooter));
+        shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
 
     //   m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
     //         m_climberSubsystem.brake();
@@ -207,7 +212,7 @@ public class RobotContainer {
         .toggleWhenPressed(new SetHoodAngle(hoodAngle, limelight));
 
         new JoystickButton(m_functionsController, Button.kX.value)
-            .toggleWhenPressed(new LimelightHoodAngle(limelight));
+            .toggleWhenPressed(new LimelightHoodAngle(limelight, hoodAngle));
     }
 
     private void whileHeldFuncController(Button button, Subsystem subsystem, Runnable runnable) {

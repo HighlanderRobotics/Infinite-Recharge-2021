@@ -104,7 +104,7 @@ public final class Constants {
 
 
     // spindexer positions
-    public static double spindexerStart = 0.5;
+    public static double spindexerStart = 0.112; //0.5;
 
 
     //Shooter + Routing + Hood Angle

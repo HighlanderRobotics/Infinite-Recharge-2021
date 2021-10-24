@@ -46,7 +46,8 @@ public class LimelightHoodAngle extends CommandBase {
    
   
 
-  public LimelightHoodAngle(LimeLightSubsystem limelight) {
+  public LimelightHoodAngle(LimeLightSubsystem limelight, HoodAngle hoodAngle) {
+    this.hoodAngle = hoodAngle;
     this.limelight = limelight;
   }
 
