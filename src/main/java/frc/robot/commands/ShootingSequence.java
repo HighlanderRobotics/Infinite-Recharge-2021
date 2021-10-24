@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -23,8 +24,8 @@ public class ShootingSequence extends SequentialCommandGroup {
             new SearchingLimelight(swerve, limelight), 
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
-                    new ParallelDeadlineGroup(
-                        new WaitCommand(10),
+                    new ParallelRaceGroup(
+                        new WaitCommand(5),
                         new ParallelCommandGroup(
                             new LimelightHoodAngle(limelight, hoodAngle),
                             new SequentialCommandGroup(

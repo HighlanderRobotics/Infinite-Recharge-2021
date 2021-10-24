@@ -161,7 +161,7 @@ public class RobotContainer {
 
         new JoystickButton(m_functionsController, Button.kX.value)
             .toggleWhenPressed(
-              new ShootWithoutLimelight(m_swerve, Constants.hoodMin, shooter, spindexer, extractor, intake, hoodAngle)
+              new ShootWithoutLimelight(m_swerve, Constants.hoodMin + 2, shooter, spindexer, extractor, intake, hoodAngle)
         );
 
         new JoystickButton(m_driverController, Button.kBumperLeft.value)
@@ -174,7 +174,7 @@ public class RobotContainer {
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.3), spindexer));
 
         new Trigger(() -> m_functionsController.getRawAxis(2) > 0.5)
-            .whileActiveContinuous(new RunCommand(() -> {intake.extend(); intake.halfSpeed();}, intake));
+            .whileActiveContinuous(new RunCommand(() -> {intake.extend(); intake.fullSpeed();}, intake));
 
         new JoystickButton(m_functionsController, Button.kA.value)
             .toggleWhenPressed(new RunCommand(intake::halfSpeed, intake));
@@ -197,7 +197,7 @@ public class RobotContainer {
         hoodAngle.setDefaultCommand(new HoodAnglePID(hoodAngle));
 
         //CHANGE THIS FOR SHOOTER RPM
-        shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
+        shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 5);}, shooter));
 
     //   m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
     //         m_climberSubsystem.brake();

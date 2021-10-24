@@ -62,7 +62,7 @@ public class HoodAnglePID extends CommandBase {
     public void execute() { 
       hoodAngle.setAngle(hoodAngle.targetAngle);
 
-      System.out.println("Target angle: " + hoodAngle.targetAngle);
+      // System.out.println("Target angle: " + hoodAngle.targetAngle);
     }
   
     @Override

@@ -67,7 +67,7 @@ public class LimelightHoodAngle extends CommandBase {
 
     hoodAngle.setTargetAngle(targetAngle);
 
-    System.out.println("Target angle: " + targetAngle);
+    // System.out.println("Target angle: " + targetAngle);
   }
 
   @Override

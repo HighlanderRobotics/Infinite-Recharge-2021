@@ -19,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -96,8 +97,9 @@ from targetRPM to targetVelocity:
   public void setRPM (double targetRPM){
     double targetVelocity = (targetRPM * 2048) / 600;
     currentSetPoint = targetRPM;
-    //System.out.println("Target RPM:" + targetRPM);
+    System.out.println("Target RPM:" + targetRPM);
     firstMotor.set(TalonFXControlMode.Velocity, targetVelocity);
+
   }
 
   /*increase or decrease RPM by an externally defined increment, used to manually increase/decrease RPM while 
@@ -109,5 +111,10 @@ from targetRPM to targetVelocity:
   }
   public void decreaseRPM (int decrement){
     setRPM(currentSetPoint - decrement);
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Shooter rpm", convertVelocitytoRPM(firstMotor.getSelectedSensorVelocity()));
   }
 }

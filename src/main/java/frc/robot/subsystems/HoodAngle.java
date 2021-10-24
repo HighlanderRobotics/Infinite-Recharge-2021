@@ -73,7 +73,7 @@ public class HoodAngle extends SubsystemBase {
       hoodMotorSpeed = -maxHood;
     }
     hoodMotor.set(hoodMotorSpeed);
-    System.out.println(getPotentiometerAngle());
+    // System.out.println(getPotentiometerAngle());
     
   }
 
@@ -83,13 +83,12 @@ public class HoodAngle extends SubsystemBase {
   }
   public void increaseHoodAngle (double increment){
     setAngle(getPotentiometerAngle() + increment);
-    System.out.println(getPotentiometerAngle());
   }
   public void decreaseHoodAngle (double decrement){
     setAngle(getPotentiometerAngle() - decrement);
-    System.out.println(getPotentiometerAngle());
   }
   public void setTargetAngle (double targetAngle){
       this.targetAngle = targetAngle;
+      System.out.println("Hood angle set to " + targetAngle);
   }
 }
