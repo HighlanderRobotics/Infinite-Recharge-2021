@@ -54,8 +54,8 @@ public class Shooter extends SubsystemBase {
     firstMotor.configNominalOutputForward(0, 20);
     firstMotor.configNominalOutputReverse(0, 20);
 
-    firstMotor.configPeakOutputForward(1, 20);
-    firstMotor.configPeakOutputReverse(-1, 20);
+    firstMotor.configPeakOutputForward(0.7, 20);
+    firstMotor.configPeakOutputReverse(-0.7, 20);
 
     firstMotor.configClosedloopRamp(5.0);
     firstMotor.configOpenloopRamp(5.0);

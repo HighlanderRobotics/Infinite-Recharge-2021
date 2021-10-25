@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import io.github.oblarg.oblog.annotations.Log;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +21,7 @@ public class Spindexer extends SubsystemBase{
     public Spindexer() {
         circleMotorVictorSPX.configPeakOutputForward(0.35);
         circleMotorVictorSPX.configPeakOutputReverse(-0.35);
+        circleMotorVictorSPX.setNeutralMode(NeutralMode.Brake);
     }
     /*public void spinUp(double percentage) {
         
