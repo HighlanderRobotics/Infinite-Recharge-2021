@@ -31,14 +31,16 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveForward;
+import frc.robot.commands.HoodAnglePID;
 import frc.robot.commands.RaiseHook;
 import frc.robot.commands.SearchingLimelight;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.LimelightHoodAngle;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinSpindexer;
 import frc.robot.commands.SpinSpindexerToPosition;
 import frc.robot.commands.PrepareHook;
 import frc.robot.commands.SetHoodAngle;
+import frc.robot.commands.ShootWithoutLimelight;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Extractor;
 import frc.robot.subsystems.Intake;
@@ -62,6 +64,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 
@@ -114,6 +117,7 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
         SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
+        SmartDashboard.putData("Hood angle", new LimelightHoodAngle(limelight, hoodAngle));
         SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
         SmartDashboard.putNumber("Potentiometer Reading in Degrees", hoodAngle.getPotentiometerAngle());
 
@@ -150,14 +154,28 @@ public class RobotContainer {
                 new ShootingSequence(m_swerve, limelight, shooter, spindexer, extractor, intake, hoodAngle)
             );
 
-        new JoystickButton(m_driverController, Button.kBumperLeft.value)
+        new JoystickButton(m_functionsController, Button.kY.value)
             .toggleWhenPressed(
-                new ParallelCommandGroup(
-                    new RunCommand(() -> {intake.extend(); intake.threeQuarterSpeed();}, intake),
-                    new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer)));
+              new ShootingSequence(m_swerve, limelight, shooter, spindexer, extractor, intake, hoodAngle)
+        );
+
+        new JoystickButton(m_functionsController, Button.kX.value)
+            .toggleWhenPressed(
+              new ShootWithoutLimelight(m_swerve, Constants.hoodMin + 2, shooter, spindexer, extractor, intake, hoodAngle)
+        );
 
         new JoystickButton(m_driverController, Button.kBumperRight.value)
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
+
+        new JoystickButton(m_functionsController, Button.kBumperLeft.value)
+            .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.3), spindexer));
+
+        new Trigger(() -> m_functionsController.getRawAxis(2) > 0.5)
+            .whileActiveContinuous(new RunCommand(() -> {intake.extend(); intake.fullSpeed();}, intake));
+
+        new JoystickButton(m_functionsController, Button.kA.value)
+            .toggleWhenPressed(new RunCommand(intake::halfSpeed, intake));
+
 
         
         
@@ -173,8 +191,11 @@ public class RobotContainer {
         intake.setDefaultCommand(new RunCommand(() -> {intake.retract(); intake.zeroSpeed();}, intake));
         //defaults intake to remain up
 
+        hoodAngle.setDefaultCommand(new HoodAnglePID(hoodAngle));
+
         //CHANGE THIS FOR SHOOTER RPM
-        shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 0);}, shooter));
+        //shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
+        shooter.setDefaultCommand(new RunCommand(() -> {shooter.setRPM(4000);}, shooter));
 
     //   m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
     //         m_climberSubsystem.brake();
@@ -195,7 +216,7 @@ public class RobotContainer {
         .toggleWhenPressed(new SetHoodAngle(hoodAngle, limelight));
 
         new JoystickButton(m_functionsController, Button.kX.value)
-            .toggleWhenPressed(new ShooterCommand(shooter, hoodAngle, limelight));
+            .toggleWhenPressed(new LimelightHoodAngle(limelight, hoodAngle));
     }
 
     private void whileHeldFuncController(Button button, Subsystem subsystem, Runnable runnable) {
