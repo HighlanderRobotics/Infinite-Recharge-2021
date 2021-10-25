@@ -104,7 +104,7 @@ public final class Constants {
 
 
     // spindexer positions
-    public static double spindexerStart = 0.5;
+    public static double spindexerStart = 0.112; //0.5;
 
 
     //Shooter + Routing + Hood Angle
@@ -125,6 +125,9 @@ public final class Constants {
      
      
      public final static Gains kGains_Hood = new Gains(-0.25, 0.00001, 0, 0, 1.00);
+
+    public static final double hoodMin = 29.0;
+    public static final double hoodMax = 72.0;
      //fix kF and peakOut
 }
 

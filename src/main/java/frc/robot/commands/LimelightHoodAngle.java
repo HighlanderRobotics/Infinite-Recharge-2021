@@ -33,7 +33,7 @@ import frc.robot.subsystems.HoodAngle;
 
 
 
-public class ShooterCommand extends CommandBase {
+public class LimelightHoodAngle extends CommandBase {
   public Shooter shooter;
   public HoodAngle hoodAngle;
   public LimeLightSubsystem limelight;
@@ -43,67 +43,40 @@ public class ShooterCommand extends CommandBase {
   public int increaseRPM;
   public double targetRPM;
   private double hoodAngleOffset = -5;
+   
   
 
-  public ShooterCommand(Shooter shooter, HoodAngle hoodAngle, LimeLightSubsystem limelight) {
-    this.shooter = shooter;
-    this.limelight = limelight;
+  public LimelightHoodAngle(LimeLightSubsystem limelight, HoodAngle hoodAngle) {
     this.hoodAngle = hoodAngle;
-      addRequirements(shooter);
-    
-    }
-
-    @Override
-    public void initialize() {
-        
-       //shooter.hoodMotor.set(0.1);
-
-      
-
-      shooter.setRPM(4000);
-
-    }
-
-    @Override
-    public void execute() { 
-
-      double x = limelight.getVerticalOffset();
-      //double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1; (less accurate, archived equation)
-
-      //equation derived from test points which calculates the needed angle for each shot based on limelight readings
-      double targetAngle = (-0.0514 * Math.pow(x, 2)) + (-1.586 * x) + 56.858 + hoodAngleOffset;
-
-      hoodAngle.setAngle(targetAngle);
-    
-      //shooter.setRPM(targetRPM);
-      
-      
-     //shooter.setAngle(45);
-      //System.out.println("Potentiometer Angle:" + shooter.getPotentiometerAngle());
-    
-     // shooter.firstMotor.set(TalonFXControlMode.PercentOutput, 0.5);
-      //shooter.secondMotor.set(TalonFXControlMode.PercentOutput, 0.5);
-    // System.out.println(encoderRate);
-
-
-    
-    /*shooter.setRPM(1000 + increaseRPM);
-    timesExecuted += 1;
-    threeSecondCount = (int)(timesExecuted / 15);
-    increaseRPM = threeSecondCount * 100;*/
-    
-
-System.out.println(Shooter.convertVelocitytoRPM(shooter.firstMotor.getSelectedSensorVelocity()));
-    }
-  
-    @Override
-    public void end(boolean interrupted) {
-      //System.out.println("Time to reach RPM: " + (System.currentTimeMillis() - startTime));
-    }
-  
-    @Override
-    public boolean isFinished() {
-     
-        return false;
-    }
+    this.limelight = limelight;
   }
+
+  @Override
+  public void initialize() {
+
+  }
+
+  @Override
+  public void execute() { 
+
+    double x = limelight.getVerticalOffset();
+    //double targetRPM = (5.3155 * Math.pow(x, 2)) + (76.5261 * x) + 3010.1; (less accurate, archived equation)
+
+    //equation derived from test points which calculates the needed angle for each shot based on limelight readings
+    double targetAngle = (-0.0514 * Math.pow(x, 2)) + (-1.586 * x) + 56.858 + hoodAngleOffset;
+
+    hoodAngle.setTargetAngle(targetAngle);
+
+    // System.out.println("Target angle: " + targetAngle);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    //System.out.println("Time to reach RPM: " + (System.currentTimeMillis() - startTime));
+  }
+
+  @Override
+  public boolean isFinished() {
+      return hoodAngle.calculateAngleError() < 0.25;
+  }
+}
