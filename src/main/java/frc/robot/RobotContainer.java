@@ -119,6 +119,8 @@ public class RobotContainer {
         configureButtonBindings();
         SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
         SmartDashboard.putData("Hood angle", new LimelightHoodAngle(limelight, hoodAngle));
+        SmartDashboard.putData("prepare hook", new PrepareHook(m_climberSubsystem));
+        SmartDashboard.putData("raise hook", new RaiseHook(m_climberSubsystem));
         SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
         SmartDashboard.putNumber("Potentiometer Reading in Degrees", hoodAngle.getPotentiometerAngle());
 

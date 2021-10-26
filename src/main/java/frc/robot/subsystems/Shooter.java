@@ -100,7 +100,7 @@ from targetRPM to targetVelocity:
   public void setRPM (double targetRPM){
     double targetVelocity = (targetRPM * 2048) / 600;
     currentSetPoint = targetRPM;
-    System.out.println("Target RPM:" + targetRPM);
+    //System.out.println("Target RPM:" + targetRPM);
     firstMotor.set(TalonFXControlMode.Velocity, targetVelocity);
 
   }
