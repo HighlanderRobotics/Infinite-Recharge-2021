@@ -8,6 +8,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -24,6 +27,11 @@ public class LimeLightSubsystem extends SubsystemBase {
   public double x;
   public double y;
   public boolean isPointingAtTarget;
+  private ShuffleboardTab tab = Shuffleboard.getTab("Drive Readouts");
+  private NetworkTableEntry isLimelightDetecting = 
+      tab.add("Limelight Status", false)
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .getEntry();
   
   public LimeLightSubsystem() {
     lightOn();
@@ -81,7 +89,9 @@ public class LimeLightSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("limelightY", y);
     SmartDashboard.putNumber("limelightArea", area);
     SmartDashboard.putBoolean("is limelight detecting target", isPointingAtTarget);
-
+    
+    isLimelightDetecting.setBoolean(isPointingAtTarget);
+    
     horizontalOffset = x;
     verticalOffset = y;
 

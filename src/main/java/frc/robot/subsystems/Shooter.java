@@ -18,7 +18,11 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 
 
@@ -26,6 +30,11 @@ public class Shooter extends SubsystemBase {
   public final TalonFX firstMotor;
   public final TalonFX secondMotor;
   public PIDController hoodPIDController;
+  private ShuffleboardTab tab = Shuffleboard.getTab("Drive Readouts");
+  private NetworkTableEntry flywheelReadoutIdle =
+    tab.add("Flywheel Status", false)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .getEntry();
   
 
   public Shooter(){ 
@@ -109,5 +118,10 @@ from targetRPM to targetVelocity:
   }
   public void decreaseRPM (int decrement){
     setRPM(currentSetPoint - decrement);
+  }
+
+  @Override
+  public void periodic() {
+    flywheelReadoutIdle.setBoolean(isRPMInRange());
   }
 }

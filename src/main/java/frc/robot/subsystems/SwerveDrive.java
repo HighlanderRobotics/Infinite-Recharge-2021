@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -16,6 +18,8 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -23,9 +27,14 @@ import io.github.oblarg.oblog.annotations.Log;
 /**
  * Represents a swerve drive style drivetrain.
  */
-public class SwerveDrive extends SubsystemBase implements Loggable{
+public class SwerveDrive extends SubsystemBase implements Loggable {
   public static final double kMaxSpeed = 3.0; // 3 meters per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+
+  ShuffleboardTab tab = Shuffleboard.getTab("Drive Readouts");
+  NetworkTableEntry maxSpeedEntry =  
+    tab.add("Speed", kMaxSpeed)
+    .getEntry();
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.404, 0.404);
   private final Translation2d m_frontRightLocation = new Translation2d(0.404, -0.404);
@@ -98,5 +107,11 @@ public class SwerveDrive extends SubsystemBase implements Loggable{
         m_backLeft.getState(),
         m_backRight.getState()
     );
+  }
+
+  @Override
+  public void periodic() {
+    // kMaxSpeed = maxSpeedEntry.getDouble(3.0);
+    //need to change from final or not have function
   }
 }
