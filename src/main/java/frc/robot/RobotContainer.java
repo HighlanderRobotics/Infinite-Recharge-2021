@@ -33,6 +33,7 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.HoodAnglePID;
 import frc.robot.commands.RaiseHook;
+import frc.robot.commands.RaiseRobot;
 import frc.robot.commands.SearchingLimelight;
 import frc.robot.commands.LimelightHoodAngle;
 import frc.robot.commands.ShootingSequence;
@@ -86,7 +87,7 @@ public class RobotContainer {
 
     private final Intake intake = new Intake();
 
-    // private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+    private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
     //commented to disable while climber extension encoders are unplugged, uncomment to fix later
 
     private final XboxController m_functionsController = new XboxController(Constants.FUNCTIONS_CONTROLLER_PORT);
@@ -176,6 +177,13 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, Button.kA.value)
             .toggleWhenPressed(new RunCommand(intake::halfSpeed, intake));
 
+        new JoystickButton(m_functionsController, Button.kStart.value)
+            .toggleWhenPressed(new SequentialCommandGroup(
+                new PrepareHook(m_climberSubsystem),
+                new RaiseHook(m_climberSubsystem)));
+        
+        new JoystickButton(m_functionsController, Button.kBack.value)
+            .toggleWhenPressed(new RaiseRobot(m_climberSubsystem));
 
         
         
@@ -195,13 +203,13 @@ public class RobotContainer {
 
         //CHANGE THIS FOR SHOOTER RPM
         //shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
-        shooter.setDefaultCommand(new RunCommand(() -> {shooter.setRPM(4000);}, shooter));
+        shooter.setDefaultCommand(new RunCommand(() -> {shooter.setRPM(0);}, shooter)); // disabled for testing; please add back
 
-    //   m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
-    //         m_climberSubsystem.brake();
-    //         //m_climberSubsystem.setWheelSpeed(0);
-    //         m_climberSubsystem.setWinchSpeed(0);
-    //     }, m_climberSubsystem));
+       m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
+             m_climberSubsystem.brake();
+             m_climberSubsystem.setWheelSpeed(0);
+             m_climberSubsystem.setWinchSpeed(0);
+         }, m_climberSubsystem));
 
         spindexer.setDefaultCommand(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0), spindexer));
 
