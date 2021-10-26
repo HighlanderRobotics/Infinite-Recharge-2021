@@ -29,7 +29,7 @@ public class LimeLightSubsystem extends SubsystemBase {
   public boolean isPointingAtTarget;
   private ShuffleboardTab tab = Shuffleboard.getTab("Drive Readouts");
   private NetworkTableEntry isLimelightDetecting = 
-      tab.add("Limelight Status", false)
+      tab.add("Limelight Status 1", false)
       .withWidget(BuiltInWidgets.kBooleanBox)
       .getEntry();
   
@@ -91,7 +91,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("is limelight detecting target", isPointingAtTarget);
     
     isLimelightDetecting.setBoolean(isPointingAtTarget);
-    
+
     horizontalOffset = x;
     verticalOffset = y;
 
