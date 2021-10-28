@@ -29,8 +29,10 @@ public class LimeLightSubsystem extends SubsystemBase {
   public boolean isPointingAtTarget;
   private ShuffleboardTab tab = Shuffleboard.getTab("Drive Readouts");
   private NetworkTableEntry isLimelightDetecting = 
-      tab.add("Limelight Status 1", false)
+      tab.add("Limelight Status", false)
       .withWidget(BuiltInWidgets.kBooleanBox)
+      .withSize(3, 2)
+      .withPosition(0, 0)
       .getEntry();
   
   public LimeLightSubsystem() {

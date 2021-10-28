@@ -22,10 +22,7 @@ public class Spindexer extends SubsystemBase{
     public DutyCycleEncoder spindexerEncoder = new DutyCycleEncoder(4);
     public VictorSPX circleMotorVictorSPX = new VictorSPX(Constants.circleThingyVictorID);
     private ShuffleboardTab tab = Shuffleboard.getTab("Drive Readouts");
-    private NetworkTableEntry spindexerPosition = 
-        tab.add("Spindexer Position", 0.0)
-        .withWidget(BuiltInWidgets.kDial)
-        .getEntry();
+    
     public Spindexer() {
         circleMotorVictorSPX.configPeakOutputForward(0.35);
         circleMotorVictorSPX.configPeakOutputReverse(-0.35);
@@ -36,10 +33,6 @@ public class Spindexer extends SubsystemBase{
         
 
     }*/
-    @Override
-    public void periodic() {
-        spindexerPosition.setNumber(spindexerEncoder.get()*100);
-    }
 
 
 }

@@ -10,8 +10,17 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
+
+import java.util.Map;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
@@ -24,7 +33,14 @@ public class Intake extends SubsystemBase implements Loggable {
    */
 
   DoubleSolenoid intakeSolenoid = new DoubleSolenoid(20, 1, 0);
-    
+  ShuffleboardTab tab = Shuffleboard.getTab("Drive Readouts");
+  NetworkTableEntry isIntakeOut = 
+    tab.add("Intake Status", false)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withPosition(6, 0)
+    .withSize(3,2)
+    .withProperties(Map.of("Color when true", "#FFFF00"))
+    .getEntry();
 
     public void extend(){
     intakeSolenoid.set(kReverse);
@@ -69,5 +85,6 @@ public class Intake extends SubsystemBase implements Loggable {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    isIntakeOut.setBoolean(intakeSolenoid.get() == kForward);
   }
 }
