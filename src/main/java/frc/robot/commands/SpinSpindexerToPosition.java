@@ -35,6 +35,12 @@ public class SpinSpindexerToPosition extends PIDCommand {
     addRequirements(spindexer);
   }
 
+  @Override
+  public void end(boolean interrupted) {
+    // TODO Auto-generated method stub
+    System.out.println("SpinSpindexerToPosition.end() ");
+    super.end(interrupted);
+  }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -75,6 +76,9 @@ public class Shooter extends SubsystemBase {
     firstMotor.configPeakOutputForward(1, 20);
     firstMotor.configPeakOutputReverse(-1, 20);
 
+    firstMotor.configClosedloopRamp(5.0);
+    firstMotor.configOpenloopRamp(5.0);
+
     firstMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 10, 0.5));
 
     firstMotor.setNeutralMode(NeutralMode.Coast);
@@ -89,7 +93,7 @@ public class Shooter extends SubsystemBase {
 
 //isRPMInRange is a simple command that can be called (continuously) to determine when the RPM gets into target range
   public boolean isRPMInRange(){
-    return (Math.abs(convertVelocitytoRPM(firstMotor.getSelectedSensorVelocity()) - currentSetPoint)) < 50;
+    return (Math.abs(convertVelocitytoRPM(firstMotor.getSelectedSensorVelocity()) - currentSetPoint)) < 200;
   }
 
 /*convertVelocityToRPM simply converts the encoder units to RPM
@@ -115,8 +119,9 @@ from targetRPM to targetVelocity:
   public void setRPM (double targetRPM){
     double targetVelocity = (targetRPM * 2048) / 600;
     currentSetPoint = targetRPM;
-    //System.out.println("Target RPM:" + targetRPM);
+    System.out.println("Target RPM:" + targetRPM);
     firstMotor.set(TalonFXControlMode.Velocity, targetVelocity);
+
   }
 
   /*increase or decrease RPM by an externally defined increment, used to manually increase/decrease RPM while 
