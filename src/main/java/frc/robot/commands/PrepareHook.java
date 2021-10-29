@@ -29,7 +29,7 @@ private final ClimberSubsystem m_climberSubsystem;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    m_climberSubsystem.setWheelSpeed(0.1);
     m_climberSubsystem.setWinchSpeed(-.2);
   }
 

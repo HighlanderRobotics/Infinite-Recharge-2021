@@ -89,9 +89,9 @@ public final class Constants {
 
     // Climber Encoders
     // Distances in inches
-    public static int[] kWinchEncoderPorts = {6,7}; // winch is 2, 3
-    public static int[] kWheelEncoderPorts = {2,3};
-    public static int[] kWinchMotorEncoderPorts = {0,1};
+    public static int[] kWinchEncoderPorts = {6,7}; // 6,7
+    public static int[] kWheelEncoderPorts = {0,1}; // 2,3
+    public static int[] kWinchMotorEncoderPorts = {2,3}; //0,1 (seemed like these were switched)
     public static int kWinchServoPort = 9;
     public static double kEncoderCyclesPerRevolution = 2048.0;
     public static double kWheelCircumference = 2 * Math.PI * 2;

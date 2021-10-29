@@ -21,7 +21,7 @@ public class RaiseHook extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    m_climberSubsystem.resetEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +31,7 @@ public class RaiseHook extends CommandBase {
     double wheelSpeed =  (0.1 / 25.0) * m_climberSubsystem.getDistanceWheelEncoder() + 0.4;
     m_climberSubsystem.setWheelSpeed(wheelSpeed);
     if (m_climberSubsystem.getAngleWinchEncoder() > getDesiredAngle()) {
-      m_climberSubsystem.setWinchSpeed(wheelSpeed * 3);
+      m_climberSubsystem.setWinchSpeed(wheelSpeed * 2.5);
 
     }
       /** 
@@ -51,6 +51,8 @@ public class RaiseHook extends CommandBase {
 
     return 0.000881 * Math.pow(m_climberSubsystem.getDistanceWheelEncoder(), 3) 
       - 0.121 * Math.pow(m_climberSubsystem.getDistanceWheelEncoder(), 2) + 21.5;
+    //double x = m_climberSubsystem.getDistanceWheelEncoder();
+    //return -0.1 * x * x + 21.5;
 
   }
 

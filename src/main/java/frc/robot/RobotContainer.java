@@ -124,6 +124,9 @@ public class RobotContainer {
         SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
         SmartDashboard.putNumber("Potentiometer Reading in Degrees", hoodAngle.getPotentiometerAngle());
 
+        SmartDashboard.putData("run winch", new RunCommand(() -> {m_climberSubsystem.setWinchSpeed(0.5);}));
+        SmartDashboard.putData("run wheel", new RunCommand(() -> {m_climberSubsystem.setWheelSpeed(0.5);}));
+
         Logger.configureLoggingAndConfig(this, false);
 
         
@@ -209,7 +212,7 @@ public class RobotContainer {
 
        m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
              m_climberSubsystem.brake();
-             m_climberSubsystem.setWheelSpeed(0);
+             //m_climberSubsystem.setWheelSpeed(0);
              m_climberSubsystem.setWinchSpeed(0);
          }, m_climberSubsystem));
 
