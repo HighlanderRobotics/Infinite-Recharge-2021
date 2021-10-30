@@ -29,7 +29,7 @@ private final ClimberSubsystem m_climberSubsystem;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climberSubsystem.setWheelSpeed(0.1);
+    m_climberSubsystem.setWheelSpeed(0.2);
     m_climberSubsystem.setWinchSpeed(-.2);
   }
 
@@ -43,6 +43,6 @@ private final ClimberSubsystem m_climberSubsystem;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_climberSubsystem.getAngleWinchEncoder() > 32.5;
+    return m_climberSubsystem.getAngleWinchEncoder() > 25.0; // 32.5 sometimes wouldn't stop
   }
 }

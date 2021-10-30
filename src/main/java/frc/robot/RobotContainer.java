@@ -121,9 +121,10 @@ public class RobotContainer {
         SmartDashboard.putData("Hood angle", new LimelightHoodAngle(limelight, hoodAngle));
         SmartDashboard.putData("prepare hook", new PrepareHook(m_climberSubsystem));
         SmartDashboard.putData("raise hook", new RaiseHook(m_climberSubsystem));
+        SmartDashboard.putData("lift robot", new RaiseRobot(m_climberSubsystem));
         SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
         SmartDashboard.putNumber("Potentiometer Reading in Degrees", hoodAngle.getPotentiometerAngle());
-
+        SmartDashboard.putData("spindexer to position", new SpinSpindexerToPosition(spindexer, Constants.spindexerStart));
         SmartDashboard.putData("run winch", new RunCommand(() -> {m_climberSubsystem.setWinchSpeed(0.5);}));
         SmartDashboard.putData("run wheel", new RunCommand(() -> {m_climberSubsystem.setWheelSpeed(0.5);}));
 
@@ -190,6 +191,9 @@ public class RobotContainer {
         new JoystickButton(m_functionsController, Button.kBack.value)
             .toggleWhenPressed(new RaiseRobot(m_climberSubsystem));
 
+        new JoystickButton(m_functionsController, Button.kB.value)
+            .whileHeld(new RunCommand(() -> {m_climberSubsystem.setWinchSpeed(0.1);}, m_climberSubsystem));
+
         
         
         // Defaults
@@ -208,12 +212,13 @@ public class RobotContainer {
 
         //CHANGE THIS FOR SHOOTER RPM
         //shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
-        shooter.setDefaultCommand(new RunCommand(() -> {shooter.setRPM(0);}, shooter)); // disabled for testing; please add back
+        shooter.setDefaultCommand(new RunCommand(() -> {shooter.setRPM(4000);}, shooter)); // disabled for testing; please add back
 
        m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
              m_climberSubsystem.brake();
              //m_climberSubsystem.setWheelSpeed(0);
              m_climberSubsystem.setWinchSpeed(0);
+             //m_climberSubsystem.setRatchetServo(true);
          }, m_climberSubsystem));
 
         spindexer.setDefaultCommand(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0), spindexer));

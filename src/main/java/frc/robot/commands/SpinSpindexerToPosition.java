@@ -21,11 +21,11 @@ public class SpinSpindexerToPosition extends PIDCommand {
         // The controller that the command will use
         new PIDController(2.0, 0, 0),
         // This should return the measurement
-        () -> spindexer.spindexerEncoder.get(),
+        () -> spindexer.spindexerEncoder.get() % 0.2,
         // This should return the setpoint (can also be a constant)
         // add startRotations to the setpoint
         // if the encoder is at 5.9 but the target is 0.5, this will make the setpoint 5.5 to increase efficiency
-        () -> targetPosition + Math.floor(spindexer.spindexerEncoder.get()),
+        () -> targetPosition,
         // This uses the output
         output -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -output)
           // Use the output here

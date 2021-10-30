@@ -22,6 +22,7 @@ public class RaiseHook extends CommandBase {
   @Override
   public void initialize() {
     m_climberSubsystem.resetEncoders();
+    m_climberSubsystem.setRatchetServo(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
