@@ -25,13 +25,10 @@ public class ShootingSequence extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
                     new ParallelRaceGroup(
-                        new WaitCommand(5),
+                        new WaitUntilCommand(shooter::isRPMInRange),
                         new ParallelCommandGroup(
                             new LimelightHoodAngle(limelight, hoodAngle),
-                            new SequentialCommandGroup(
-                                new AutoAim(swerve, limelight),
-                                new WaitUntilCommand(shooter::isRPMInRange)
-                            ),
+                            new AutoAim(swerve, limelight),
                             new SpinSpindexerToPosition(spindexer, Constants.spindexerStart)
                         )
                     ),
