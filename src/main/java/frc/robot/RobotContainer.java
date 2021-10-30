@@ -174,6 +174,9 @@ public class RobotContainer {
         new JoystickButton(m_driverController, Button.kBumperRight.value)
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
 
+        new JoystickButton(m_functionsController, Button.kBumperRight.value)
+            .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, 0.3), spindexer));
+
         new JoystickButton(m_functionsController, Button.kBumperLeft.value)
             .whileHeld(new RunCommand(() -> spindexer.circleMotorVictorSPX.set(VictorSPXControlMode.PercentOutput, -0.3), spindexer));
 
@@ -212,7 +215,7 @@ public class RobotContainer {
 
         //CHANGE THIS FOR SHOOTER RPM
         //shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
-        shooter.setDefaultCommand(new RunCommand(() -> {shooter.setRPM(4000);}, shooter)); // disabled for testing; please add back
+        shooter.setDefaultCommand(new RunCommand(() -> {shooter.setRPM(3000);}, shooter)); // disabled for testing; please add back
 
        m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 
              m_climberSubsystem.brake();
