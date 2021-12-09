@@ -120,13 +120,14 @@ public class RobotContainer {
         SmartDashboard.putData("AutoAim", new AutoAim(m_swerve, limelight));
         SmartDashboard.putData("Hood angle", new LimelightHoodAngle(limelight, hoodAngle));
         SmartDashboard.putData("prepare hook", new PrepareHook(m_climberSubsystem));
-        SmartDashboard.putData("raise hook", new RaiseHook(m_climberSubsystem));
-        SmartDashboard.putData("lift robot", new RaiseRobot(m_climberSubsystem));
+        SmartDashboard.putData("Raise Hook", new RaiseHook(m_climberSubsystem));
+        SmartDashboard.putData("lift robot", new RaiseRobot(m_climberSubsystem, shooter));
         SmartDashboard.putData("Roibbie thing", new SequentialCommandGroup(new SearchingLimelight(m_swerve, limelight), new AutoAim(m_swerve, limelight)));
         SmartDashboard.putNumber("Potentiometer Reading in Degrees", hoodAngle.getPotentiometerAngle());
         SmartDashboard.putData("spindexer to position", new SpinSpindexerToPosition(spindexer, Constants.spindexerStart));
         SmartDashboard.putData("run winch", new RunCommand(() -> {m_climberSubsystem.setWinchSpeed(0.5);}));
         SmartDashboard.putData("run wheel", new RunCommand(() -> {m_climberSubsystem.setWheelSpeed(0.5);}));
+        SmartDashboard.putData("stop shooter idle", new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 0);}));
 
         Logger.configureLoggingAndConfig(this, false);
 
@@ -192,7 +193,7 @@ public class RobotContainer {
                 new RaiseHook(m_climberSubsystem)));
         
         new JoystickButton(m_functionsController, Button.kBack.value)
-            .toggleWhenPressed(new RaiseRobot(m_climberSubsystem));
+            .toggleWhenPressed(new RaiseRobot(m_climberSubsystem, shooter));
 
         new JoystickButton(m_functionsController, Button.kB.value)
             .whileHeld(new RunCommand(() -> {m_climberSubsystem.setWinchSpeed(0.1);}, m_climberSubsystem));
@@ -202,7 +203,6 @@ public class RobotContainer {
         // Defaults
         m_swerve.setDefaultCommand(new RunCommand(teleOpDriveFn, m_swerve));
      
-        //m_driveSubsystem.setDefaultCommand(new RunCommand(() -> m_driveSubsystem.driveStraight(), m_driveSubsystem));
         limelight.setDefaultCommand(new RunCommand(limelight::lightOn, limelight));
 
         extractor.setDefaultCommand(new RunCommand(extractor::retract, extractor));
@@ -214,7 +214,6 @@ public class RobotContainer {
         hoodAngle.setDefaultCommand(new HoodAnglePID(hoodAngle));
 
         //CHANGE THIS FOR SHOOTER RPM
-        //shooter.setDefaultCommand(new RunCommand(() -> {shooter.firstMotor.set(ControlMode.PercentOutput, 10);}, shooter));
         shooter.setDefaultCommand(new RunCommand(() -> {shooter.setRPM(3000);}, shooter)); // disabled for testing; please add back
 
        m_climberSubsystem.setDefaultCommand(new RunCommand(() -> { 

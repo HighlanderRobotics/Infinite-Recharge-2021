@@ -24,7 +24,7 @@ public class ShootingSequence extends SequentialCommandGroup {
             new SearchingLimelight(swerve, limelight), 
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
-                    new ParallelRaceGroup(
+                    new ParallelDeadlineGroup(
                         new WaitUntilCommand(shooter::isRPMInRange),
                         new ParallelCommandGroup(
                             new LimelightHoodAngle(limelight, hoodAngle),
